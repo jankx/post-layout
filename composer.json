@@ -3,7 +3,7 @@
   "description": "WordPress post and custom post type layout generator",
   "type": "library",
   "require": {
-    "jankx/core": "dev-master"
+    "jankx/core": "dev-dev"
   },
   "license": "MIT",
   "minimum-stability": "dev",
