@@ -1,15 +1,16 @@
 {
-    "name": "jankx/post-layouts",
-    "description": "WordPress post and custom post type layout generator",
-    "type": "library",
-    "require": {
-        "jankx/core": "dev-master"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Puleeno Nguyen",
-            "email": "puleeno@gmail.com"
-        }
-    ]
+  "name": "jankx/post-layouts",
+  "description": "WordPress post and custom post type layout generator",
+  "type": "library",
+  "require": {
+    "jankx/core": "dev-master"
+  },
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Puleeno Nguyen",
+      "email": "puleeno@gmail.com"
+    }
+  ]
 }
