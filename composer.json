@@ -12,5 +12,10 @@
       "name": "Puleeno Nguyen",
       "email": "puleeno@gmail.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "\\Jankx\\PostLayout": "src/"
+    }
+  }
 }
