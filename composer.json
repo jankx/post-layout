@@ -15,7 +15,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "\\Jankx\\PostLayout": "src/"
+      "Jankx\\PostLayouts": "src/"
     }
   }
 }
