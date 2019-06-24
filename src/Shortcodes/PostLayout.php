@@ -1,2 +1,6 @@
 <?php
-namespace Jankx\
+namespace Jankx\PostLayouts;
+
+class Shortcode
+{
+}
