@@ -1,6 +1,9 @@
 <?php
 namespace Jankx\PostLayouts;
 
+use Jankx\PostLayouts\Data\Post as PostData;
+use Jankx\PostLayouts\Shortcodes\PostLayout;
+
 class Manager
 {
     protected static $instance;
@@ -18,16 +21,18 @@ class Manager
         if (\Jankx::isRequest('frontend')) {
             add_action('jankx_setup_environment', array($this, 'setupEnvironment'));
         }
-        $this->registerPostLayoutsShortcodes();
+        add_action('init', array($this, 'registerPostLayoutsShortcodes'));
     }
 
     public function setupEnvironment($jankx) {
         $jankx->post = function($postID = null) {
-            return new Data($postID);
+            return new PostData($postID);
         };
     }
 
     public function registerPostLayoutsShortcodes()
     {
+        $postLayout = new PostLayout();
+        add_shortcode('jankx_post_layout', array(new PostLayout(), 'render'));
     }
 }

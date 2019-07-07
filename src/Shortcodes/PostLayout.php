@@ -1,6 +1,14 @@
 <?php
-namespace Jankx\PostLayouts;
+namespace Jankx\PostLayouts\Shortcodes;
 
-class Shortcode
+class PostLayout
 {
+    public function __construct()
+    {
+    }
+
+    public function render()
+    {
+        return 'hi';
+    }
 }
