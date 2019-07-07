@@ -22,8 +22,8 @@ class Manager
     }
 
     public function setupEnvironment($jankx) {
-        $jankx->post = function() {
-            return new Data();
+        $jankx->post = function($postID = null) {
+            return new Data($postID);
         };
     }
 
