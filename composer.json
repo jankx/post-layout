@@ -1,5 +1,5 @@
 {
-  "name": "jankx/post-layouts",
+  "name": "jankx/post-layout",
   "description": "WordPress post and custom post type layout generator",
   "type": "library",
   "require": {
@@ -15,7 +15,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Jankx\\PostLayouts\\": "src/"
+      "Jankx\\PostLayout\\": "src/"
     }
   }
 }
