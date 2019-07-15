@@ -1,7 +1,7 @@
 <?php
-namespace Jankx\PostLayouts\Abstracts;
+namespace Jankx\PostLayout\Abstracts;
 
-use Jankx\PostLayouts\Interfaces\LayoutPreset as InterfaceLayoutPreset;
+use Jankx\PostLayout\Interfaces\LayoutPreset as InterfaceLayoutPreset;
 
 abstract class LayoutPreset implements InterfaceLayoutPreset
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Jankx\PostLayouts\Shortcodes;
+namespace Jankx\PostLayout\Shortcodes;
 
 class PostLayout
 {

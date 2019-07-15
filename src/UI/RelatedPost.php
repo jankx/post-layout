@@ -1,5 +1,5 @@
 <?php
-namespace Jankx\PostLayouts\UI;
+namespace Jankx\PostLayout\UI;
 
 
 class RelatedPost

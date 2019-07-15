@@ -1,5 +1,5 @@
 <?php
-namespace Jankx\PostLayouts\Data;
+namespace Jankx\PostLayout\Data;
 
 class Category
 {

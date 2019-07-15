@@ -1,5 +1,5 @@
 <?php
-namespace Jankx\PostLayouts\Interfaces;
+namespace Jankx\PostLayout\Interfaces;
 
 interface LayoutPresets
 {
