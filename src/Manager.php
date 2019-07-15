@@ -19,15 +19,17 @@ class Manager
         return self::$instance;
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         if (Jankx::isRequest('frontend')) {
             add_action('jankx_setup_environment', array($this, 'setupEnvironment'));
         }
         add_action('init', array($this, 'registerPostLayoutShortcodes'));
     }
 
-    public function setupEnvironment($jankx) {
-        $jankx->post = function($postID = null) {
+    public function setupEnvironment($jankx)
+    {
+        $jankx->post = function ($postID = null) {
             return new PostData($postID);
         };
     }

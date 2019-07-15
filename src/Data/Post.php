@@ -39,20 +39,20 @@ class Post
 
     public function ID()
     {
-        return ! empty( $this->post ) ? $this->post->ID : false;
+        return ! empty($this->post) ? $this->post->ID : false;
     }
 
     public function title($before = '', $after = '', $echo = true)
     {
         $title = get_the_title();
 
-        if ( strlen( $title ) == 0 ) {
+        if (strlen($title) == 0) {
             return;
         }
 
         $title = $before . $title . $after;
 
-        if ( $echo ) {
+        if ($echo) {
             echo $title;
         } else {
             return $title;
@@ -67,7 +67,6 @@ class Post
             $thumbnail = get_the_post_thumbnail();
         } else {
             $thumbnail = '<div class="no-thumbnail"><span></span></div>';
-
         }
         if (!$echo) {
             return $thumbnail;
@@ -77,13 +76,13 @@ class Post
 
     public function exceprt()
     {
-        echo apply_filters( 'the_excerpt', get_the_excerpt() );
+        echo apply_filters('the_excerpt', get_the_excerpt());
     }
 
     public function date($d = '', $before = '', $after = '', $echo = true)
     {
-        if ( is_new_day() ) {
-            $the_date    = $before . get_the_date( $d ) . $after;
+        if (is_new_day()) {
+            $the_date    = $before . get_the_date($d) . $after;
             /**
              * Filters the date a post was published for display.
              *
@@ -95,9 +94,9 @@ class Post
              * @param string $before   HTML output before the date.
              * @param string $after    HTML output after the date.
              */
-            $the_date = apply_filters( 'the_date', $the_date, $d, $before, $after );
+            $the_date = apply_filters('the_date', $the_date, $d, $before, $after);
 
-            if ( $echo ) {
+            if ($echo) {
                 echo $the_date;
             } else {
                 return $the_date;
@@ -112,61 +111,64 @@ class Post
 
     public function format()
     {
-        if ( ! $this->post ) {
+        if (! $this->post) {
             return false;
         }
 
-        if ( ! post_type_supports( $this->post->post_type, 'post-formats' ) ) {
+        if (! post_type_supports($this->post->post_type, 'post-formats')) {
             return false;
         }
 
-        $_format = get_the_terms( $this->post->ID, 'post_format' );
+        $_format = get_the_terms($this->post->ID, 'post_format');
 
-        if ( empty( $_format ) ) {
+        if (empty($_format)) {
             return false;
         }
 
-        $format = reset( $_format );
+        $format = reset($_format);
 
-        return str_replace( 'post-format-', '', $format->slug );
+        return str_replace('post-format-', '', $format->slug);
     }
 
     public function permalink()
     {
         echo esc_url(
-            apply_filters( 'the_permalink', get_permalink( $this->post ), $this->post )
+            apply_filters('the_permalink', get_permalink($this->post), $this->post)
         );
     }
 
-    public function next() {
+    public function next()
+    {
     }
 
-    public function prev() {
+    public function prev()
+    {
     }
 
     public function isSticky()
     {
-        $post_id = absint( $post_id );
+        $post_id = absint($post_id);
 
-        if ( ! $post_id ) {
+        if (! $post_id) {
             $post_id = get_the_ID();
         }
 
-        $stickies = get_option( 'sticky_posts' );
+        $stickies = get_option('sticky_posts');
 
-        if ( ! is_array( $stickies ) ) {
+        if (! is_array($stickies)) {
             return false;
         }
 
-        if ( in_array( $post_id, $stickies ) ) {
+        if (in_array($post_id, $stickies)) {
             return true;
         }
 
         return false;
     }
 
-    public function type($post = null) {
-        if ( $post = get_post( $post ) ) {
+    public function type($post = null)
+    {
+        if ($post = get_post($post)) {
             return $post->post_type;
         }
 

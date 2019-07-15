@@ -1,7 +1,6 @@
 <?php
 namespace Jankx\PostLayout\UI;
 
-
 class RelatedPost
 {
     public function __construct()
@@ -14,4 +13,3 @@ class RelatedPost
         echo 'related post';
     }
 }
-
