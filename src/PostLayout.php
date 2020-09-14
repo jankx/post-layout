@@ -2,11 +2,15 @@
 namespace Jankx\PostLayout;
 
 use WP_Query;
+use Jankx\Template\Template;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
+
+use function wp_parse_args;
 
 abstract class PostLayout implements PostLayoutConstract
 {
     protected $wp_query;
+    protected $options;
 
     public function __construct($wp_query = null)
     {
@@ -20,5 +24,11 @@ abstract class PostLayout implements PostLayoutConstract
                 WP_Query::class
             ));
         }
+    }
+
+    public function setOptions($options)
+    {
+        $this->options = wp_parse_args($options, array(
+        ));
     }
 }
