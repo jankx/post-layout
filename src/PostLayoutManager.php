@@ -12,6 +12,8 @@ class PostLayoutManager
     protected static $instance;
 
     protected $supportedLayouts;
+    protected $templateLoader;
+
 
     public static function getInstance()
     {
@@ -23,8 +25,11 @@ class PostLayoutManager
 
     private function __construct()
     {
+        $this->templateLoader = new PostTemplateLoader();
+
         $this->getLayouts();
         $this->loadHelpers();
+        $this->initHooks();
     }
 
     public function getLayouts($args = array(), $refresh = false)
@@ -70,5 +75,10 @@ class PostLayoutManager
     public function loadHelpers()
     {
         require_once realpath(dirname(__FILE__) . '/../functions.php');
+    }
+
+    public function initHooks()
+    {
+        add_action('template_redirect', array($this->templateLoader, 'load'));
     }
 }
