@@ -3,11 +3,13 @@ namespace Jankx\PostLayout;
 
 use Jankx\PostLayout\Layout\ListLayout;
 use Jankx\PostLayout\Layout\LargePostWithList;
+use Jankx\PostLayout\Layout\Mansory;
 
 class PostLayoutManager
 {
     const LIST = 'list';
-    const LEFT_POST_WITH_RIGHT_LIST = 'left_post_with_right_list';
+    const PRESET_1 = 'left_post_with_right_list';
+    const MANSORY = 'mansory';
 
     protected static $instance;
 
@@ -40,7 +42,7 @@ class PostLayoutManager
                     'name' => __('List Layout', 'jankx'),
                     'class' => ListLayout::class,
                 ),
-                static::LEFT_POST_WITH_RIGHT_LIST => array(
+                static::PRESET_1 => array(
                     'name' => __('Preset 1', 'jankx'),
                     'class' => LargePostWithList::class,
                 )
