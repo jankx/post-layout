@@ -14,7 +14,7 @@ class ListLayout extends PostLayout
 
     public function render()
     {
-        $args = array_merge(
+        $args = wp_parse_args(
             $this->options,
             array(
                 'wp_query' => $this->wp_query,
