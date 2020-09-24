@@ -20,9 +20,11 @@ class LargePostWithList extends PostLayout
         ?>
         <div class="jankx-posts-layout left-post right-list">
             <?php
+            if ($args['header_text']) {
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
                 ));
+            }
             ?>
             <div class="jankx-posts-layout-wrapper">
                     <div class="jankx-posts-layout-inner">

@@ -12,6 +12,8 @@ abstract class PostLayout implements PostLayoutConstract
     protected $wp_query;
     protected $options;
 
+    protected static $layoutInstances = array();
+
     public function __construct($wp_query = null)
     {
         if (is_null($wp_query)) {

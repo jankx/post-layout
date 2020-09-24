@@ -26,9 +26,11 @@ class ListLayout extends PostLayout
         ?>
         <div class="jankx-posts-layout list">
             <?php
+            if ($args['header_text']) {
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
                 ));
+            }
             ?>
             <div class="posts-layout-wrapper">
                     <div class="jankx-layout-inner">
