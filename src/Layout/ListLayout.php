@@ -17,33 +17,49 @@ class ListLayout extends PostLayout
         $args = array_merge(
             $this->options,
             array(
-                'wp_query' => $this->wp_query
-            )
+                'wp_query' => $this->wp_query,
+                'large_first_post' => false,
+                'show_thumbnail' => true,
+                'thumbnail_position' => 'left',
+            ),
         );
         ?>
-        <div class="jankx-posts left-post right-list">
+        <div class="jankx-posts-layout list">
             <?php
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
                 ));
             ?>
-            <div class="posts-list-wrapper">
-                    <div class="jankx-inner">
+            <div class="posts-layout-wrapper">
+                    <div class="jankx-layout-inner">
                         <?php
-                        // Create first post
-                        $this->wp_query->the_post();
-                        $data = array(
-                            'post' => $this->wp_query->post,
-                        );
-                        jankx_template('post/loop/large-image', $data);
-
+                        if ($args['large_first_post']) {
+                            // Create first post
+                            $this->wp_query->the_post();
+                            $data = array(
+                                'post' => $this->wp_query->post,
+                                'thumbnail_position' => $args['thumbnail_position'],
+                            );
+                            jankx_template('post/list/large-post', $data);
+                        }
 
                         // Create post list
-                        jankx_post_loop_start();
+                        jankx_post_loop_start('list');
 
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
-                            jankx_template('post/loop/list-item', $data);
+                            $post_class = array();
+
+                            if ($args['show_thumbnail']) {
+                                $post_class[] = 'thumbnail-' . $args['thumbnail_position'];
+                            }
+
+                            $data = array(
+                                'post' => $this->wp_query->post,
+                                'show_thumbnail' => $args['show_thumbnail'],
+                                'post_class' => implode(' ', $post_class),
+                            );
+                            jankx_template('post/list/loop-post', $data);
                         }
 
                         jankx_post_loop_end();
