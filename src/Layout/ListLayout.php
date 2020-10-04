@@ -21,6 +21,7 @@ class ListLayout extends PostLayout
                 'large_first_post' => false,
                 'show_thumbnail' => true,
                 'thumbnail_position' => 'left',
+                'header_text' => '',
             ),
         );
         ?>
