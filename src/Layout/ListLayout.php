@@ -22,7 +22,7 @@ class ListLayout extends PostLayout
                 'show_thumbnail' => true,
                 'thumbnail_position' => 'left',
                 'header_text' => '',
-            ),
+            )
         );
         ?>
         <div class="jankx-posts-layout list">

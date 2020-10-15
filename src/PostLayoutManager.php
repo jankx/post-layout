@@ -7,7 +7,7 @@ use Jankx\PostLayout\Layout\Mansory;
 
 class PostLayoutManager
 {
-    const LIST = 'list';
+    const LIST_LAYOUT = 'list';
     const PRESET_1 = 'left_post_with_right_list';
     const MANSORY = 'mansory';
 
@@ -38,7 +38,7 @@ class PostLayoutManager
     {
         if (is_null($this->supportedLayouts) || $refresh) {
             $this->supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
-                static::LIST => array(
+                static::LIST_LAYOUT => array(
                     'name' => __('List Layout', 'jankx'),
                     'class' => ListLayout::class,
                 ),

@@ -17,7 +17,7 @@ class PostTemplateLoader
         $layoutManager = PostLayoutManager::getInstance();
         $layoutStyle   = apply_filters(
             "jankx_post_layout_page_{$page}_style",
-            PostLayoutManager::LIST
+            PostLayoutManager::LIST_LAYOUT
         );
         $layoutCls     = $layoutManager->getLayoutClass($layoutStyle);
 
