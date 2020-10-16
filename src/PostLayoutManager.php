@@ -4,12 +4,14 @@ namespace Jankx\PostLayout;
 use Jankx\PostLayout\Layout\ListLayout;
 use Jankx\PostLayout\Layout\LargePostWithList;
 use Jankx\PostLayout\Layout\Mansory;
+use Jankx\PostLayout\Layout\Card;
 
 class PostLayoutManager
 {
     const LIST_LAYOUT = 'list';
     const PRESET_1 = 'left_post_with_right_list';
     const MANSORY = 'mansory';
+    const CARD = 'card';
 
     protected static $instance;
 
