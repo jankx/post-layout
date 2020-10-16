@@ -47,6 +47,10 @@ class PostLayoutManager
                 static::PRESET_1 => array(
                     'name' => __('Preset 1', 'jankx'),
                     'class' => LargePostWithList::class,
+                ),
+                static::CARD => array(
+                    'name' => __('Card Layout', 'jankx'),
+                    'class' => Card::class,
                 )
             ));
         }
