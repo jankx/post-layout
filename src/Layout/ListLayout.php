@@ -30,7 +30,7 @@ class ListLayout extends PostLayout
             if ($args['header_text']) {
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
-                    'url' => $args['view_all_url'],
+                    'url ' => $args['view_all_url'],
                 ));
             }
             ?>
