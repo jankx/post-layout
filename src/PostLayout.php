@@ -13,6 +13,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $options;
 
     protected static $layoutInstances = array();
+    protected static $isElementor = false;
 
     public function __construct($wp_query = null)
     {
@@ -26,6 +27,7 @@ abstract class PostLayout implements PostLayoutConstract
                 WP_Query::class
             ));
         }
+        static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
     }
 
     public function setOptions($options)
@@ -34,7 +36,7 @@ abstract class PostLayout implements PostLayoutConstract
         ));
     }
 
-    public function getPostClass($post) {
+    public function getPostClass($post, $args) {
         $classes = array();
 
         if ($args['show_thumbnail']) {
@@ -42,7 +44,7 @@ abstract class PostLayout implements PostLayoutConstract
         }
 
         // Hotfix for Elementor not include post type in post_class when editing
-        if (! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin()) {
+        if (static::$isElementor || (defined('DOING_AJAX') && $_REQUEST['action'] === 'elementor_ajax')) {
             $classes[] = $post->post_type;
         }
 

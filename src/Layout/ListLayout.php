@@ -55,7 +55,7 @@ class ListLayout extends PostLayout
                             $data = array(
                                 'post' => $post,
                                 'show_thumbnail' => $args['show_thumbnail'],
-                                'post_class' => $this->getPostClass($post),
+                                'post_class' => $this->getPostClass($post, $args),
                             );
                             jankx_template('post/list/loop-post', $data);
                         }

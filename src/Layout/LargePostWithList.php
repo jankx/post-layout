@@ -34,7 +34,7 @@ class LargePostWithList extends PostLayout
                         $post = $this->wp_query->post;
                         $data = array(
                             'post' => $post,
-                            'post_class' => $this->getPostClass($post)
+                            'post_class' => $this->getPostClass($post, $args)
                         );
                         jankx_template('post/preset1/large-post', $data);
 
