@@ -51,16 +51,11 @@ class ListLayout extends PostLayout
 
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
-                            $post_class = array();
-
-                            if ($args['show_thumbnail']) {
-                                $post_class[] = 'thumbnail-' . $args['thumbnail_position'];
-                            }
-
+                            $post = $this->wp_query->post;
                             $data = array(
-                                'post' => $this->wp_query->post,
+                                'post' => $post,
                                 'show_thumbnail' => $args['show_thumbnail'],
-                                'post_class' => implode(' ', $post_class),
+                                'post_class' => $this->getPostClass($post),
                             );
                             jankx_template('post/list/loop-post', $data);
                         }

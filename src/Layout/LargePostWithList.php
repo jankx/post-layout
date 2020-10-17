@@ -31,11 +31,12 @@ class LargePostWithList extends PostLayout
                         <?php
                         // Create first post
                         $this->wp_query->the_post();
+                        $post = $this->wp_query->post;
                         $data = array(
-                            'post' => $this->wp_query->post,
+                            'post' => $post,
+                            'post_class' => $this->getPostClass($post)
                         );
                         jankx_template('post/preset1/large-post', $data);
-
 
                         // Create post list
                         jankx_post_loop_start('left-thumbnail');

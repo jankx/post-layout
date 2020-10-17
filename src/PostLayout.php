@@ -33,4 +33,19 @@ abstract class PostLayout implements PostLayoutConstract
         $this->options = wp_parse_args($options, array(
         ));
     }
+
+    public function getPostClass($post) {
+        $classes = array();
+
+        if ($args['show_thumbnail']) {
+            $classes[] = 'thumbnail-' . $args['thumbnail_position'];
+        }
+
+        // Hotfix for Elementor not include post type in post_class when editing
+        if (! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin()) {
+            $classes[] = $post->post_type;
+        }
+
+        return apply_filters('jankx_post_layout_post_class', $classes, $post);
+    }
 }
