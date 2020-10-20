@@ -6,6 +6,9 @@ function jankx_post_loop_start($listStyle = PostLayoutManager::LIST_LAYOUT, $arg
     if (strpos($listStyle, 'layout') === false) {
         $postsListClasses[] = sprintf('%s_layout', $listStyle);
     }
+    if (isset($args['columns'])) {
+        $postsListClasses[] = 'columns-' . $args['columns'];
+    }
     $attributes = array(
         'class' => $postsListClasses,
     );
