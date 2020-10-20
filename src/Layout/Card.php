@@ -44,8 +44,9 @@ class Card extends PostLayout
                     $post = $this->wp_query->post;
                     $data = array(
                         'post' => $post,
-                        'show_thumbnail' => $args['show_thumbnail'],
-                        'post_class' => $this->getPostClass($post, $args),
+                        'show_thumbnail' => array_get($args, 'show_thumbnail', true),
+                        'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
+                        'post_class' => $this->getPostClass(array(), $post, $args),
                     );
                     jankx_template(array(
                         $post->post_type . '-layout/card/loop-item',

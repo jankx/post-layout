@@ -57,10 +57,14 @@ class ListLayout extends PostLayout
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
                             $post = $this->wp_query->post;
+                            $itemClasses = array();
+                            if ($args['show_thumbnail']) {
+                                $itemClasses = array('thumbnail-' . $args['thumbnail_position']);
+                            }
                             $data = array(
                                 'post' => $post,
                                 'show_thumbnail' => $args['show_thumbnail'],
-                                'post_class' => $this->getPostClass($post, $args),
+                                'post_class' => $this->getPostClass($itemClasses, $post),
                             );
                             jankx_template(array(
                                 $post->post_type . '-layout/list/loop-item',
