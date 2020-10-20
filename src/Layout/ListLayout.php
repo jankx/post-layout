@@ -40,15 +40,19 @@ class ListLayout extends PostLayout
                         if ($args['large_first_post']) {
                             // Create first post
                             $this->wp_query->the_post();
+                            $post = $this->wp_query->post;
                             $data = array(
-                                'post' => $this->wp_query->post,
+                                'post' => $post,
                                 'thumbnail_position' => $args['thumbnail_position'],
                             );
-                            jankx_template('post/list/large-post', $data);
+                            jankx_template(array(
+                                $post->post_type . '-layout/list-large-item',
+                                'post-layout/list/large-item'
+                            ), $data);
                         }
 
                         // Create post list
-                        jankx_post_loop_start('list');
+                        jankx_post_loop_start('list', $args);
 
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
@@ -58,10 +62,13 @@ class ListLayout extends PostLayout
                                 'show_thumbnail' => $args['show_thumbnail'],
                                 'post_class' => $this->getPostClass($post, $args),
                             );
-                            jankx_template('post/list/loop-post', $data);
+                            jankx_template(array(
+                                $post->post_type . '-layout/list/loop-item',
+                                'post-layout/list/loop-item'
+                            ), $data);
                         }
 
-                        jankx_post_loop_end();
+                        jankx_post_loop_end('list', $args);
                         wp_reset_postdata();
                         ?>
                     </div>

@@ -36,7 +36,10 @@ class LargePostWithList extends PostLayout
                             'post' => $post,
                             'post_class' => $this->getPostClass($post, $args)
                         );
-                        jankx_template('post/preset1/large-post', $data);
+                        jankx_template(array(
+                            $post->post_type . '-layout/preset1/large-item',
+                            'post-layout/preset1/large-item'
+                        ), $data);
 
                         // Create post list
                         jankx_post_loop_start('left-thumbnail');
@@ -46,7 +49,10 @@ class LargePostWithList extends PostLayout
 
                             $post_type = $this->wp_query->post->post_type;
 
-                            jankx_template($post_type . '/preset1/loop-post', $data);
+                            jankx_template(array(
+                                $post_type . 'layout-/preset1/loop-item',
+                                'post-layout/preset1/loop-item'
+                            ), $data);
                         }
 
                         jankx_post_loop_end();

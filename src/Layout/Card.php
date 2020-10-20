@@ -48,8 +48,8 @@ class Card extends PostLayout
                         'post_class' => $this->getPostClass($post, $args),
                     );
                     jankx_template(array(
-                        $post->post_type . '/card/loop-item',
-                        'post/card/loop-item',
+                        $post->post_type . '-layout/card/loop-item',
+                        'post-layout/card/loop-item',
                     ), $data);
                 }
 
