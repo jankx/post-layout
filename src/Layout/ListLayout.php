@@ -47,7 +47,8 @@ class ListLayout extends PostLayout
                             );
                             jankx_template(array(
                                 $post->post_type . '-layout/list-large-item',
-                                'post-layout/list/large-item'
+                                'post-layout/list/large-item',
+                                'post-layout/large-item',
                             ), $data);
                         }
 
@@ -67,7 +68,8 @@ class ListLayout extends PostLayout
                             );
                             jankx_template(array(
                                 $post->post_type . '-layout/list/loop-item',
-                                'post-layout/list/loop-item'
+                                'post-layout/list/loop-item',
+                                'post-layout/loop-item',
                             ), $data);
                         }
 

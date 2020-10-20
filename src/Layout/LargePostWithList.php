@@ -37,7 +37,8 @@ class LargePostWithList extends PostLayout
                         );
                         jankx_template(array(
                             $post->post_type . '-layout/preset1/large-item',
-                            'post-layout/preset1/large-item'
+                            'post-layout/preset1/large-item',
+                            'post-layout/large-item',
                         ), $data);
 
                         // Create post list
@@ -52,7 +53,8 @@ class LargePostWithList extends PostLayout
                             );
                             jankx_template(array(
                                 $post->post_type . 'layout-/preset1/loop-item',
-                                'post-layout/preset1/loop-item'
+                                'post-layout/preset1/loop-item',
+                                'post-layout/loop-item',
                             ), $data);
                         }
 

@@ -50,6 +50,7 @@ class Card extends PostLayout
                     jankx_template(array(
                         $post->post_type . '-layout/card/loop-item',
                         'post-layout/card/loop-item',
+                        'post-layout/loop-item',
                     ), $data);
                 }
 

@@ -12,6 +12,7 @@ class PostLayoutManager
     const PRESET_1 = 'left_post_with_right_list';
     const MANSORY = 'mansory';
     const CARD = 'card';
+    const CAROUSEL = 'carousel';
 
     protected static $instance;
 
@@ -51,6 +52,10 @@ class PostLayoutManager
                 static::CARD => array(
                     'name' => __('Card Layout', 'jankx'),
                     'class' => Card::class,
+                ),
+                static::CAROUSEL => array(
+                    'name' => __('Carousel Layout', 'jankx'),
+                    'class' => Carousel::class,
                 )
             ));
         }
