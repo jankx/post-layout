@@ -14,6 +14,7 @@ class Card extends PostLayout
     protected function open()
     {
     }
+
     protected function close()
     {
     }

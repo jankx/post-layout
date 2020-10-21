@@ -94,5 +94,6 @@ class PostLayoutManager
     public function initHooks()
     {
         add_action('template_redirect', array($this->templateLoader, 'load'));
+        add_filter('post_class', array(PostLayout::class, 'postClasses'));
     }
 }

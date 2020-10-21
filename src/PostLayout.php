@@ -61,4 +61,17 @@ abstract class PostLayout implements PostLayoutConstract
         // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
     }
+
+    protected function createCustomPostClass(&$post = null) {
+    }
+
+    public static function postClasses($classes) {
+        global $post;
+        if (isset($post->custom_post_class)) {
+            $classes[] = is_array($post->custom_post_class)
+                ? implode(' ', $post->custom_post_class)
+                : $post->custom_post_class;
+        }
+        return $classes;
+    }
 }
