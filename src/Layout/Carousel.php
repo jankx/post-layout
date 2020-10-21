@@ -18,7 +18,8 @@ class Carousel extends PostLayout
             'thumbnail_position' => 'left',
             'header_text' => '',
             'columns' => 4,
-            'rows' => 1
+            'rows' => 1,
+            'show_excerpt' => false,
         );
     }
 
@@ -64,6 +65,7 @@ class Carousel extends PostLayout
                             $data = array(
                                 'post' => $post,
                                 'show_title' => array_get($args, 'show_title', true),
+                                'show_excerpt' => $args['show_excerpt'],
                                 'show_thumbnail' => array_get($args, 'show_thumbnail', true),
                                 'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
                             );

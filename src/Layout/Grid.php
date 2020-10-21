@@ -15,6 +15,7 @@ class Grid extends PostLayout
             'show_thumbnail' => true,
             'thumbnail_position' => 'left',
             'header_text' => '',
+            'show_excerpt' => false,
         );
     }
 
@@ -45,6 +46,7 @@ class Grid extends PostLayout
                     $data = array(
                         'post' => $post,
                         'show_title' => array_get($args, 'show_title', true),
+                        'show_excerpt' => $args['show_excerpt'],
                         'show_thumbnail' => array_get($args, 'show_thumbnail', true),
                         'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
                     );
