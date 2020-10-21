@@ -9,13 +9,6 @@ class Grid extends PostLayout
         return 'grid';
     }
 
-    protected function open()
-    {
-    }
-    protected function close()
-    {
-    }
-
     public function render()
     {
         $args = wp_parse_args(

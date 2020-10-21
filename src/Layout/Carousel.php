@@ -11,13 +11,6 @@ class Carousel extends PostLayout
         return 'carousel';
     }
 
-    protected function open()
-    {
-    }
-    protected function close()
-    {
-    }
-
     protected function defaultOptions() {
         return array(
             'large_first_post' => false,

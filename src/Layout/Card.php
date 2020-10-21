@@ -11,14 +11,6 @@ class Card extends PostLayout
         return 'card';
     }
 
-    protected function open()
-    {
-    }
-
-    protected function close()
-    {
-    }
-
     public function render()
     {
         $args = wp_parse_args(

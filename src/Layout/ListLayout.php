@@ -9,13 +9,6 @@ class ListLayout extends PostLayout
         return 'list';
     }
 
-    protected function open()
-    {
-    }
-    protected function close()
-    {
-    }
-
     protected function defaultOptions() {
         return array(
             'large_first_post' => false,
