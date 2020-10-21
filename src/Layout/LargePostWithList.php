@@ -31,41 +31,44 @@ class LargePostWithList extends PostLayout
             }
             ?>
             <div class="jankx-posts-layout-wrapper">
-                    <div class="jankx-posts-layout-inner">
-                        <?php
-                        // Create first post
+                <div class="jankx-posts-layout-inner">
+                    <?php
+                    // Create first post
+                    $this->wp_query->the_post();
+                    $post &= $this->wp_query->post;
+                    // Setup the post classes
+                    $this->createCustomPostClass($post);
+
+                    $data = array(
+                        'post' => $post,
+                    );
+                    jankx_template(array(
+                        $post->post_type . '-layout/preset1/large-item',
+                        'post-layout/preset1/large-item',
+                        'post-layout/large-item',
+                    ), $data);
+
+                    // Create post list
+                    $this->loop_start('left-thumbnail');
+
+                    while ($this->wp_query->have_posts()) {
                         $this->wp_query->the_post();
+
                         $post = $this->wp_query->post;
                         $data = array(
                             'post' => $post,
                         );
                         jankx_template(array(
-                            $post->post_type . '-layout/preset1/large-item',
-                            'post-layout/preset1/large-item',
-                            'post-layout/large-item',
+                            $post->post_type . 'layout-/preset1/loop-item',
+                            'post-layout/preset1/loop-item',
+                            'post-layout/loop-item',
                         ), $data);
+                    }
 
-                        // Create post list
-                        $this->loop_start('left-thumbnail');
-
-                        while ($this->wp_query->have_posts()) {
-                            $this->wp_query->the_post();
-
-                            $post = $this->wp_query->post;
-                            $data = array(
-                                'post' => $post,
-                            );
-                            jankx_template(array(
-                                $post->post_type . 'layout-/preset1/loop-item',
-                                'post-layout/preset1/loop-item',
-                                'post-layout/loop-item',
-                            ), $data);
-                        }
-
-                        $this->loop_end();
-                        wp_reset_postdata();
-                        ?>
-                    </div>
+                    $this->loop_end();
+                    wp_reset_postdata();
+                    ?>
+                </div>
             </div>
         </div>
         <?php

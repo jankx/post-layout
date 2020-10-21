@@ -45,7 +45,10 @@ class Carousel extends PostLayout
 
                 while ($this->wp_query->have_posts()) {
                     $this->wp_query->the_post();
-                    $post = $this->wp_query->post;
+                    $post = &$this->wp_query->post;
+                    // Setup the post classes
+                    $this->createCustomPostClass($post);
+
                     $data = array(
                         'post' => $post,
                         'show_thumbnail' => array_get($args, 'show_thumbnail', true),
