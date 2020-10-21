@@ -12,6 +12,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected static $layoutInstances = array();
     protected static $isElementor = false;
 
+    protected $instanceId;
     protected $wp_query;
     protected $options;
     protected $supportColumns = false;
@@ -29,6 +30,16 @@ abstract class PostLayout implements PostLayoutConstract
             ));
         }
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
+        if (empty(static::$layoutInstances)) {
+            $this->instanceId = 1;
+        } else {
+            $this->instanceId = max(static::$layoutInstances) + 1;
+        }
+        array_push(static::$layoutInstances, $this->instanceId);
+    }
+
+    public function getId() {
+        return $this->instanceId;
     }
 
     abstract public function get_name();
