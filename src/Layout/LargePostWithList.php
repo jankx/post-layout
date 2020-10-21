@@ -59,7 +59,7 @@ class LargePostWithList extends PostLayout
                         $data = array(
                             'post' => $post,
                             'show_title' => array_get($args, 'show_title', true),
-                            'show_excerpt' => $args['show_excerpt'],
+                            'show_excerpt' => array_get($args, 'show_excerpt', false),
                         );
                         jankx_template(array(
                             $post->post_type . 'layout-/preset1/loop-item',

@@ -79,7 +79,7 @@ class ListLayout extends PostLayout
                         $data = array(
                             'post' => $post,
                             'show_title' => array_get($args, 'show_title', true),
-                            'show_excerpt' => $args['show_excerpt'],
+                            'show_excerpt' => array_get($args, 'show_excerpt', false),
                             'show_thumbnail' => $args['show_thumbnail'],
                             'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
                         );
