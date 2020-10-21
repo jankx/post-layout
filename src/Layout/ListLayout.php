@@ -84,7 +84,9 @@ class ListLayout extends PostLayout
                         }
                         $data = array(
                             'post' => $post,
+                            'show_title' => array_get($args, 'show_title', true),
                             'show_thumbnail' => $args['show_thumbnail'],
+                            'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
                         );
                         jankx_template(array(
                             $post->post_type . '-layout/list/loop-item',

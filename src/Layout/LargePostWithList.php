@@ -49,7 +49,7 @@ class LargePostWithList extends PostLayout
                     ), $data);
 
                     // Create post list
-                    $this->loop_start('left-thumbnail');
+                    $this->loop_start();
 
                     while ($this->wp_query->have_posts()) {
                         $this->wp_query->the_post();
@@ -57,6 +57,7 @@ class LargePostWithList extends PostLayout
                         $post = $this->wp_query->post;
                         $data = array(
                             'post' => $post,
+                            'show_title' => array_get($args, 'show_title', true),
                         );
                         jankx_template(array(
                             $post->post_type . 'layout-/preset1/loop-item',
