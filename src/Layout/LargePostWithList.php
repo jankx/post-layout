@@ -11,16 +11,16 @@ class LargePostWithList extends PostLayout
         return static::NAME;
     }
 
+    protected function defaultOptions() {
+        return array(
+            'show_thumbnail' => true,
+            'thumbnail_position' => 'left',
+        );
+    }
+
     public function render()
     {
-        $args = array_merge(
-            $this->options,
-            array(
-                'wp_query' => $this->wp_query,
-                'show_thumbnail' => true,
-                'thumbnail_position' => 'left',
-            )
-        );
+        $args = $this->options;
         ?>
         <div class="jankx-posts-layout left-post right-list">
             <?php

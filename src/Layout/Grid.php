@@ -9,18 +9,18 @@ class Grid extends PostLayout
         return 'grid';
     }
 
+    protected function defaultOptions() {
+        return array(
+            'large_first_post' => false,
+            'show_thumbnail' => true,
+            'thumbnail_position' => 'left',
+            'header_text' => '',
+        );
+    }
+
     public function render()
     {
-        $args = wp_parse_args(
-            $this->options,
-            array(
-                'wp_query' => $this->wp_query,
-                'large_first_post' => false,
-                'show_thumbnail' => true,
-                'thumbnail_position' => 'left',
-                'header_text' => '',
-            )
-        );
+        $args = $this->options;
         ?>
         <div class="jankx-posts-layout list">
             <?php
