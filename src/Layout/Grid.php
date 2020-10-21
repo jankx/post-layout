@@ -3,12 +3,10 @@ namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\PostLayout;
 
-class Card extends PostLayout
+class Grid extends PostLayout
 {
-    protected $supportColumns = true;
-
     public function get_name() {
-        return 'card';
+        return 'grid';
     }
 
     protected function open()
@@ -41,7 +39,7 @@ class Card extends PostLayout
             }
             ?>
             <div class="posts-layout-wrapper">
-                <?php
+            <?php
                 // Create post list
                 $this->loop_start('card', $args);
 
@@ -60,9 +58,9 @@ class Card extends PostLayout
                     ), $data);
                 }
 
-                $this->loop_end('card', $args);
+                $this->loop_end();
                 wp_reset_postdata();
-                ?>
+            ?>
             </div>
         </div>
         <?php

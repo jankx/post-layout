@@ -9,11 +9,12 @@ use function wp_parse_args;
 
 abstract class PostLayout implements PostLayoutConstract
 {
-    protected $wp_query;
-    protected $options;
-
     protected static $layoutInstances = array();
     protected static $isElementor = false;
+
+    protected $wp_query;
+    protected $options;
+    protected $supportColumns = false;
 
     public function __construct($wp_query = null)
     {
@@ -30,9 +31,34 @@ abstract class PostLayout implements PostLayoutConstract
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
     }
 
+    abstract public function get_name();
+
     public function setOptions($options)
     {
         $this->options = wp_parse_args($options, array(
         ));
+    }
+
+    public function loop_start() {
+        $postsListClasses = array('jankx-posts', sprintf('%s-layout', $this->get_name()));
+        if ($this->supportColumns && !empty($this->options['columns'])) {
+            $postsListClasses[] = 'columns-' . $this->options['columns'];
+        }
+        $attributes = array(
+            'class' => $postsListClasses,
+        );
+
+        echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
+
+        // This hook use to start custom render post layout
+        do_action('jankx_post_loop_start', $this->get_name(), $this);
+    }
+
+    public function loop_end() {
+        // This hook use to stop custom render post layout
+        do_action('jankx_post_loop_end', $this->get_name(), $this);
+
+        // Close posts list wrapper
+        echo '</div><!-- End .jankx-posts -->';
     }
 }

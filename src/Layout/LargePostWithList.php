@@ -7,6 +7,10 @@ class LargePostWithList extends PostLayout
 {
     const NAME = 'preset-1';
 
+    public function get_name() {
+        return static::NAME;
+    }
+
     public function render()
     {
         $args = array_merge(
@@ -42,7 +46,7 @@ class LargePostWithList extends PostLayout
                         ), $data);
 
                         // Create post list
-                        jankx_post_loop_start('left-thumbnail');
+                        $this->loop_start('left-thumbnail');
 
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
@@ -58,7 +62,7 @@ class LargePostWithList extends PostLayout
                             ), $data);
                         }
 
-                        jankx_post_loop_end();
+                        $this->loop_end();
                         wp_reset_postdata();
                         ?>
                     </div>

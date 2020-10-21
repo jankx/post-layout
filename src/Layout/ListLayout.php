@@ -5,6 +5,10 @@ use Jankx\PostLayout\PostLayout;
 
 class ListLayout extends PostLayout
 {
+    public function get_name() {
+        return 'list';
+    }
+
     protected function open()
     {
     }
@@ -53,7 +57,7 @@ class ListLayout extends PostLayout
                         }
 
                         // Create post list
-                        jankx_post_loop_start('list', $args);
+                        $this->loop_start('list', $args);
 
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
@@ -73,7 +77,7 @@ class ListLayout extends PostLayout
                             ), $data);
                         }
 
-                        jankx_post_loop_end('list', $args);
+                        $this->loop_end('list', $args);
                         wp_reset_postdata();
                         ?>
                     </div>

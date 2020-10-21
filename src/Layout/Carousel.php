@@ -5,6 +5,10 @@ use Jankx\PostLayout\PostLayout;
 
 class Carousel extends PostLayout
 {
+    public function get_name() {
+        return 'carousel';
+    }
+
     protected function open()
     {
     }
@@ -37,7 +41,7 @@ class Carousel extends PostLayout
             <div class="posts-layout-wrapper">
                 <?php
                 // Create post list
-                jankx_post_loop_start('carousel', $args);
+                $this->loop_start('carousel', $args);
 
                 while ($this->wp_query->have_posts()) {
                     $this->wp_query->the_post();
@@ -54,7 +58,7 @@ class Carousel extends PostLayout
                     ), $data);
                 }
 
-                jankx_post_loop_end('carousel', $args);
+                $this->loop_end('carousel', $args);
                 wp_reset_postdata();
                 ?>
             </div>

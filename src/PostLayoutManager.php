@@ -5,6 +5,8 @@ use Jankx\PostLayout\Layout\ListLayout;
 use Jankx\PostLayout\Layout\LargePostWithList;
 use Jankx\PostLayout\Layout\Mansory;
 use Jankx\PostLayout\Layout\Card;
+use Jankx\PostLayout\Layout\Carousel;
+use Jankx\PostLayout\Layout\Grid;
 
 class PostLayoutManager
 {
@@ -13,6 +15,7 @@ class PostLayoutManager
     const MANSORY = 'mansory';
     const CARD = 'card';
     const CAROUSEL = 'carousel';
+    const GRID = 'grid';
 
     protected static $instance;
 
@@ -33,7 +36,6 @@ class PostLayoutManager
         $this->templateLoader = new PostTemplateLoader();
 
         $this->getLayouts();
-        $this->loadHelpers();
         $this->initHooks();
     }
 
@@ -56,6 +58,10 @@ class PostLayoutManager
                 static::CAROUSEL => array(
                     'name' => __('Carousel Layout', 'jankx'),
                     'class' => Carousel::class,
+                ),
+                static::GRID => array(
+                    'name' => __('Grid Layout', 'jankx'),
+                    'class' => Grid::class,
                 )
             ));
         }
@@ -83,11 +89,6 @@ class PostLayoutManager
             return array_get($layout, 'class');
         }
         return $layout;
-    }
-
-    public function loadHelpers()
-    {
-        require_once realpath(dirname(__FILE__) . '/../functions.php');
     }
 
     public function initHooks()
