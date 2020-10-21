@@ -22,6 +22,16 @@ class Carousel extends PostLayout
         );
     }
 
+    protected function createCustomPostClass(&$post = null) {
+        if (is_a($post, \WP_Post::class)) {
+            $classes = array();
+            if ($this->options['show_thumbnail']) {
+                $classes[] = 'thumbnail-' . $this->options['thumbnail_position'];
+            }
+            $post->custom_post_class = $classes;
+        }
+    }
+
     public function render()
     {
         $args = $this->options;
