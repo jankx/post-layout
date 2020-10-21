@@ -16,18 +16,28 @@ class ListLayout extends PostLayout
     {
     }
 
+    protected function defaultOptions() {
+        return array(
+            'large_first_post' => false,
+            'show_thumbnail' => true,
+            'thumbnail_position' => 'left',
+            'header_text' => '',
+        );
+    }
+
+    protected function createCustomPostClass(&$post = null) {
+        if (is_a($post, \WP_Post::class)) {
+            $classes = array();
+            if ($this->options['show_thumbnail']) {
+                $classes[] = 'thumbnail-' . $this->options['thumbnail_position'];
+            }
+            $post->custom_post_class = $classes;
+        }
+    }
+
     public function render()
     {
-        $args = wp_parse_args(
-            $this->options,
-            array(
-                'wp_query' => $this->wp_query,
-                'large_first_post' => false,
-                'show_thumbnail' => true,
-                'thumbnail_position' => 'left',
-                'header_text' => '',
-            )
-        );
+        $args = $this->options;
         ?>
         <div class="jankx-posts-layout list">
             <?php

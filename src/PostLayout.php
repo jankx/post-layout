@@ -33,10 +33,21 @@ abstract class PostLayout implements PostLayoutConstract
 
     abstract public function get_name();
 
+    protected function defaultOptions() {
+        return array();
+    }
+
     public function setOptions($options)
     {
-        $this->options = wp_parse_args($options, array(
-        ));
+        // Parse post layout with default options
+        $this->options = wp_parse_args(
+            $options,
+            $this->defaultOptions()
+        );
+    }
+
+    public function getOptions() {
+        return (array)$this->options;
     }
 
     public function loop_start() {
