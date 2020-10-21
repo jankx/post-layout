@@ -105,22 +105,11 @@ class Carousel extends PostLayout
     }
 
     protected function createSlideItem() {
-        if ($this->currentIndex === 0) {
-            echo '<li class="splide__slide">';
-        }
+        echo '<li class="splide__slide">';
     }
 
     protected function closeSlideItem() {
-        $this->currentIndex += 1;
-
-        // Reset the current index
-        if ($this->options['rows'] == $this->currentIndex) {
-            $this->currentIndex = 0;
-        }
-
-        if ($this->currentIndex === 0 || !$this->wp_query->have_posts()) {
-            echo '</li>';
-        }
+        echo '</li>';
     }
 
     protected function closeTrackList() {
