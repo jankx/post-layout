@@ -11,6 +11,7 @@ abstract class PostLayout implements PostLayoutConstract
 {
     protected static $layoutInstances = array();
     protected static $isElementor = false;
+    protected static $customDataFields = array();
 
     protected $instanceId;
     protected $wp_query;
@@ -102,7 +103,7 @@ abstract class PostLayout implements PostLayoutConstract
     }
 
     protected function prepareTemplateData() {
-        return array(
+        $templateData = array(
             'post' => $this->wp_query->post,
             'show_title' => array_get($this->options, 'show_title', true),
             'show_excerpt' => array_get($this->options, 'show_excerpt', false),
@@ -111,5 +112,17 @@ abstract class PostLayout implements PostLayoutConstract
             'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
             'get_meta_value' => array($this, 'getMetaValue'),
         );
+        foreach(static::$customDataFields as $field => $defaultValue) {
+            if (!isset($this->options[$field])) {
+                $this->options[$field] = $defaultValue;
+            }
+            $templateData[$field] = $this->options[$field];
+        }
+
+        return $templateData;
+    }
+
+    public static function addCustomDataField($fieldName, $defaultValue = null) {
+        static::$customDataFields[$fieldName] = $defaultValue;
     }
 }
