@@ -54,27 +54,18 @@ class Carousel extends PostLayout
                 $this->createSplide();
 
                     $this->createControls();
-
                     $this->createTrackList();
                         while ($this->wp_query->have_posts()) {
                             $this->wp_query->the_post();
                             $post = &$this->wp_query->post;
                             // Setup the post classes
                             $this->createCustomPostClass($post);
-
-                            $data = array(
-                                'post' => $post,
-                                'show_title' => array_get($args, 'show_title', true),
-                                'show_excerpt' => array_get($args, 'show_excerpt', false),
-                                'show_thumbnail' => array_get($args, 'show_thumbnail', true),
-                                'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
-                            );
                             $this->createSlideItem();
                             jankx_template(array(
                                 $post->post_type . '-layout/carousel/loop-item',
                                 'post-layout/carousel/loop-item',
                                 'post-layout/loop-item',
-                            ), $data);
+                            ), $this->prepareTemplateData());
                             $this->closeSlideItem();
                         }
                     $this->closeTrackList();

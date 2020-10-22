@@ -96,4 +96,20 @@ abstract class PostLayout implements PostLayoutConstract
         }
         return $classes;
     }
+
+    public function getMetaValue($value, $feature) {
+        return $value;
+    }
+
+    protected function prepareTemplateData() {
+        return array(
+            'post' => $this->wp_query->post,
+            'show_title' => array_get($this->options, 'show_title', true),
+            'show_excerpt' => array_get($this->options, 'show_excerpt', false),
+            'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
+            'thumbnail_size' => array_get($this->options, 'thumbnail_size', 'thumbnail'),
+            'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
+            'get_meta_value' => array($this, 'getMetaValue'),
+        );
+    }
 }

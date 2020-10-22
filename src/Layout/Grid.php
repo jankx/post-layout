@@ -42,19 +42,11 @@ class Grid extends PostLayout
                     $post = &$this->wp_query->post;
                     // Setup the post classes
                     $this->createCustomPostClass($post);
-
-                    $data = array(
-                        'post' => $post,
-                        'show_title' => array_get($args, 'show_title', true),
-                        'show_excerpt' => array_get($args, 'show_excerpt', false),
-                        'show_thumbnail' => array_get($args, 'show_thumbnail', true),
-                        'thumbnail_size' => array_get($args, 'thumbnail_size', 'thumbnail'),
-                    );
                     jankx_template(array(
                         $post->post_type . '-layout/card/loop-item',
                         'post-layout/card/loop-item',
                         'post-layout/loop-item',
-                    ), $data);
+                    ), $this->prepareTemplateData());
                 }
 
                 $this->loop_end();
