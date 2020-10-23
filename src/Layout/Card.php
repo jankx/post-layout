@@ -7,12 +7,14 @@ class Card extends PostLayout
 {
     protected $supportColumns = true;
 
-    public function get_name() {
+    public function get_name()
+    {
         return 'card';
     }
 
 
-    protected function defaulOptions() {
+    protected function defaulOptions()
+    {
         return array(
             'large_first_post' => false,
             'show_thumbnail' => true,

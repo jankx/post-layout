@@ -7,11 +7,13 @@ class Carousel extends PostLayout
 {
     protected $currentIndex = 0;
 
-    public function get_name() {
+    public function get_name()
+    {
         return 'carousel';
     }
 
-    protected function defaultOptions() {
+    protected function defaultOptions()
+    {
         return array(
             'large_first_post' => false,
             'show_thumbnail' => true,
@@ -23,7 +25,8 @@ class Carousel extends PostLayout
         );
     }
 
-    protected function createCustomPostClass(&$post = null) {
+    protected function createCustomPostClass(&$post = null)
+    {
         if (is_a($post, \WP_Post::class)) {
             $classes = array();
             if ($this->options['show_thumbnail']) {
@@ -55,19 +58,19 @@ class Carousel extends PostLayout
 
                     $this->createControls();
                     $this->createTrackList();
-                        while ($this->wp_query->have_posts()) {
-                            $this->wp_query->the_post();
-                            $post = &$this->wp_query->post;
-                            // Setup the post classes
-                            $this->createCustomPostClass($post);
-                            $this->createSlideItem();
-                            jankx_template(array(
-                                $post->post_type . '-layout/carousel/loop-item',
-                                'post-layout/carousel/loop-item',
-                                'post-layout/loop-item',
-                            ), $this->prepareTemplateData());
-                            $this->closeSlideItem();
-                        }
+                while ($this->wp_query->have_posts()) {
+                    $this->wp_query->the_post();
+                    $post = &$this->wp_query->post;
+                    // Setup the post classes
+                    $this->createCustomPostClass($post);
+                    $this->createSlideItem();
+                    jankx_template(array(
+                        $post->post_type . '-layout/carousel/loop-item',
+                        'post-layout/carousel/loop-item',
+                        'post-layout/loop-item',
+                    ), $this->prepareTemplateData());
+                    $this->closeSlideItem();
+                }
                     $this->closeTrackList();
                 $this->closeSplide();
 
@@ -80,7 +83,8 @@ class Carousel extends PostLayout
         $this->createJsMountSlide();
     }
 
-    protected function createSplide() {
+    protected function createSplide()
+    {
         $splideClasses = array('splide');
         $attributes = array(
             'class' => $splideClasses,
@@ -89,24 +93,28 @@ class Carousel extends PostLayout
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
     }
 
-    protected function createControls() {
+    protected function createControls()
+    {
         jankx_template('post-layout/carousel/nav');
     }
 
-    protected function createTrackList() {
-    ?>
+    protected function createTrackList()
+    {
+        ?>
     <div class="splide__track">
         <ul class="splide__list">
-    <?php
+        <?php
     }
 
-    protected function createSlideItem() {
-        if ($this->currentIndex === 0 ) {
+    protected function createSlideItem()
+    {
+        if ($this->currentIndex === 0) {
             echo '<li class="splide__slide">';
         }
     }
 
-    protected function closeSlideItem() {
+    protected function closeSlideItem()
+    {
         $this->currentIndex += 1;
 
         if ($this->currentIndex == $this->options['rows']) {
@@ -115,23 +123,26 @@ class Carousel extends PostLayout
 
         $currentPostIndex = $this->wp_query->current_post;
         $totalIndex = $this->wp_query->post_count - 1;
-        if ($this->currentIndex === 0 || $currentPostIndex >= $totalIndex  ) {
+        if ($this->currentIndex === 0 || $currentPostIndex >= $totalIndex) {
             echo '</li>';
         }
     }
 
-    protected function closeTrackList() {
-    ?>
+    protected function closeTrackList()
+    {
+        ?>
         </ul>
     </div><!-- Close .splide__track -->
-    <?php
+        <?php
     }
 
-    protected function closeSplide() {
+    protected function closeSplide()
+    {
         echo '</div> <!-- Close .splide -->';
     }
 
-    public function createJsMountSlide() {
+    public function createJsMountSlide()
+    {
         execute_script(jankx_template('post-layout/carousel/script', array(
             'id' => sprintf('jankx-post-layout-%d', $this->getId()),
             'var' => sprintf('jankx_post_layout_%d', $this->getId()),

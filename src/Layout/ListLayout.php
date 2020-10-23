@@ -5,11 +5,13 @@ use Jankx\PostLayout\PostLayout;
 
 class ListLayout extends PostLayout
 {
-    public function get_name() {
+    public function get_name()
+    {
         return 'list';
     }
 
-    protected function defaultOptions() {
+    protected function defaultOptions()
+    {
         return array(
             'large_first_post' => false,
             'show_thumbnail' => true,
@@ -19,7 +21,8 @@ class ListLayout extends PostLayout
         );
     }
 
-    protected function createCustomPostClass(&$post = null) {
+    protected function createCustomPostClass(&$post = null)
+    {
         if (is_a($post, \WP_Post::class)) {
             $classes = array();
             if ($this->options['show_thumbnail']) {

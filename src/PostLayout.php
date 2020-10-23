@@ -39,13 +39,15 @@ abstract class PostLayout implements PostLayoutConstract
         array_push(static::$layoutInstances, $this->instanceId);
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->instanceId;
     }
 
     abstract public function get_name();
 
-    protected function defaultOptions() {
+    protected function defaultOptions()
+    {
         return array();
     }
 
@@ -58,11 +60,13 @@ abstract class PostLayout implements PostLayoutConstract
         );
     }
 
-    public function getOptions() {
+    public function getOptions()
+    {
         return (array)$this->options;
     }
 
-    public function loop_start() {
+    public function loop_start()
+    {
         $postsListClasses = array('jankx-posts', sprintf('%s-layout', $this->get_name()));
         if ($this->supportColumns && !empty($this->options['columns'])) {
             $postsListClasses[] = 'columns-' . $this->options['columns'];
@@ -77,7 +81,8 @@ abstract class PostLayout implements PostLayoutConstract
         do_action('jankx_post_loop_start', $this->get_name(), $this);
     }
 
-    public function loop_end() {
+    public function loop_end()
+    {
         // This hook use to stop custom render post layout
         do_action('jankx_post_loop_end', $this->get_name(), $this);
 
@@ -85,10 +90,12 @@ abstract class PostLayout implements PostLayoutConstract
         echo '</div><!-- End .jankx-posts -->';
     }
 
-    protected function createCustomPostClass(&$post = null) {
+    protected function createCustomPostClass(&$post = null)
+    {
     }
 
-    public static function postClasses($classes) {
+    public static function postClasses($classes)
+    {
         global $post;
         if (isset($post->custom_post_class)) {
             $classes[] = is_array($post->custom_post_class)
@@ -98,11 +105,13 @@ abstract class PostLayout implements PostLayoutConstract
         return $classes;
     }
 
-    public function getMetaValue($value, $feature) {
+    public function getMetaValue($value, $feature)
+    {
         return $value;
     }
 
-    protected function prepareTemplateData() {
+    protected function prepareTemplateData()
+    {
         $templateData = array(
             'post' => $this->wp_query->post,
             'show_title' => array_get($this->options, 'show_title', true),
@@ -112,7 +121,7 @@ abstract class PostLayout implements PostLayoutConstract
             'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
             'get_meta_value' => array($this, 'getMetaValue'),
         );
-        foreach(static::$customDataFields as $field => $defaultValue) {
+        foreach (static::$customDataFields as $field => $defaultValue) {
             if (!isset($this->options[$field])) {
                 $this->options[$field] = $defaultValue;
             }
@@ -122,7 +131,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $templateData;
     }
 
-    public static function addCustomDataField($fieldName, $defaultValue = null) {
+    public static function addCustomDataField($fieldName, $defaultValue = null)
+    {
         static::$customDataFields[$fieldName] = $defaultValue;
     }
 }

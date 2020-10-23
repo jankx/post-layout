@@ -7,11 +7,13 @@ class LargePostWithList extends PostLayout
 {
     const NAME = 'preset-1';
 
-    public function get_name() {
+    public function get_name()
+    {
         return static::NAME;
     }
 
-    protected function defaultOptions() {
+    protected function defaultOptions()
+    {
         return array(
             'show_thumbnail' => true,
             'thumbnail_position' => 'left',
