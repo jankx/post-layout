@@ -44,7 +44,7 @@ class PostLayoutManager
         if (is_null($this->supportedLayouts) || $refresh) {
             $this->supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
                 static::LIST_LAYOUT => array(
-                    'name' => __('List Layout', 'jankx'),
+                    'name' => __('List', 'jankx'),
                     'class' => ListLayout::class,
                 ),
                 static::PRESET_1 => array(
@@ -52,15 +52,15 @@ class PostLayoutManager
                     'class' => LargePostWithList::class,
                 ),
                 static::CARD => array(
-                    'name' => __('Card Layout', 'jankx'),
+                    'name' => __('Card', 'jankx'),
                     'class' => Card::class,
                 ),
                 static::CAROUSEL => array(
-                    'name' => __('Carousel Layout', 'jankx'),
+                    'name' => __('Carousel', 'jankx'),
                     'class' => Carousel::class,
                 ),
                 static::GRID => array(
-                    'name' => __('Grid Layout', 'jankx'),
+                    'name' => __('Grid', 'jankx'),
                     'class' => Grid::class,
                 )
             ));
