@@ -10,6 +10,7 @@ class PostTemplateLoader
     {
         add_action('jankx_template_page_index_content', array($this, 'render'));
         add_action('jankx_template_page_archive_content', array($this, 'render'));
+        add_action('jankx_template_before_post_content', array($this, 'renderPostMetas'));
     }
 
     public function render($page = 'home')
@@ -28,5 +29,9 @@ class PostTemplateLoader
         if (is_a($postLayoutInstance, PostLayout::class)) {
             echo $postLayoutInstance->render();
         }
+    }
+
+    public function renderPostMetas() {
+        jankx_template('common/post-metas');
     }
 }
