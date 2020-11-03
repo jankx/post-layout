@@ -13,7 +13,7 @@ class Card extends PostLayout
     }
 
 
-    protected function defaulOptions()
+    protected function defaultOptions()
     {
         return array(
             'show_thumbnail' => true,
