@@ -16,9 +16,8 @@ class Card extends PostLayout
     protected function defaulOptions()
     {
         return array(
-            'large_first_post' => false,
             'show_thumbnail' => true,
-            'thumbnail_position' => 'left',
+            'thumbnail_position' => 'top',
             'header_text' => '',
             'show_excerpt' => false,
         );
