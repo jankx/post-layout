@@ -38,7 +38,7 @@ class LargePostWithList extends PostLayout
                     <?php
                     // Create first post
                     $this->wp_query->the_post();
-                    $post &= $this->wp_query->post;
+                    $post = &$this->wp_query->post;
                     // Setup the post classes
                     $this->createCustomPostClass($post);
 
