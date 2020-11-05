@@ -27,7 +27,7 @@ class Card extends PostLayout
     {
         $args = $this->options;
         ?>
-        <div class="jankx-posts-layout list">
+        <div class="jankx-posts-layout card">
             <?php
             if ($args['header_text']) {
                 jankx_template('common/header-text', array(
