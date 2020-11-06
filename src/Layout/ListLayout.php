@@ -51,19 +51,13 @@ class ListLayout extends PostLayout
                     if ($args['large_first_post']) {
                         // Create first post
                         $this->wp_query->the_post();
-                        $post = &$this->wp_query->post;
                         // Setup the post classes
-                        $this->createCustomPostClass($post);
-
-                        $data = array(
-                            'post' => $post,
-                            'thumbnail_position' => $args['thumbnail_position'],
-                        );
+                        $this->createCustomPostClass($this->wp_query->post);
                         jankx_template(array(
                             $post->post_type . '-layout/list-large-item',
                             'post-layout/list/large-item',
                             'post-layout/large-item',
-                        ), $data);
+                        ), $this->prepareTemplateData());
                     }
 
                     // Create post list
