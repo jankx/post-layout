@@ -25,7 +25,7 @@ class LargePostWithList extends PostLayout
     {
         $args = $this->options;
         ?>
-        <div class="jankx-posts-layout left-post right-list">
+        <div class="jankx-posts-layout left-post right-list preset-1">
             <?php
             if ($args['header_text']) {
                 jankx_template('common/header-text', array(

@@ -2,7 +2,7 @@
 namespace Jankx\PostLayout;
 
 use Jankx\PostLayout\Layout\ListLayout;
-use Jankx\PostLayout\Layout\LargePostWithList;
+use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Mansory;
 use Jankx\PostLayout\Layout\Card;
 use Jankx\PostLayout\Layout\Carousel;
@@ -49,7 +49,7 @@ class PostLayoutManager
                 ),
                 static::PRESET_1 => array(
                     'name' => __('Preset 1', 'jankx'),
-                    'class' => LargePostWithList::class,
+                    'class' => Preset1::class,
                 ),
                 static::CARD => array(
                     'name' => __('Card', 'jankx'),
