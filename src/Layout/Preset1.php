@@ -3,7 +3,7 @@ namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\PostLayout;
 
-class LargePostWithList extends PostLayout
+class Preset1 extends PostLayout
 {
     const NAME = 'preset-1';
 
