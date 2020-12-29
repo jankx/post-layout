@@ -25,7 +25,7 @@ class Grid extends PostLayout
     {
         $args = $this->options;
         ?>
-        <div class="jankx-posts-layout list">
+        <div class="jankx-posts-layout grid">
             <?php
             if ($args['header_text']) {
                 jankx_template('common/header-text', array(
@@ -55,6 +55,10 @@ class Grid extends PostLayout
                 wp_reset_postdata();
             ?>
             </div>
+
+            <?php if (array_get($args, 'show_paginate', false)): ?>
+                <?php echo jankx_paginate(); ?>
+            <?php endif; ?>
         </div>
         <?php
     }
