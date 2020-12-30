@@ -31,7 +31,8 @@ class PostTemplateLoader
         }
     }
 
-    public function renderPostMetas() {
+    public function renderPostMetas()
+    {
         jankx_template('common/post-metas');
     }
 }

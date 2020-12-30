@@ -71,7 +71,7 @@ class Preset1 extends PostLayout
                 </div>
             </div>
 
-            <?php if (array_get($args, 'show_paginate', false)): ?>
+            <?php if (array_get($args, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>
             <?php endif; ?>
         </div>
