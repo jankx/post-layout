@@ -107,6 +107,23 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function getMetaValue($value, $feature)
     {
+        $func = false;
+        $args = array();
+        if (isset($value['function']) && is_callable($value['function'])) {
+            $func = $value['function'];
+            if (isset($value['args'])) {
+                $args = $value['args'];
+            }
+        } elseif (is_callable($value)) {
+            $func = $value;
+        }
+        if ($func !== false) {
+            return call_user_func_array(
+                $func,
+                $args
+            );
+        }
+
         switch ($feature) {
             case 'post_date':
                 return get_the_date(get_option('date_format'));
