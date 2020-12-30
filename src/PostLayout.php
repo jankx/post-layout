@@ -105,10 +105,21 @@ abstract class PostLayout implements PostLayoutConstract
         return $classes;
     }
 
-    public function getMetaValue($value, $feature)
+    protected static function parse_internal_meta($feature, $default_value = false)
+    {
+        switch ($feature) {
+            case 'post_date':
+                return get_the_date(get_option('date_format'));
+            default:
+                return $default_value;
+        }
+    }
+
+    public static function get_meta_value($value, $feature)
     {
         $func = false;
         $args = array();
+
         if (isset($value['function']) && is_callable($value['function'])) {
             $func = $value['function'];
             if (isset($value['args'])) {
@@ -116,18 +127,14 @@ abstract class PostLayout implements PostLayoutConstract
             }
         } elseif (is_callable($value)) {
             $func = $value;
+        } else {
+            return static::parse_internal_meta($feature, $value);
         }
         if ($func !== false) {
             return call_user_func_array(
                 $func,
                 $args
             );
-        }
-
-        switch ($feature) {
-            case 'post_date':
-                return get_the_date(get_option('date_format'));
-            default: return $value;
         }
     }
 
@@ -140,7 +147,7 @@ abstract class PostLayout implements PostLayoutConstract
             'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
             'thumbnail_size' => array_get($this->options, 'thumbnail_size', 'thumbnail'),
             'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
-            'get_meta_value' => array($this, 'getMetaValue'),
+            '_post_layout' => __CLASS__,
         );
         foreach (static::$customDataFields as $field => $defaultValue) {
             if (!isset($this->options[$field])) {
