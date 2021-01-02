@@ -54,9 +54,13 @@ abstract class PostLayout implements PostLayoutConstract
     public function setOptions($options)
     {
         // Parse post layout with default options
-        $this->options = wp_parse_args(
-            $options,
-            $this->defaultOptions()
+        $this->options =  apply_filters(
+            'jankx_post_layout_set_options',
+            wp_parse_args(
+                $options,
+                $this->defaultOptions()
+            ),
+            $this
         );
     }
 
