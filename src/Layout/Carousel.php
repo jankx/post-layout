@@ -158,7 +158,7 @@ class Carousel extends PostLayout
         execute_script(jankx_template('post-layout/carousel/script', array(
             'id' => sprintf('jankx-post-layout-%d', $this->getId()),
             'var' => sprintf('jankx_post_layout_%d', $this->getId()),
-            'config' => json_encode($args),
+            'config' => $args,
         ), null, false));
     }
 }
