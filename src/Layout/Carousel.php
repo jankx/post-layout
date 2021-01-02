@@ -15,13 +15,13 @@ class Carousel extends PostLayout
     protected function defaultOptions()
     {
         return array(
-            'large_first_post' => false,
             'show_thumbnail' => true,
-            'thumbnail_position' => 'left',
+            'thumbnail_position' => 'top',
             'header_text' => '',
             'columns' => 4,
             'rows' => 1,
             'show_excerpt' => false,
+            'item_style' => 'card',
         );
     }
 
@@ -40,7 +40,7 @@ class Carousel extends PostLayout
     {
         $args = $this->options;
         ?>
-        <div class="jankx-posts-layout list">
+        <div class="jankx-posts-layout carousel">
             <?php
             if ($args['header_text']) {
                 jankx_template('common/header-text', array(
