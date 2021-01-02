@@ -141,31 +141,24 @@ class Carousel extends PostLayout
         echo '</div> <!-- Close .splide -->';
     }
 
-    protected function transformConfigrations($args)
-    {
-        $configs = '';
-
-        foreach ($args as $key => $value) {
-            switch (gettype($value)) {
-                default:
-                    $configs .= sprintf('%s: "%s"', $key, $value);
-                    break;
-            }
-        }
-
-        return sprintf('{%s}', $configs);
-    }
-
     public function createJsMountSlide()
     {
         $args = array(
             'perPage' => array_get($this->options, 'columns', 4),
+            'breakpoints' => array(
+                '800' => array(
+                    'perPage' => 2,
+                ),
+                '600' => array(
+                    'perPage' => 1
+                )
+            )
         );
 
         execute_script(jankx_template('post-layout/carousel/script', array(
             'id' => sprintf('jankx-post-layout-%d', $this->getId()),
             'var' => sprintf('jankx_post_layout_%d', $this->getId()),
-            'config' => $this->transformConfigrations($args)
+            'config' => json_encode($args),
         ), null, false));
     }
 }
