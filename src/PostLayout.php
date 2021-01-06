@@ -160,7 +160,12 @@ abstract class PostLayout implements PostLayoutConstract
             $templateData[$field] = $this->options[$field];
         }
 
-        return $templateData;
+        return apply_filters(
+            'jankx_post_layout_parse_item_data',
+            $templateData,
+            $this->wp_query->post,
+            $this
+        );
     }
 
     public static function addCustomDataField($fieldName, $defaultValue = null)
