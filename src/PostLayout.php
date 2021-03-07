@@ -16,6 +16,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $instanceId;
     protected $wp_query;
     protected $options;
+
     protected $supportColumns = false;
 
     public function __construct($wp_query = null)
@@ -48,7 +49,9 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected function defaultOptions()
     {
-        return array();
+        return array(
+            'max_loop_items' => -1,
+        );
     }
 
     public function setOptions($options)
@@ -71,6 +74,14 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected function checkNextPost()
     {
+        $max_loop_items = array_get($this->options, 'max_loop_items');
+        if ($max_loop_items > 0) {
+            if ($this->wp_query->post_count < $max_loop_items) {
+                $max_loop_items = $this->wp_query->post_count;
+            }
+            return $this->wp_query->current_post < ($max_loop_items - 1);
+        }
+
         return $this->wp_query->have_posts();
     }
 
