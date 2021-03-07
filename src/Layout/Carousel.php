@@ -58,7 +58,7 @@ class Carousel extends PostLayout
 
                     $this->createControls();
                     $this->createTrackList();
-                while ($this->wp_query->have_posts()) {
+                while ($this->checkNextPost()) {
                     $this->wp_query->the_post();
                     $post = &$this->wp_query->post;
                     // Setup the post classes

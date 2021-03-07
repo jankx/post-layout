@@ -69,6 +69,11 @@ abstract class PostLayout implements PostLayoutConstract
         return (array)$this->options;
     }
 
+    protected function checkNextPost()
+    {
+        return $this->wp_query->have_posts();
+    }
+
     public function loop_start()
     {
         $postsListClasses = array('jankx-posts', sprintf('%s-layout', $this->get_name()));

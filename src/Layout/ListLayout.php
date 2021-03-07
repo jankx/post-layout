@@ -63,7 +63,7 @@ class ListLayout extends PostLayout
                     // Create post list
                     $this->loop_start('list', $args);
 
-                    while ($this->wp_query->have_posts()) {
+                    while ($this->checkNextPost()) {
                         $this->wp_query->the_post();
                         $post = &$this->wp_query->post;
                         // Setup the post classes
