@@ -24,6 +24,9 @@ class PostTemplateLoader
 
         // Create post layout style instance
         $postLayoutInstance = new $layoutCls($GLOBALS['wp_query']);
+        // $postLayoutInstance->setOptions(array(
+        //     'columns' => 4,
+        // ));
 
         // Render posts
         if (is_a($postLayoutInstance, PostLayout::class)) {

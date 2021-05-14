@@ -15,7 +15,7 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected $instanceId;
     protected $wp_query;
-    protected $options;
+    protected $options = array();
 
     protected $supportColumns = false;
 
@@ -38,6 +38,8 @@ abstract class PostLayout implements PostLayoutConstract
             $this->instanceId = max(static::$layoutInstances) + 1;
         }
         array_push(static::$layoutInstances, $this->instanceId);
+
+        $this->options = $this->defaultOptions();
     }
 
     public function getId()
@@ -58,10 +60,10 @@ abstract class PostLayout implements PostLayoutConstract
     {
         // Parse post layout with default options
         $this->options =  apply_filters(
-            'jankx_post_layout_set_options',
+            "jankx_post_layout_{$this::get_name()}_set_options",
             wp_parse_args(
                 $options,
-                $this->defaultOptions()
+                $this->options
             ),
             $this
         );
