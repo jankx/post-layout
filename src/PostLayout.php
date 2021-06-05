@@ -163,7 +163,6 @@ abstract class PostLayout implements PostLayoutConstract
     protected function prepareTemplateData()
     {
         $templateData = array(
-            'post' => $this->wp_query->post,
             'show_title' => array_get($this->options, 'show_title', true),
             'show_excerpt' => array_get($this->options, 'show_excerpt', false),
             'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
