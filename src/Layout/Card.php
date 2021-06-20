@@ -30,9 +30,16 @@ class Card extends PostLayout
         <div class="jankx-posts-layout card">
             <?php
             if ($args['header_text']) {
+                $css_classes = array('widget-text-header');
+                $url = array_get($args['view_all_url'], 'url');
+                if ($url) {
+                    $css_classes[] = 'has-link';
+                }
+
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
-                    'url ' => $args['view_all_url'],
+                    'url ' => $url,
+                    'class_name' => implode(' ', $css_classes),
                 ));
             }
             ?>

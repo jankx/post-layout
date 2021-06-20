@@ -28,8 +28,16 @@ class Preset1 extends PostLayout
         <div class="jankx-posts-layout left-post right-list preset-1">
             <?php
             if ($args['header_text']) {
+                $css_classes = array('widget-text-header');
+                $url = array_get($args['view_all_url'], 'url');
+                if ($url) {
+                    $css_classes[] = 'has-link';
+                }
+
                 jankx_template('common/header-text', array(
                     'text' => $args['header_text'],
+                    'url ' => $url,
+                    'class_name' => implode(' ', $css_classes),
                 ));
             }
             ?>
