@@ -26,7 +26,7 @@ class Preset1 extends PostLayout
         );
     }
 
-    public function render()
+    public function render($echo = true)
     {
         $args = $this->options;
         ?>

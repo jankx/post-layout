@@ -17,7 +17,7 @@ class Tabs extends PostLayout
         return __('Tabs', 'jankx');
     }
 
-    public function render()
+    public function render($echo = true)
     {
     }
 }

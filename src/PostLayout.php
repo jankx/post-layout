@@ -189,4 +189,7 @@ abstract class PostLayout implements PostLayoutConstract
     {
         static::$customDataFields[$fieldName] = $defaultValue;
     }
+
+    public function renderItem($post = null) {
+    }
 }

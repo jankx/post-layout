@@ -29,7 +29,7 @@ class Card extends PostLayout
         );
     }
 
-    public function render()
+    public function render($echo = true)
     {
         $args = $this->options;
         ?>

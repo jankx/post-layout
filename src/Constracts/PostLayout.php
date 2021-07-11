@@ -5,5 +5,5 @@ interface PostLayout
 {
     public static function get_layout_label();
 
-    public function render();
+    public function render($echo = true);
 }
