@@ -87,6 +87,14 @@ class PostLayoutManager
         return $layout;
     }
 
+    public function getLayout($layoutName, $wp_query = null) {
+        if (empty($this->supportedLayouts[$layoutName])) {
+            return;
+        }
+        $layoutCls = $this->supportedLayouts[$layoutName];
+        return new $layoutCls($wp_query);
+    }
+
     public function initHooks()
     {
         add_action('template_redirect', array($this->templateLoader, 'load'));

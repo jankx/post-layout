@@ -18,6 +18,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $options = array();
 
     protected $supportColumns = false;
+    protected $contentGenerator;
 
     public function __construct($wp_query = null)
     {
