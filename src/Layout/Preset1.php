@@ -5,11 +5,16 @@ use Jankx\PostLayout\PostLayout;
 
 class Preset1 extends PostLayout
 {
-    const NAME = 'preset-1';
+    const LAYOUT_NAME = 'preset-1';
 
     public function get_name()
     {
-        return static::NAME;
+        return static::LAYOUT_NAME;
+    }
+
+    public static function get_layout_label()
+    {
+        return sprintf(__('Preset %d', 'jankx'), 1);
     }
 
     protected function defaultOptions()

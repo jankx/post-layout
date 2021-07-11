@@ -5,9 +5,16 @@ use Jankx\PostLayout\PostLayout;
 
 class Grid extends PostLayout
 {
+    const LAYOUT_NAME = 'grid';
+
     public function get_name()
     {
-        return 'grid';
+        return static::LAYOUT_NAME;
+    }
+
+    public static function get_layout_label()
+    {
+        return __('Grid', 'jankx');
     }
 
     protected function defaultOptions()

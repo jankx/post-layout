@@ -10,12 +10,6 @@ use Jankx\PostLayout\Layout\Grid;
 
 class PostLayoutManager
 {
-    const LIST_LAYOUT = 'list';
-    const PRESET_1 = 'left_post_with_right_list';
-    const MANSORY = 'mansory';
-    const CARD = 'card';
-    const CAROUSEL = 'carousel';
-    const GRID = 'grid';
     const VERSION = '1.0.0';
 
     protected static $instance;
@@ -44,28 +38,29 @@ class PostLayoutManager
     {
         if (is_null($this->supportedLayouts) || $refresh) {
             $this->supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
-                static::LIST_LAYOUT => array(
-                    'name' => __('List', 'jankx'),
+                ListLayout::LAYOUT_NAME => array(
+                    'name' => ListLayout::get_layout_label(),
                     'class' => ListLayout::class,
                 ),
-                static::PRESET_1 => array(
-                    'name' => __('Preset 1', 'jankx'),
+                Preset1::LAYOUT_NAME => array(
+                    'name' => Preset1::get_layout_label(),
                     'class' => Preset1::class,
                 ),
-                static::CARD => array(
-                    'name' => __('Card', 'jankx'),
+                Card::LAYOUT_NAME => array(
+                    'name' => Card::get_layout_label(),
                     'class' => Card::class,
                 ),
-                static::CAROUSEL => array(
-                    'name' => __('Carousel', 'jankx'),
+                Carousel::LAYOUT_NAME => array(
+                    'name' => Carousel::get_layout_label(),
                     'class' => Carousel::class,
                 ),
-                static::GRID => array(
-                    'name' => __('Grid', 'jankx'),
+                Grid::LAYOUT_NAME => array(
+                    'name' => Grid::get_layout_label(),
                     'class' => Grid::class,
                 )
             ));
         }
+
         $args = wp_parse_args($args, array(
             'type' => 'all',
         ));
@@ -102,7 +97,7 @@ class PostLayoutManager
     public function asset_url($path = '')
     {
         if (is_null($this->assetsDirUrl)) {
-            $this->assetsDirUrl = jankx_get_path_url( dirname(__DIR__) );
+            $this->assetsDirUrl = jankx_get_path_url(dirname(__DIR__));
         }
         return sprintf('%s/assets/%s', $this->assetsDirUrl, $path);
     }

@@ -3,6 +3,7 @@ namespace Jankx\PostLayout;
 
 use Jankx\PostLayout\Constracts\PostLayout;
 use Jankx\PostLayout\PostLayoutManager;
+use Jankx\PostLayout\Layout\ListLayout;
 
 class PostTemplateLoader
 {
@@ -18,7 +19,7 @@ class PostTemplateLoader
         $layoutManager = PostLayoutManager::getInstance();
         $layoutStyle   = apply_filters(
             "jankx_post_layout_page_{$page}_style",
-            PostLayoutManager::LIST_LAYOUT
+            ListLayout::LAYOUT_NAME
         );
         $layoutCls     = $layoutManager->getLayoutClass($layoutStyle);
 

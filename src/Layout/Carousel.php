@@ -5,11 +5,18 @@ use Jankx\PostLayout\PostLayout;
 
 class Carousel extends PostLayout
 {
+    const LAYOUT_NAME = 'carousel';
+
     protected $currentIndex = 0;
 
     public function get_name()
     {
-        return 'carousel';
+        return static::LAYOUT_NAME;
+    }
+
+    public static function get_layout_label()
+    {
+        return __('Carousel', 'jankx');
     }
 
     protected function defaultOptions()

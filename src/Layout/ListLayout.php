@@ -5,9 +5,16 @@ use Jankx\PostLayout\PostLayout;
 
 class ListLayout extends PostLayout
 {
+    const LAYOUT_NAME = 'list';
+
     public function get_name()
     {
         return 'list';
+    }
+
+    public static function get_layout_label()
+    {
+        return __('List', 'jankx');
     }
 
     protected function defaultOptions()
