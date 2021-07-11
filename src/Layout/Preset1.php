@@ -50,14 +50,11 @@ class Preset1 extends PostLayout
                     // Setup the post classes
                     $this->createCustomPostClass($post);
 
-                    $data = array(
-                        'post' => $post,
-                    );
                     jankx_template(array(
                         $post->post_type . '-layout/preset1/large-item',
                         'post-layout/preset1/large-item',
                         'post-layout/large-item',
-                    ), $data);
+                    ));
 
                     // Create post list
                     $this->loop_start();

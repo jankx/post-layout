@@ -16,12 +16,13 @@ class PostLayoutManager
     const CARD = 'card';
     const CAROUSEL = 'carousel';
     const GRID = 'grid';
+    const VERSION = '1.0.0';
 
     protected static $instance;
 
     protected $supportedLayouts;
     protected $templateLoader;
-
+    protected $assetsDirUrl;
 
     public static function getInstance()
     {
@@ -95,5 +96,34 @@ class PostLayoutManager
     {
         add_action('template_redirect', array($this->templateLoader, 'load'));
         add_filter('post_class', array(PostLayout::class, 'postClasses'));
+        add_action('wp_enqueue_scripts', array($this, 'registerScripts'));
+    }
+
+    public function asset_url($path = '')
+    {
+        if (is_null($this->assetsDirUrl)) {
+            $this->assetsDirUrl = jankx_get_path_url( dirname(__DIR__) );
+        }
+        return sprintf('%s/assets/%s', $this->assetsDirUrl, $path);
+    }
+
+    public function registerScripts()
+    {
+        wp_register_style(
+            'jankx-post-layout',
+            $this->asset_url('css/post-layout.css'),
+            array(),
+            static::VERSION
+        );
+
+        if (defined('JANKX_FRAMEWORK_FILE_LOADER')) {
+            add_filter('jankx_asset_css_dependences', function ($deps) {
+                array_push($deps, 'jankx-post-layout');
+
+                return $deps;
+            });
+        } else {
+            wp_enqueue_style('jankx-post-layout');
+        }
     }
 }
