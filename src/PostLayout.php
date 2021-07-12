@@ -230,7 +230,7 @@ abstract class PostLayout implements PostLayoutConstract
 
         $this->templateEngine->render(
             array(
-                'post-layout/card/loop-item',
+                "post-layout/{$this->get_name()}/loop-item",
                 'post-layout/loop-item'
             ),
             $this->prepareTemplateData()
@@ -245,7 +245,7 @@ abstract class PostLayout implements PostLayoutConstract
 
         $args = $this->options;
         ?>
-        <div class="jankx-posts-layout card">
+        <div class="jankx-posts-layout <?php echo $this->get_name(); ?>">
             <?php
             // Create post list
             $this->loop_start(
