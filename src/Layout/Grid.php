@@ -33,7 +33,6 @@ class Grid extends PostLayout
         $args = $this->options;
         ?>
         <div class="jankx-posts-layout grid">
-            <div class="posts-layout-wrapper">
             <?php
                 // Create post list
                 $this->loop_start('card', $args);
@@ -53,7 +52,6 @@ class Grid extends PostLayout
                 $this->loop_end();
                 wp_reset_postdata();
             ?>
-            </div>
 
             <?php if (array_get($args, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>

@@ -48,35 +48,33 @@ class Carousel extends PostLayout
         $args = $this->options;
         ?>
         <div class="jankx-posts-layout carousel">
-            <div class="posts-layout-wrapper">
-                <?php
-                // Create post list
-                $this->loop_start('carousel', $args);
+            <?php
+            // Create post list
+            $this->loop_start('carousel', $args);
 
-                $this->createSplide();
+            $this->createSplide();
 
-                    $this->createControls();
-                    $this->createTrackList();
-                while ($this->checkNextPost()) {
-                    $this->wp_query->the_post();
-                    $post = &$this->wp_query->post;
-                    // Setup the post classes
-                    $this->createCustomPostClass($post);
-                    $this->createSlideItem();
-                    jankx_template(array(
-                        $post->post_type . '-layout/carousel/loop-item',
-                        'post-layout/carousel/loop-item',
-                        'post-layout/loop-item',
-                    ), $this->prepareTemplateData());
-                    $this->closeSlideItem();
-                }
-                    $this->closeTrackList();
-                $this->closeSplide();
+                $this->createControls();
+                $this->createTrackList();
+            while ($this->checkNextPost()) {
+                $this->wp_query->the_post();
+                $post = &$this->wp_query->post;
+                // Setup the post classes
+                $this->createCustomPostClass($post);
+                $this->createSlideItem();
+                jankx_template(array(
+                    $post->post_type . '-layout/carousel/loop-item',
+                    'post-layout/carousel/loop-item',
+                    'post-layout/loop-item',
+                ), $this->prepareTemplateData());
+                $this->closeSlideItem();
+            }
+                $this->closeTrackList();
+            $this->closeSplide();
 
-                $this->loop_end('carousel', $args);
-                wp_reset_postdata();
-                ?>
-            </div>
+            $this->loop_end('carousel', $args);
+            wp_reset_postdata();
+            ?>
         </div>
         <?php
         $this->createJsMountSlide();

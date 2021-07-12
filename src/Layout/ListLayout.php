@@ -44,45 +44,43 @@ class ListLayout extends PostLayout
         $args = $this->options;
         ?>
         <div class="jankx-posts-layout list">
-            <div class="posts-layout-wrapper">
-                <div class="jankx-layout-inner">
-                    <?php
-                    if ($args['large_first_post']) {
-                        // Create first post
-                        $this->wp_query->the_post();
-                        // Setup the post classes
-                        $this->createCustomPostClass($this->wp_query->post);
-                        jankx_template(array(
-                            $post->post_type . '-layout/list-large-item',
-                            'post-layout/list/large-item',
-                            'post-layout/large-item',
-                        ), $this->prepareTemplateData());
+            <div class="jankx-layout-inner">
+                <?php
+                if ($args['large_first_post']) {
+                    // Create first post
+                    $this->wp_query->the_post();
+                    // Setup the post classes
+                    $this->createCustomPostClass($this->wp_query->post);
+                    jankx_template(array(
+                        $post->post_type . '-layout/list-large-item',
+                        'post-layout/list/large-item',
+                        'post-layout/large-item',
+                    ), $this->prepareTemplateData());
+                }
+
+                // Create post list
+                $this->loop_start('list', $args);
+
+                while ($this->checkNextPost()) {
+                    $this->wp_query->the_post();
+                    $post = &$this->wp_query->post;
+                    // Setup the post classes
+                    $this->createCustomPostClass($post);
+
+                    $itemClasses = array();
+                    if ($args['show_thumbnail']) {
+                        $itemClasses = array('thumbnail-' . $args['thumbnail_position']);
                     }
+                    jankx_template(array(
+                        $post->post_type . '-layout/list/loop-item',
+                        'post-layout/list/loop-item',
+                        'post-layout/loop-item',
+                    ), $this->prepareTemplateData());
+                }
 
-                    // Create post list
-                    $this->loop_start('list', $args);
-
-                    while ($this->checkNextPost()) {
-                        $this->wp_query->the_post();
-                        $post = &$this->wp_query->post;
-                        // Setup the post classes
-                        $this->createCustomPostClass($post);
-
-                        $itemClasses = array();
-                        if ($args['show_thumbnail']) {
-                            $itemClasses = array('thumbnail-' . $args['thumbnail_position']);
-                        }
-                        jankx_template(array(
-                            $post->post_type . '-layout/list/loop-item',
-                            'post-layout/list/loop-item',
-                            'post-layout/loop-item',
-                        ), $this->prepareTemplateData());
-                    }
-
-                    $this->loop_end('list', $args);
-                    wp_reset_postdata();
-                    ?>
-                </div>
+                $this->loop_end('list', $args);
+                wp_reset_postdata();
+                ?>
             </div>
             <?php if (array_get($args, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>
