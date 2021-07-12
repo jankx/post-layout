@@ -19,6 +19,7 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected $supportColumns = false;
     protected $contentGenerator;
+    protected $contentGeneratorArgs = array();
 
     public function __construct($wp_query = null)
     {
@@ -191,6 +192,19 @@ abstract class PostLayout implements PostLayoutConstract
         static::$customDataFields[$fieldName] = $defaultValue;
     }
 
-    public function renderItem($post = null) {
+    public function setContentGenerator($generator)
+    {
+        if (is_callable($generator)) {
+            $this->contentGenerator = $generator;
+        } elseif (is_array($generator) && isset($generator['function']) && is_callable($generator['function'])) {
+            $this->contentGenerator = $generator['function'];
+            if (isset($generator['args'])) {
+                $this->contentGeneratorArgs = $generator['args'];
+            }
+        }
+    }
+
+    public function renderLoopItem($post)
+    {
     }
 }

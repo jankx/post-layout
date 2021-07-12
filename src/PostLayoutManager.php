@@ -87,11 +87,13 @@ class PostLayoutManager
         return $layout;
     }
 
-    public function getLayout($layoutName, $wp_query = null) {
-        if (empty($this->supportedLayouts[$layoutName])) {
+    public static function createLayout($layoutName, $wp_query = null)
+    {
+        $instance = static::getInstance();
+        if (empty($instance->supportedLayouts[$layoutName])) {
             return;
         }
-        $layoutCls = $this->supportedLayouts[$layoutName];
+        $layoutCls = array_get($instance->supportedLayouts[$layoutName], 'class');
         return new $layoutCls($wp_query);
     }
 
