@@ -28,37 +28,4 @@ class Card extends PostLayout
             'show_excerpt' => false,
         );
     }
-
-    public function render($echo = true)
-    {
-        $args = $this->options;
-        ?>
-        <div class="jankx-posts-layout card">
-            <?php
-            // Create post list
-            $this->loop_start('card', $args);
-
-            while ($this->checkNextPost()) {
-                $this->wp_query->the_post();
-                $post = &$this->wp_query->post;
-
-                // Setup the post classes
-                $this->createCustomPostClass($post);
-                jankx_template(array(
-                    $post->post_type . '-layout/card/loop-item',
-                    'post-layout/card/loop-item',
-                    'post-layout/loop-item',
-                ), $this->prepareTemplateData());
-            }
-
-            $this->loop_end('card', $args);
-            wp_reset_postdata();
-            ?>
-
-            <?php if (array_get($args, 'show_paginate', false)) : ?>
-                <?php echo jankx_paginate(); ?>
-            <?php endif; ?>
-        </div>
-        <?php
-    }
 }

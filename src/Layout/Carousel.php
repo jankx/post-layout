@@ -74,10 +74,11 @@ class Carousel extends PostLayout
 
             $this->loop_end('carousel', $args);
             wp_reset_postdata();
+
+            $this->createSlidesOptionsVariable();
             ?>
         </div>
         <?php
-        $this->createJsMountSlide();
     }
 
     protected function createSplide()
@@ -138,7 +139,7 @@ class Carousel extends PostLayout
         echo '</div> <!-- Close .splide -->';
     }
 
-    public function createJsMountSlide()
+    public function createSlidesOptionsVariable()
     {
         $args = array(
             'perPage' => array_get($this->options, 'columns', 4),

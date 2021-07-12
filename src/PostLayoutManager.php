@@ -12,32 +12,41 @@ class PostLayoutManager
 {
     const VERSION = '1.0.0';
 
-    protected static $instance;
+    protected static $instances;
+    protected static $supportedLayouts;
 
-    protected $supportedLayouts;
-    protected $templateLoader;
-    protected $assetsDirUrl;
+    protected static $assetsDirUrl;
 
-    public static function getInstance()
+    protected $templateEngine;
+
+    public static function getInstance($engineId = null)
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static();
+        if (isset(static::$instances[$engineId])) {
+            return static::$instances[$engineId];
         }
-        return static::$instance;
     }
 
-    private function __construct()
+    public static function createInstance($templateEngine)
     {
-        $this->templateLoader = new PostTemplateLoader();
-
-        $this->getLayouts();
-        $this->initHooks();
+        $id = $templateEngine->getId();
+        if (!isset($instances[$id])) {
+            static::$instances[$id] = new static($templateEngine);
+        }
+        return static::$instances[$id];
     }
 
-    public function getLayouts($args = array(), $refresh = false)
+    private function __construct($templateEngine)
     {
-        if (is_null($this->supportedLayouts) || $refresh) {
-            $this->supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
+        if (empty(static::$instances)) {
+            $this->initHooks();
+        }
+        $this->templateEngine = &$templateEngine;
+    }
+
+    public static function getLayouts($args = array(), $refresh = false)
+    {
+        if (is_null(static::$supportedLayouts) || $refresh) {
+            static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
                 ListLayout::LAYOUT_NAME => array(
                     'name' => ListLayout::get_layout_label(),
                     'class' => ListLayout::class,
@@ -68,48 +77,53 @@ class PostLayoutManager
         if ($args['type'] === 'names') {
             return array_map(function ($value) {
                 return $value['name'];
-            }, $this->supportedLayouts);
+            }, static::$supportedLayouts);
         }
 
-        return $this->supportedLayouts;
+        return static::$supportedLayouts;
     }
 
     public function getLayoutClass($layoutName = 'list')
     {
-        if (empty($this->supportedLayouts[$layoutName])) {
+        if (empty(static::$supportedLayouts[$layoutName])) {
             return;
         }
 
-        $layout = $this->supportedLayouts[$layoutName];
+        $layout = static::$supportedLayouts[$layoutName];
         if (is_array($layout)) {
             return array_get($layout, 'class');
         }
         return $layout;
     }
 
-    public static function createLayout($layoutName, $wp_query = null)
+    public function createLayout($layoutName, $wp_query = null)
     {
-        $instance = static::getInstance();
-        if (empty($instance->supportedLayouts[$layoutName])) {
+        if (empty(static::$supportedLayouts[$layoutName])) {
             return;
         }
-        $layoutCls = array_get($instance->supportedLayouts[$layoutName], 'class');
-        return new $layoutCls($wp_query);
+        $layoutCls = array_get(static::$supportedLayouts[$layoutName], 'class');
+        $layout    = new $layoutCls($wp_query);
+
+        $layout->setTemplateEngine($this->templateEngine);
+
+        return $layout;
     }
 
     public function initHooks()
     {
-        add_action('template_redirect', array($this->templateLoader, 'load'));
+        $templateLoader = new PostTemplateLoader();
+
+        add_action('template_redirect', array($templateLoader, 'load'));
         add_filter('post_class', array(PostLayout::class, 'postClasses'));
         add_action('wp_enqueue_scripts', array($this, 'registerScripts'));
     }
 
     public function asset_url($path = '')
     {
-        if (is_null($this->assetsDirUrl)) {
-            $this->assetsDirUrl = jankx_get_path_url(dirname(__DIR__));
+        if (is_null(static::$assetsDirUrl)) {
+            static::$assetsDirUrl = jankx_get_path_url(dirname(__DIR__));
         }
-        return sprintf('%s/assets/%s', $this->assetsDirUrl, $path);
+        return sprintf('%s/assets/%s', static::$assetsDirUrl, $path);
     }
 
     public function registerScripts()

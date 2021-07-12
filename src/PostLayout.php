@@ -3,6 +3,7 @@ namespace Jankx\PostLayout;
 
 use WP_Query;
 use Jankx\Template\Template;
+use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
 
 use function wp_parse_args;
@@ -15,6 +16,7 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected $instanceId;
     protected $wp_query;
+    protected $templateEngine;
     protected $options = array();
 
     protected $supportColumns = false;
@@ -42,6 +44,13 @@ abstract class PostLayout implements PostLayoutConstract
         array_push(static::$layoutInstances, $this->instanceId);
 
         $this->options = $this->defaultOptions();
+    }
+
+    public function setTemplateEngine($engine)
+    {
+        if (is_a($engine, Engine::class)) {
+            $this->templateEngine = $engine;
+        }
     }
 
     public function getId()
@@ -102,13 +111,13 @@ abstract class PostLayout implements PostLayoutConstract
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
 
         // This hook use to start custom render post layout
-        do_action('jankx_post_loop_start', $this->get_name(), $this);
+        do_action('jankx/layout/post/loop/start', $this->get_name(), $this);
     }
 
     public function loop_end()
     {
         // This hook use to stop custom render post layout
-        do_action('jankx_post_loop_end', $this->get_name(), $this);
+        do_action('jankx/layout/post/loop/end', $this->get_name(), $this);
 
         // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
@@ -204,7 +213,66 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
+    public function the_post()
+    {
+        $this->wp_query->the_post();
+    }
+
+    public function getCurrentPostItem()
+    {
+        return $this->wp_query->post;
+    }
+
     public function renderLoopItem($post)
     {
+        // Setup the post classes
+        $this->createCustomPostClass($post);
+
+        $this->templateEngine->render(
+            array(
+                'post-layout/card/loop-item',
+                'post-layout/loop-item'
+            ),
+            $this->prepareTemplateData()
+        );
+    }
+
+    public function render($echo = true)
+    {
+        if (!$this->templateEngine) {
+            return error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
+        }
+
+        $args = $this->options;
+        ?>
+        <div class="jankx-posts-layout card">
+            <?php
+            // Create post list
+            $this->loop_start(
+                $this->get_name(),
+                $args
+            );
+
+            while ($this->checkNextPost()) {
+                $this->the_post();
+
+                $this->renderLoopItem(
+                    $this->getCurrentPostItem()
+                );
+            }
+
+            $this->loop_end(
+                $this->get_name(),
+                $args
+            );
+
+            wp_reset_postdata();
+            ?>
+
+            <?php if (array_get($args, 'show_paginate', false)) : ?>
+                <?php echo jankx_paginate(); ?>
+            <?php endif; ?>
+        </div>
+        <?php
     }
 }

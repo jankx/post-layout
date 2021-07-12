@@ -35,9 +35,8 @@ class Preset1 extends PostLayout
                 <?php
                 // Create first post
                 $this->wp_query->the_post();
-                $post = &$this->wp_query->post;
                 // Setup the post classes
-                $this->createCustomPostClass($post);
+                $this->createCustomPostClass($this->wp_query->post);
 
                 jankx_template(array(
                     $post->post_type . '-layout/preset1/large-item',
