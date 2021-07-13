@@ -1,9 +1,10 @@
 <?php
 namespace Jankx\PostLayout\Layout;
 
+use Jankx\PostLayout\Constracts\PostLayoutChildren;
 use Jankx\PostLayout\PostLayout;
 
-class Grid extends PostLayout
+class Grid extends PostLayout implements PostLayoutChildren
 {
     const LAYOUT_NAME = 'grid';
 

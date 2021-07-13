@@ -1,9 +1,10 @@
 <?php
 namespace Jankx\PostLayout\Layout;
 
+use Jankx\PostLayout\Constracts\PostLayoutHasChildren;
 use Jankx\PostLayout\PostLayout;
 
-class Tabs extends PostLayout
+class Tabs extends PostLayout implements PostLayoutParent
 {
     const LAYOUT_NAME = 'card';
 

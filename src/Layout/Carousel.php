@@ -1,9 +1,10 @@
 <?php
 namespace Jankx\PostLayout\Layout;
 
+use Jankx\PostLayout\Constracts\PostLayoutChildren;
 use Jankx\PostLayout\PostLayout;
 
-class Carousel extends PostLayout
+class Carousel extends PostLayout implements PostLayoutChildren
 {
     const LAYOUT_NAME = 'carousel';
 
