@@ -83,19 +83,6 @@ class PostLayoutManager
         return static::$supportedLayouts;
     }
 
-    public function getLayoutClass($layoutName = 'list')
-    {
-        if (empty(static::$supportedLayouts[$layoutName])) {
-            return;
-        }
-
-        $layout = static::$supportedLayouts[$layoutName];
-        if (is_array($layout)) {
-            return array_get($layout, 'class');
-        }
-        return $layout;
-    }
-
     public function createLayout($layoutName, $wp_query = null)
     {
         if (empty(static::$supportedLayouts[$layoutName])) {

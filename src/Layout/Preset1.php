@@ -28,7 +28,11 @@ class Preset1 extends PostLayout
 
     public function render($echo = true)
     {
-        $args = $this->options;
+        if (!$this->templateEngine) {
+            error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
+
+            return;
+        }
         ?>
         <div class="jankx-posts-layout left-post right-list preset-1">
             <div class="jankx-posts-layout-inner">
@@ -38,7 +42,7 @@ class Preset1 extends PostLayout
                 // Setup the post classes
                 $this->createCustomPostClass($this->wp_query->post);
 
-                jankx_template(array(
+                $this->templateEngine->render(array(
                     $post->post_type . '-layout/preset1/large-item',
                     'post-layout/preset1/large-item',
                     'post-layout/large-item',
@@ -51,7 +55,7 @@ class Preset1 extends PostLayout
                     $this->wp_query->the_post();
 
                     $post = $this->wp_query->post;
-                    jankx_template(array(
+                    $this->templateEngine->render(array(
                         $post->post_type . 'layout-/preset1/loop-item',
                         'post-layout/preset1/loop-item',
                         'post-layout/loop-item',
@@ -63,7 +67,7 @@ class Preset1 extends PostLayout
                 ?>
             </div>
 
-            <?php if (array_get($args, 'show_paginate', false)) : ?>
+            <?php if (array_get($this->options, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>
             <?php endif; ?>
         </div>

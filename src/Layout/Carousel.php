@@ -45,6 +45,12 @@ class Carousel extends PostLayout
 
     public function render($echo = true)
     {
+        if (!$this->templateEngine) {
+            error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
+
+            return;
+        }
+
         $args = $this->options;
         ?>
         <div class="jankx-posts-layout carousel">
@@ -62,7 +68,7 @@ class Carousel extends PostLayout
                 // Setup the post classes
                 $this->createCustomPostClass($post);
                 $this->createSlideItem();
-                jankx_template(array(
+                $this->templateEngine->render(array(
                     $post->post_type . '-layout/carousel/loop-item',
                     'post-layout/carousel/loop-item',
                     'post-layout/loop-item',
@@ -93,7 +99,7 @@ class Carousel extends PostLayout
 
     protected function createControls()
     {
-        jankx_template('post-layout/carousel/nav');
+        $this->templateEngine->render('post-layout/carousel/nav');
     }
 
     protected function createTrackList()
@@ -153,7 +159,7 @@ class Carousel extends PostLayout
             )
         );
 
-        execute_script(jankx_template('post-layout/carousel/script', array(
+        execute_script($this->templateEngine->render('post-layout/carousel/script', array(
             'id' => sprintf('jankx-post-layout-%d', $this->getId()),
             'var' => sprintf('jankx_post_layout_%d', $this->getId()),
             'config' => $args,

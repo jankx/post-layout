@@ -100,7 +100,14 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function loop_start()
     {
-        $postsListClasses = array('jankx-posts', sprintf('%s-layout', $this->get_name()));
+        $post_types = (array)$this->wp_query->query_vars['post_type'];
+        $postsListClasses = array_merge(
+            array('jankx-posts', sprintf('%s-layout', $this->get_name())),
+            array_map(function ($post_type) {
+                return 'post-type-' . $post_type;
+            }, $post_types)
+        );
+
         if ($this->supportColumns && !empty($this->options['columns'])) {
             $postsListClasses[] = 'columns-' . $this->options['columns'];
         }
@@ -110,14 +117,18 @@ abstract class PostLayout implements PostLayoutConstract
 
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
 
-        // This hook use to start custom render post layout
-        do_action('jankx/layout/post/loop/start', $this->get_name(), $this);
+        foreach ($post_types as $post_type) {
+            // This hook use to start custom render post layout
+            do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
+        }
     }
 
     public function loop_end()
     {
-        // This hook use to stop custom render post layout
-        do_action('jankx/layout/post/loop/end', $this->get_name(), $this);
+        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+            // This hook use to stop custom render post layout
+            do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
+        }
 
         // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
@@ -228,19 +239,27 @@ abstract class PostLayout implements PostLayoutConstract
         // Setup the post classes
         $this->createCustomPostClass($post);
 
-        $this->templateEngine->render(
-            array(
-                "post-layout/{$this->get_name()}/loop-item",
-                'post-layout/loop-item'
-            ),
-            $this->prepareTemplateData()
-        );
+        if (is_null($this->contentGenerator)) {
+            return $this->templateEngine->render(
+                array(
+                    "post-layout/{$this->get_name()}/loop-item",
+                    'post-layout/loop-item'
+                ),
+                $this->prepareTemplateData()
+            );
+        }
+
+        $args = $this->contentGeneratorArgs;
+        array_push($args, $post);
+
+        return call_user_func_array($this->contentGenerator, $args);
     }
 
     public function render($echo = true)
     {
         if (!$this->templateEngine) {
-            return error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
+            error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
+            return;
         }
 
         $args = $this->options;
