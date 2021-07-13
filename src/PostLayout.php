@@ -185,16 +185,19 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    protected function prepareTemplateData()
+    protected function prepareTemplateData($data = array())
     {
-        $templateData = array(
-            'show_title' => array_get($this->options, 'show_title', true),
-            'show_excerpt' => array_get($this->options, 'show_excerpt', false),
-            'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
-            'thumbnail_size' => array_get($this->options, 'thumbnail_size', 'thumbnail'),
-            'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
-            '_post_layout' => __CLASS__,
+        $templateData = wp_parse_args(
+            $data,
+            array(
+                'show_title' => array_get($this->options, 'show_title', true),
+                'show_excerpt' => array_get($this->options, 'show_excerpt', false),
+                'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
+                'thumbnail_size' => array_get($this->options, 'thumbnail_size', 'thumbnail'),
+                'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
+            )
         );
+
         foreach (static::$customDataFields as $field => $defaultValue) {
             if (!isset($this->options[$field])) {
                 $this->options[$field] = $defaultValue;
@@ -319,6 +322,13 @@ abstract class PostLayout implements PostLayoutConstract
             $layoutName,
             $this->wp_query
         );
+
+        if (is_callable($this->contentGenerator)) {
+            $this->childLayout->setContentGenerator(array(
+                'function' => &$this->contentGenerator,
+                'args' => &$this->contentGeneratorArgs,
+            ));
+        }
     }
 
     public function getChildLayout()

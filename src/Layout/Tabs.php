@@ -3,6 +3,7 @@ namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\PostLayout;
+use Jankx\PostLayout\Layout\Tabs\Tab;
 
 class Tabs extends PostLayout implements PostLayoutParent
 {
@@ -22,15 +23,29 @@ class Tabs extends PostLayout implements PostLayoutParent
 
     public function render($echo = true)
     {
+        if (!$echo) {
+            ob_start();
+        }
+
+        $this->templateEngine->render(
+            'post-layout/tabs/tabs',
+            array(
+                'tabs' => $this->tabs,
+                'tab_content' => $this->childLayout->render(false)
+            )
+        );
+
+        if (!$echo) {
+            return ob_get_clean();
+        }
     }
 
     public function addTab($tab_title, $tab_object, $url = null)
     {
-        $tab_object = wp_parse_args($tab_object, array(
-            'type' => '', // WordPress data type such as: post, taxonomy
-            'name' => '', // The type of WordPress data type such as: post, page, category, etc,...
-            'id' => '', // The object ID
-        ));
+        array_push(
+            $this->tabs,
+            new Tab($tab_title, $tab_object, $url)
+        );
     }
 
     public function addTabs($tabs)
@@ -41,6 +56,15 @@ class Tabs extends PostLayout implements PostLayoutParent
                 continue;
             }
             $this->addTab($tab['title'], $tab['object'], array_get($tab, 'url'));
+        }
+    }
+
+    public function setContentGenerator($generator)
+    {
+        if (isset($this->childLayout)) {
+            $this->childLayout->setContentGenerator($generator);
+        } else {
+            parent::setContentGenerator($generator);
         }
     }
 }
