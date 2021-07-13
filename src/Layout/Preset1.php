@@ -40,9 +40,11 @@ class Preset1 extends PostLayout
             <div class="jankx-posts-layout-inner">
                 <?php
                 // Create first post
-                $this->wp_query->the_post();
+                $this->the_post();
+
+                $post = $this->getCurrentPostItem();
                 // Setup the post classes
-                $this->createCustomPostClass($this->wp_query->post);
+                $this->createCustomPostClass($post);
 
                 $this->templateEngine->render(array(
                     $post->post_type . '-layout/preset1/large-item',
@@ -55,13 +57,9 @@ class Preset1 extends PostLayout
 
                 while ($this->checkNextPost()) {
                     $this->the_post();
-
-                    $post = $this->wp_query->post;
-                    $this->templateEngine->render(array(
-                        $post->post_type . 'layout-/preset1/loop-item',
-                        'post-layout/preset1/loop-item',
-                        'post-layout/loop-item',
-                    ), $this->prepareTemplateData());
+                    $this->renderLoopItem(
+                        $this->getCurrentPostItem()
+                    );
                 }
 
                 $this->loop_end();
