@@ -41,3 +41,11 @@ $cardLayout = $postLayoutManager->createLayout('card', $wp_query);
 // Show post layout content to end user.
 $cardLayout->render();
 ```
+
+
+# Layout supports
+- Card
+- Grid
+- List
+- Carousel
+- Tabs
