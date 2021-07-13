@@ -1,7 +1,7 @@
 <?php
 namespace Jankx\PostLayout\Layout;
 
-use Jankx\PostLayout\Constracts\PostLayoutHasChildren;
+use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\PostLayout;
 
 class Tabs extends PostLayout implements PostLayoutParent

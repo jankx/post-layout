@@ -1,12 +1,16 @@
 <?php
 namespace Jankx\PostLayout;
 
+use Jankx\PostLayout\Constracts\PostLayoutParent;
+use Jankx\PostLayout\Constracts\PostLayoutChildren;
+
 use Jankx\PostLayout\Layout\ListLayout;
 use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Mansory;
 use Jankx\PostLayout\Layout\Card;
 use Jankx\PostLayout\Layout\Carousel;
 use Jankx\PostLayout\Layout\Grid;
+use Jankx\PostLayout\Layout\Tabs;
 
 class PostLayoutManager
 {
@@ -66,21 +70,45 @@ class PostLayoutManager
                 Grid::LAYOUT_NAME => array(
                     'name' => Grid::get_layout_label(),
                     'class' => Grid::class,
+                ),
+                Tabs::LAYOUT_NAME => array(
+                    'name' => Tabs::get_layout_label(),
+                    'class' => Tabs::class,
                 )
             ));
         }
 
         $args = wp_parse_args($args, array(
+            'field' => 'all',
             'type' => 'all',
         ));
+        $ret = static::$supportedLayouts;
 
-        if ($args['type'] === 'names') {
-            return array_map(function ($value) {
-                return $value['name'];
-            }, static::$supportedLayouts);
+        if ($args['type'] !== 'all') {
+            switch ($args['type']) {
+                case 'child':
+                case 'children':
+                    $ret = array_filter($ret, function ($value) {
+                        return is_a($value['class'], PostLayoutChildren::class, true);
+                    });
+                    break;
+                case 'parent':
+                    $ret = array_filter($ret, function ($value) {
+                        return is_a($value['class'], PostLayoutParent::class, true);
+                    });
+                    break;
+            }
         }
 
-        return static::$supportedLayouts;
+        if ($args['field'] === 'names') {
+            return array_map(function ($value) {
+                return $value['name'];
+            }, $ret);
+        }
+
+        if($args['field'] === 'keys') {
+            return array_keys($ret);
+        }
     }
 
     public function createLayout($layoutName, $wp_query = null)
@@ -98,9 +126,6 @@ class PostLayoutManager
 
     public function initHooks()
     {
-        $templateLoader = new PostTemplateLoader();
-
-        add_action('template_redirect', array($templateLoader, 'load'));
         add_filter('post_class', array(PostLayout::class, 'postClasses'));
         add_action('wp_enqueue_scripts', array($this, 'registerScripts'));
     }
