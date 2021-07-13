@@ -242,6 +242,7 @@ abstract class PostLayout implements PostLayoutConstract
         if (is_null($this->contentGenerator)) {
             return $this->templateEngine->render(
                 array(
+                    $post->post_type . '-layout/carousel/loop-item',
                     "post-layout/{$this->get_name()}/loop-item",
                     'post-layout/loop-item'
                 ),
@@ -263,6 +264,9 @@ abstract class PostLayout implements PostLayoutConstract
         }
 
         $args = $this->options;
+        if (!$echo) {
+            ob_start();
+        }
         ?>
         <div class="jankx-posts-layout <?php echo $this->get_name(); ?>">
             <?php
@@ -293,5 +297,8 @@ abstract class PostLayout implements PostLayoutConstract
             <?php endif; ?>
         </div>
         <?php
+        if (!$echo) {
+            return ob_get_clean();
+        }
     }
 }

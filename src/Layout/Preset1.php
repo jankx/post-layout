@@ -30,8 +30,10 @@ class Preset1 extends PostLayout
     {
         if (!$this->templateEngine) {
             error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
-
             return;
+        }
+        if (!$echo) {
+            ob_start();
         }
         ?>
         <div class="jankx-posts-layout left-post right-list preset-1">
@@ -52,7 +54,7 @@ class Preset1 extends PostLayout
                 $this->loop_start();
 
                 while ($this->checkNextPost()) {
-                    $this->wp_query->the_post();
+                    $this->the_post();
 
                     $post = $this->wp_query->post;
                     $this->templateEngine->render(array(
@@ -72,5 +74,8 @@ class Preset1 extends PostLayout
             <?php endif; ?>
         </div>
         <?php
+        if (!$echo) {
+            return ob_get_clean();
+        }
     }
 }

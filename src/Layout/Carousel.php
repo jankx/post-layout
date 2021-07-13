@@ -47,11 +47,13 @@ class Carousel extends PostLayout
     {
         if (!$this->templateEngine) {
             error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
-
             return;
         }
 
         $args = $this->options;
+        if (!$echo) {
+            ob_start();
+        }
         ?>
         <div class="jankx-posts-layout carousel">
             <?php
@@ -63,7 +65,7 @@ class Carousel extends PostLayout
                 $this->createControls();
                 $this->createTrackList();
             while ($this->checkNextPost()) {
-                $this->wp_query->the_post();
+                $this->the_post();
                 $post = &$this->wp_query->post;
                 // Setup the post classes
                 $this->createCustomPostClass($post);
@@ -85,6 +87,9 @@ class Carousel extends PostLayout
             ?>
         </div>
         <?php
+        if (!$echo) {
+            return ob_get_clean();
+        }
     }
 
     protected function createSplide()
