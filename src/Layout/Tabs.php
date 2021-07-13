@@ -6,7 +6,7 @@ use Jankx\PostLayout\PostLayout;
 
 class Tabs extends PostLayout implements PostLayoutParent
 {
-    const LAYOUT_NAME = 'card';
+    const LAYOUT_NAME = 'tabs';
 
     public function get_name()
     {
