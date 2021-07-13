@@ -4,7 +4,9 @@ namespace Jankx\PostLayout;
 use WP_Query;
 use Jankx\Template\Template;
 use Jankx\TemplateEngine\Engine;
+use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
+use Jankx\PostLayout\PostLayoutManager;
 
 use function wp_parse_args;
 
@@ -17,6 +19,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $instanceId;
     protected $wp_query;
     protected $templateEngine;
+    protected $childLayout;
     protected $options = array();
 
     protected $supportColumns = false;
@@ -300,5 +303,32 @@ abstract class PostLayout implements PostLayoutConstract
         if (!$echo) {
             return ob_get_clean();
         }
+    }
+
+    public function addChildLayout($layoutName)
+    {
+        if (!is_a($this, PostLayoutParent::class)) {
+            throw new \Exception(sprintf(
+                '%s post layout is not support add child layout'
+            ));
+        }
+        $postLayoutManager = PostLayoutManager::getInstance(
+            $this->templateEngine->getId()
+        );
+        $this->childLayout = $postLayoutManager->createLayout(
+            $layoutName,
+            $this->wp_query
+        );
+    }
+
+    public function getChildLayout()
+    {
+        if (!is_a($this, PostLayoutParent::class)) {
+            throw new \Exception(sprintf(
+                '%s post layout is not support get child layout',
+                static::get_layout_label()
+            ));
+        }
+        return $this->childLayout;
     }
 }

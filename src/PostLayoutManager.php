@@ -106,7 +106,7 @@ class PostLayoutManager
             }, $ret);
         }
 
-        if($args['field'] === 'keys') {
+        if ($args['field'] === 'keys') {
             return array_keys($ret);
         }
     }
