@@ -3,6 +3,7 @@
   "description": "WordPress post and custom post type layout generator",
   "type": "library",
   "require": {
+    "jankx/asset": "*",
     "jankx/template": "*",
     "jankx/pagination": "*"
   },
