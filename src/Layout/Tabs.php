@@ -26,15 +26,19 @@ class Tabs extends PostLayout implements PostLayoutParent
         if (!$echo) {
             ob_start();
         }
-
-        $this->templateEngine->render(
-            'post-layout/tabs/tabs',
-            array(
-                'tabs' => $this->tabs,
-                'tab_content' => $this->childLayout->render(false)
-            )
-        );
-
+        ?>
+        <div class="jankx-parent-layout tabs">
+        <?php
+            $this->templateEngine->render(
+                'post-layout/tabs/tabs',
+                array(
+                    'tabs' => $this->tabs,
+                    'tab_content' => $this->childLayout->render(false)
+                )
+            );
+        ?>
+        </div>
+        <?php
         if (!$echo) {
             return ob_get_clean();
         }

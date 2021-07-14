@@ -20,6 +20,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $wp_query;
     protected $templateEngine;
     protected $childLayout;
+    protected $hasChildren;
     protected $options = array();
 
     protected $supportColumns = false;
@@ -46,7 +47,8 @@ abstract class PostLayout implements PostLayoutConstract
         }
         array_push(static::$layoutInstances, $this->instanceId);
 
-        $this->options = $this->defaultOptions();
+        $this->options     = $this->defaultOptions();
+        $this->hasChildren = is_a($this, PostLayoutParent::class);
     }
 
     public function setTemplateEngine($engine)
@@ -114,23 +116,32 @@ abstract class PostLayout implements PostLayoutConstract
         if ($this->supportColumns && !empty($this->options['columns'])) {
             $postsListClasses[] = 'columns-' . $this->options['columns'];
         }
+
         $attributes = array(
-            'class' => $postsListClasses,
+            'class' => $postsListClasses
         );
+
+        if ($this->hasChildren) {
+            $attributes['data-post-type'] = $this->wp_query->get('post_type', 'post');
+        }
 
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
 
-        foreach ($post_types as $post_type) {
-            // This hook use to start custom render post layout
-            do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
+        if (!$this->hasChildren) {
+            foreach ($post_types as $post_type) {
+                // This hook use to start custom render post layout
+                do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
+            }
         }
     }
 
     public function loop_end()
     {
-        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
-            // This hook use to stop custom render post layout
-            do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
+        if (!$this->hasChildren) {
+            foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+                // This hook use to stop custom render post layout
+                do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
+            }
         }
 
         // Close posts list wrapper
@@ -190,10 +201,10 @@ abstract class PostLayout implements PostLayoutConstract
         $templateData = wp_parse_args(
             $data,
             array(
-                'show_title' => array_get($this->options, 'show_title', true),
-                'show_excerpt' => array_get($this->options, 'show_excerpt', false),
-                'show_thumbnail' => array_get($this->options, 'show_thumbnail', true),
-                'thumbnail_size' => array_get($this->options, 'thumbnail_size', 'thumbnail'),
+                'show_title'         => array_get($this->options, 'show_title', true),
+                'show_excerpt'       => array_get($this->options, 'show_excerpt', false),
+                'show_thumbnail'     => array_get($this->options, 'show_thumbnail', true),
+                'thumbnail_size'     => array_get($this->options, 'thumbnail_size', 'thumbnail'),
                 'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
             )
         );

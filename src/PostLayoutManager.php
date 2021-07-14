@@ -11,10 +11,11 @@ use Jankx\PostLayout\Layout\Card;
 use Jankx\PostLayout\Layout\Carousel;
 use Jankx\PostLayout\Layout\Grid;
 use Jankx\PostLayout\Layout\Tabs;
+use Jankx\PostLayout\Request\PostsFetcher;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.0.0';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -43,6 +44,11 @@ class PostLayoutManager
     {
         if (empty(static::$instances)) {
             $this->initHooks();
+
+            $fetcher = new PostsFetcher();
+            did_action('init')
+                ? $fetcher->init()
+                : add_action('init', array($fetcher, 'init'));
         }
         $this->templateEngine = &$templateEngine;
     }
@@ -140,21 +146,33 @@ class PostLayoutManager
 
     public function registerScripts()
     {
-        wp_register_style(
+        css(
             'jankx-post-layout',
             $this->asset_url('css/post-layout.css'),
             array(),
             static::VERSION
         );
+        js(
+            'jankx-post-layout',
+            $this->asset_url('js/post-layout.js'),
+            array('jankx-common'),
+            static::VERSION,
+            true
+        );
 
         if (defined('JANKX_FRAMEWORK_FILE_LOADER')) {
             add_filter('jankx_asset_css_dependences', function ($deps) {
                 array_push($deps, 'jankx-post-layout');
+                return $deps;
+            });
 
+            add_filter('jankx_asset_js_dependences', function ($deps) {
+                array_push($deps, 'jankx-post-layout');
                 return $deps;
             });
         } else {
-            wp_enqueue_style('jankx-post-layout');
+            css('jankx-post-layout');
+            js('jankx-post-layout');
         }
     }
 }
