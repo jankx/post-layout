@@ -67,23 +67,25 @@ function jankx_post_layout_tab_link_click_event(e) {
             var mode = jankx_post_wrap.dataset.mode || 'append';
 
             if (xhr.readyState === 4 && xhr.status === 200) {
+                var success_flag = xhr.responseJSON && xhr.responseJSON.success;
+
                 // Success case
-                if (!xhr.responseJSON) {
+                if (success_flag) {
                     var realContentWrap = jankx_post_wrap.dataset.contentWrapper
                         ? jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper)
                         : jankx_post_wrap;
 
                     if (mode === 'replace') {
-                        realContentWrap.html(xhr.response);
+                        realContentWrap.html(xhr.responseJSON.data.content);
                     } else {
-                        realContentWrap.appendHTML(xhr.response);
+                        realContentWrap.appendHTML(xhr.responseJSON.data.content);
                     }
                 }
 
                 // Support callback
                 var jankx_callback = jkx_post_layout['jankx_tabs_' + engine_id + '_' + layout  + '_' + post_type];
                 if (window[jankx_callback]) {
-                    window[jankx_callback](realContentWrap, body);
+                    window[jankx_callback](realContentWrap, body, success_flag);
                 }
 
                 tabsWrap.removeClass('blocked');

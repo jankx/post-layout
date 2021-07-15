@@ -15,7 +15,7 @@ use Jankx\PostLayout\Request\PostsFetcher;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.22';
+    const VERSION = '1.0.0.27';
 
     protected static $instances;
     protected static $supportedLayouts;

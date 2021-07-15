@@ -80,7 +80,8 @@ class PostsFetcher
 
         $postLayout->disableLoopStartLoopEnd();
 
-        $postLayout->render();
-        exit();
+        wp_send_json_success(array(
+            'content' => $postLayout->render(false)
+        ));
     }
 }
