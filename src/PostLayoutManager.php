@@ -149,25 +149,35 @@ class PostLayoutManager
 
     public function registerScripts()
     {
+        $splideCss = apply_filters('jankx_post_layout_use_splide_core_css', false)
+            ? 'splide-core.min'
+            : 'splide.min';
+        css(
+            'splide',
+            $this->asset_url("libs/splide/css/{$splideCss}.css"),
+            array(),
+            '2.4.12'
+        );
+
         css(
             'jankx-post-layout',
             $this->asset_url('css/post-layout.css'),
-            array(),
+            array('splide'),
             static::VERSION
         );
 
         js(
             'splide',
-            $this->asset_url('libs/splides/js/splide.js'),
+            $this->asset_url('libs/splide/js/splide.js'),
             array(),
-            static::VERSION,
+            '2.4.12',
             true
         );
 
         js(
             'jankx-post-layout',
             $this->asset_url('js/post-layout.js'),
-            array('jankx-common'),
+            array('jankx-common', 'splide'),
             static::VERSION,
             true
         )
