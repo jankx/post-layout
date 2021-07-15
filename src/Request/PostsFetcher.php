@@ -51,6 +51,18 @@ class PostsFetcher
     {
     }
 
+    public function createQueryDataTypeArgs(&$args) {
+        switch ($this->data_type) {
+            case 'taxonomy':
+                $args['tax_query'][] = array(
+                    'taxonomy' => $this->type_name,
+                    'field' => 'term_id',
+                    'terms' => intval($this->object_id),
+                );
+                return $args;
+        }
+    }
+
     public function createWordPressQuery()
     {
         $args = array(
@@ -60,6 +72,10 @@ class PostsFetcher
 
         if ($this->current_page > 1) {
             $args['paged'] = $this->current_page;
+        }
+
+        if ($this->data_type & $this->type_name & $this->object_id) {
+            $this->createQueryDataTypeArgs($args);
         }
 
         return new WP_Query($args);
@@ -81,7 +97,8 @@ class PostsFetcher
         $postLayout->disableLoopStartLoopEnd();
 
         wp_send_json_success(array(
-            'content' => $postLayout->render(false)
+            'content' => $postLayout->render(false),
+            'more_posts' => $this->checkHasMorePost(),
         ));
     }
 }
