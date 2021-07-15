@@ -12,6 +12,10 @@ function jankx_post_layout_tab_links_create_trigger(link_elements) {
 function jankx_post_layout_tab_link_click_event(e) {
     e.preventDefault();
     var clickedTab = e.target.parent();
+    var tabsWrap = clickedTab.findParent('.jankx-tabs');
+    if (tabsWrap.hasClass('blocked')) {
+        return;
+    }
 
     var data_type = clickedTab.dataset.type;
     var data_type_name = clickedTab.dataset.typeName;
@@ -20,13 +24,13 @@ function jankx_post_layout_tab_link_click_event(e) {
     if (!(data_type && data_type_name && object_id)) {
         return;
     }
-
-    var tabsWrap = clickedTab.findParent('.jankx-tabs');
     var parentTabWrap = tabsWrap.findParent('.jankx-parent-layout');
     var contentLayout = parentTabWrap.find('.jankx-post-layout-wrap');
     if (!contentLayout) {
         return;
     }
+
+    tabsWrap.addClass('blocked');
 
     tabsWrap.find('.the-tab.active').removeClass('active');
     clickedTab.addClass('active');
@@ -38,6 +42,7 @@ function jankx_post_layout_tab_link_click_event(e) {
     var engine_id = contentLayout.dataset.engineId;
 
     if (!post_type || !engine_id) {
+        tabsWrap.removeClass('blocked');
         return;
     }
 
@@ -80,6 +85,8 @@ function jankx_post_layout_tab_link_click_event(e) {
                 if (window[jankx_callback]) {
                     window[jankx_callback](realContentWrap, body);
                 }
+
+                tabsWrap.removeClass('blocked');
             }
         }
     });
