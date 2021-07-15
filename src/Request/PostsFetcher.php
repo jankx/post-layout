@@ -51,7 +51,8 @@ class PostsFetcher
     {
     }
 
-    public function createQueryDataTypeArgs(&$args) {
+    public function createQueryDataTypeArgs(&$args)
+    {
         switch ($this->data_type) {
             case 'taxonomy':
                 $args['tax_query'][] = array(

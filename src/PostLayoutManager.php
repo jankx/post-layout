@@ -136,7 +136,7 @@ class PostLayoutManager
     public function initHooks()
     {
         add_filter('post_class', array(PostLayout::class, 'postClasses'));
-        add_action('wp_enqueue_scripts', array($this, 'registerScripts'));
+        add_action('wp', array($this, 'registerScripts'), 15);
     }
 
     public function asset_url($path = '')
@@ -155,18 +155,26 @@ class PostLayoutManager
             array(),
             static::VERSION
         );
-        wp_register_script(
+
+        js(
+            'splide',
+            $this->asset_url('libs/splides/js/splide.js'),
+            array(),
+            static::VERSION,
+            true
+        );
+
+        js(
             'jankx-post-layout',
             $this->asset_url('js/post-layout.js'),
             array('jankx-common'),
             static::VERSION,
             true
-        );
-
-        wp_localize_script('jankx-post-layout', 'jkx_post_layout', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'action' => PostsFetcher::FETCH_POSTS_ACTION,
-        ));
+        )
+            ->localize('jkx_post_layout', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'action' => PostsFetcher::FETCH_POSTS_ACTION,
+            ));
 
         if (defined('JANKX_FRAMEWORK_FILE_LOADER')) {
             add_filter('jankx_asset_css_dependences', function ($deps) {
@@ -180,7 +188,7 @@ class PostLayoutManager
             });
         } else {
             css('jankx-post-layout');
-            wp_enqueue_script('jankx-post-layout');
+            js('jankx-post-layout');
         }
     }
 }
