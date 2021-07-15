@@ -20,10 +20,11 @@ function jankx_post_layout_tab_link_click_event(e) {
     var data_type = clickedTab.dataset.type;
     var data_type_name = clickedTab.dataset.typeName;
     var object_id = clickedTab.dataset.objectId;
-
     if (!(data_type && data_type_name && object_id)) {
         return;
     }
+
+    var currentActiveTab = tabsWrap.find('.the-tab.active');
     var parentTabWrap = tabsWrap.findParent('.jankx-parent-layout');
     var contentLayout = parentTabWrap.find('.jankx-post-layout-wrap');
     if (!contentLayout) {
@@ -31,8 +32,7 @@ function jankx_post_layout_tab_link_click_event(e) {
     }
 
     tabsWrap.addClass('blocked');
-
-    tabsWrap.find('.the-tab.active').removeClass('active');
+    currentActiveTab.removeClass('active');
     clickedTab.addClass('active');
 
     var post_type = contentLayout.dataset.postType;
