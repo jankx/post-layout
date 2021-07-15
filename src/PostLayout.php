@@ -120,12 +120,14 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->have_posts();
     }
 
-    public function loop_start()
+    public function loop_start($disableWTopWrapper = false)
     {
         if ($this->isContentOnly) {
             return;
         }
-        echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
+        if (!$disableWTopWrapper) {
+            echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
+        }
 
         $post_types = (array)$this->wp_query->query_vars['post_type'];
         $postsListClasses = array_merge(
@@ -158,7 +160,7 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    public function loop_end()
+    public function loop_end($disableWTopWrapper = false)
     {
         if ($this->isContentOnly) {
             return;
@@ -172,7 +174,9 @@ abstract class PostLayout implements PostLayoutConstract
 
             // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
-        echo '</div><!-- End .jankx-post-layout-wrap -->';
+        if (!$disableWTopWrapper) {
+            echo '</div><!-- End .jankx-post-layout-wrap -->';
+        }
     }
 
     protected function createCustomPostClass(&$post = null)

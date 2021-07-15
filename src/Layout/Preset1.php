@@ -57,7 +57,7 @@ class Preset1 extends PostLayout
                 ));
 
                 // Create post list
-                $this->loop_start();
+                $this->loop_start(true);
 
                 while ($this->checkNextPost()) {
                     $this->the_post();
@@ -66,7 +66,7 @@ class Preset1 extends PostLayout
                     );
                 }
 
-                $this->loop_end();
+                $this->loop_end(true);
                 wp_reset_postdata();
                 ?>
             </div>
