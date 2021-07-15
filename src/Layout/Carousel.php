@@ -50,16 +50,18 @@ class Carousel extends PostLayout implements PostLayoutChildren
             error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
             return;
         }
-
-        $args = $this->options;
         if (!$echo) {
             ob_start();
+        }
+        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+            // This hook use to stop custom render post layout
+            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
         }
         ?>
         <div class="jankx-posts-layout carousel">
             <?php
             // Create post list
-            $this->loop_start('carousel', $args);
+            $this->loop_start();
 
             $this->createSplide();
 
@@ -81,7 +83,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
                 $this->closeTrackList();
             $this->closeSplide();
 
-            $this->loop_end('carousel', $args);
+            $this->loop_end();
             wp_reset_postdata();
 
             $this->createSlidesOptionsVariable();

@@ -33,6 +33,7 @@ class Tabs extends PostLayout implements PostLayoutParent
                 'post-layout/tabs/tabs',
                 array(
                     'tabs' => $this->tabs,
+                    'first_tab' => array_get($this->tabs, 0, []),
                     'tab_content' => $this->childLayout->render(false)
                 )
             );

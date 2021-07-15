@@ -21,11 +21,13 @@ abstract class PostLayout implements PostLayoutConstract
     protected $templateEngine;
     protected $childLayout;
     protected $hasChildren;
-    protected $options = array();
+    protected $isContentOnly;
 
+    protected $options = array();
     protected $supportColumns = false;
     protected $contentGenerator;
     protected $contentGeneratorArgs = array();
+    protected $contentWrapperTag = false;
 
     public function __construct($wp_query = null)
     {
@@ -90,6 +92,16 @@ abstract class PostLayout implements PostLayoutConstract
         return (array)$this->options;
     }
 
+    public function disableLoopStartLoopEnd()
+    {
+        return $this->isContentOnly = true;
+    }
+
+    public function setContentWrapperTag($tag)
+    {
+        $this->contentWrapperTag = $tag;
+    }
+
     protected function checkNextPost()
     {
         $max_loop_items = array_get($this->options, 'max_loop_items');
@@ -105,6 +117,11 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function loop_start()
     {
+        if ($this->isContentOnly) {
+            return;
+        }
+        echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
+
         $post_types = (array)$this->wp_query->query_vars['post_type'];
         $postsListClasses = array_merge(
             array('jankx-posts', sprintf('%s-layout', $this->get_name())),
@@ -121,8 +138,9 @@ abstract class PostLayout implements PostLayoutConstract
             'class' => $postsListClasses
         );
 
-        if ($this->hasChildren) {
-            $attributes['data-post-type'] = $this->wp_query->get('post_type', 'post');
+
+        if ($this->contentWrapperTag) {
+            $attributes['data-content-wrapper'] = $this->contentWrapperTag;
         }
 
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
@@ -137,6 +155,9 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function loop_end()
     {
+        if ($this->isContentOnly) {
+            return;
+        }
         if (!$this->hasChildren) {
             foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
                 // This hook use to stop custom render post layout
@@ -144,8 +165,9 @@ abstract class PostLayout implements PostLayoutConstract
             }
         }
 
-        // Close posts list wrapper
+            // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
+        echo '</div><!-- End .jankx-post-layout-wrap -->';
     }
 
     protected function createCustomPostClass(&$post = null)
@@ -273,6 +295,21 @@ abstract class PostLayout implements PostLayoutConstract
         return call_user_func_array($this->contentGenerator, $args);
     }
 
+    protected function createWrapAttributes()
+    {
+        $attributes = array(
+            'class' => array('jankx-post-layout-wrap')
+        );
+
+        if (!$this->hasChildren) {
+            $attributes['data-post-type'] = $this->wp_query->get('post_type');
+            $attributes['data-posts-per-page'] = $this->wp_query->get('posts_per_page');
+            $attributes['data-layout'] = $this->get_name();
+            $attributes['data-engine-id'] = $this->templateEngine->getId();
+        }
+        return $attributes;
+    }
+
     public function render($echo = true)
     {
         if (!$this->templateEngine) {
@@ -280,18 +317,17 @@ abstract class PostLayout implements PostLayoutConstract
             return;
         }
 
-        $args = $this->options;
         if (!$echo) {
             ob_start();
         }
+        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+            // This hook use to stop custom render post layout
+            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
+        }
         ?>
-        <div class="jankx-posts-layout <?php echo $this->get_name(); ?>">
             <?php
             // Create post list
-            $this->loop_start(
-                $this->get_name(),
-                $args
-            );
+            $this->loop_start();
 
             while ($this->checkNextPost()) {
                 $this->the_post();
@@ -301,19 +337,17 @@ abstract class PostLayout implements PostLayoutConstract
                 );
             }
 
-            $this->loop_end(
-                $this->get_name(),
-                $args
-            );
+            $this->loop_end();
 
             wp_reset_postdata();
             ?>
 
-            <?php if (array_get($args, 'show_paginate', false)) : ?>
+            <?php if (array_get($this->options, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>
             <?php endif; ?>
-        </div>
+
         <?php
+        wp_reset_postdata();
         if (!$echo) {
             return ob_get_clean();
         }
@@ -334,6 +368,7 @@ abstract class PostLayout implements PostLayoutConstract
             $this->wp_query
         );
 
+        // This case use when the content generator is set before add child layout
         if (is_callable($this->contentGenerator)) {
             $this->childLayout->setContentGenerator(array(
                 'function' => &$this->contentGenerator,

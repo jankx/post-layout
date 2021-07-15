@@ -35,6 +35,10 @@ class Preset1 extends PostLayout
         if (!$echo) {
             ob_start();
         }
+        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+            // This hook use to stop custom render post layout
+            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
+        }
         ?>
         <div class="jankx-posts-layout left-post right-list preset-1">
             <div class="jankx-posts-layout-inner">
