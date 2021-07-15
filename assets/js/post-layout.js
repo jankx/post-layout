@@ -58,15 +58,27 @@ function jankx_post_layout_tab_link_click_event(e) {
             tabsWrap.find('.active');
         },
         complete: function(xhr) {
+            var jankx_post_wrap = contentLayout.find('.jankx-posts');
+            var mode = jankx_post_wrap.dataset.mode || 'append';
+
             if (xhr.readyState === 4 && xhr.status === 200) {
                 // Success case
                 if (!xhr.responseJSON) {
-                    var jankx_post_wrap = contentLayout.find('.jankx-posts');
-                    console.log(jankx_post_wrap.dataset);
+                    var realContentWrap = jankx_post_wrap.dataset.contentWrapper
+                        ? jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper)
+                        : jankx_post_wrap;
 
-                    if (jankx_post_wrap.dataset.contentWrapper) {
-                        jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper).appendHTML(xhr.response);
+                    if (mode === 'replace') {
+                        realContentWrap.html(xhr.response);
+                    } else {
+                        realContentWrap.appendHTML(xhr.response);
                     }
+                }
+
+                // Support callback
+                var jankx_callback = jkx_post_layout['jankx_tabs_' + engine_id + '_' + layout  + '_' + post_type];
+                if (window[jankx_callback]) {
+                    window[jankx_callback](realContentWrap, body);
                 }
             }
         }

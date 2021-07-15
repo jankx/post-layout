@@ -15,9 +15,10 @@ class PostsFetcher
     protected $data_type;
     protected $type_name;
     protected $object_id;
-    protected $current_page;
-    protected $posts_per_page;
-    protected $layout;
+
+    protected $current_page = 1;
+    protected $posts_per_page = 10;
+    protected $layout = 'card';
 
     public function init()
     {
@@ -54,7 +55,12 @@ class PostsFetcher
     {
         $args = array(
             'post_type' => $this->post_type,
+            'posts_per_page' => $this->posts_per_page,
         );
+
+        if ($this->current_page > 1) {
+            $args['paged'] = $this->current_page;
+        }
 
         return new WP_Query($args);
     }

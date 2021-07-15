@@ -12,6 +12,9 @@ use function wp_parse_args;
 
 abstract class PostLayout implements PostLayoutConstract
 {
+    const MODE_APPEND = 'append';
+    const MODE_REPLACE = 'replace';
+
     protected static $layoutInstances = array();
     protected static $isElementor = false;
     protected static $customDataFields = array();
@@ -28,6 +31,8 @@ abstract class PostLayout implements PostLayoutConstract
     protected $contentGenerator;
     protected $contentGeneratorArgs = array();
     protected $contentWrapperTag = false;
+    protected $mode = 'append';
+
 
     public function __construct($wp_query = null)
     {
@@ -135,9 +140,9 @@ abstract class PostLayout implements PostLayoutConstract
         }
 
         $attributes = array(
-            'class' => $postsListClasses
+            'class' => $postsListClasses,
+            'data-mode' => $this->mode,
         );
-
 
         if ($this->contentWrapperTag) {
             $attributes['data-content-wrapper'] = $this->contentWrapperTag;
