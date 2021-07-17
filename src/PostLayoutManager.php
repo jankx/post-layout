@@ -1,6 +1,7 @@
 <?php
 namespace Jankx\PostLayout;
 
+use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayoutChildren;
 
@@ -26,6 +27,9 @@ class PostLayoutManager
 
     public static function getInstance($engineId = null)
     {
+        if (is_a($engineId, Engine::class)) {
+            $engineId = $engineId->getId();
+        }
         if (isset(static::$instances[$engineId])) {
             return static::$instances[$engineId];
         }
