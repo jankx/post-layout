@@ -4,15 +4,15 @@ namespace Jankx\PostLayout;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayoutChildren;
-
+use Jankx\PostLayout\Request\PostsFetcher;
 use Jankx\PostLayout\Layout\ListLayout;
-use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Mansory;
 use Jankx\PostLayout\Layout\Card;
 use Jankx\PostLayout\Layout\Carousel;
 use Jankx\PostLayout\Layout\Grid;
 use Jankx\PostLayout\Layout\Tabs;
-use Jankx\PostLayout\Request\PostsFetcher;
+use Jankx\PostLayout\Layout\Preset1;
+use Jankx\PostLayout\Layout\Preset2;
 
 class PostLayoutManager
 {
@@ -65,10 +65,6 @@ class PostLayoutManager
                     'name' => ListLayout::get_layout_label(),
                     'class' => ListLayout::class,
                 ),
-                Preset1::LAYOUT_NAME => array(
-                    'name' => Preset1::get_layout_label(),
-                    'class' => Preset1::class,
-                ),
                 Card::LAYOUT_NAME => array(
                     'name' => Card::get_layout_label(),
                     'class' => Card::class,
@@ -84,6 +80,14 @@ class PostLayoutManager
                 Tabs::LAYOUT_NAME => array(
                     'name' => Tabs::get_layout_label(),
                     'class' => Tabs::class,
+                ),
+                Preset1::LAYOUT_NAME => array(
+                    'name' => Preset1::get_layout_label(),
+                    'class' => Preset1::class,
+                ),
+                Preset2::LAYOUT_NAME => array(
+                    'name' => Preset2::get_layout_label(),
+                    'class' => Preset2::class,
                 )
             ));
         }
