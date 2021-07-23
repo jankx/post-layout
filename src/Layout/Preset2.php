@@ -60,6 +60,9 @@ class Preset2 extends PostLayout
                 $this->loop_start(true);
 
                 while ($this->checkNextPost()) {
+                    if ($this->wp_query->current_post > 0 && $this->wp_query->current_post % 4 === 0) {
+                        break;
+                    }
                     $this->the_post();
                     $this->renderLoopItem(
                         $this->getCurrentPostItem()
@@ -67,6 +70,39 @@ class Preset2 extends PostLayout
                 }
 
                 $this->loop_end(true);
+                ?>
+            </div>
+
+            <div class="jankx-posts-layout-inner">
+                <?php
+                // Create post list
+                $this->loop_start(true);
+
+                while ($this->checkNextPost()) {
+                    if ($this->wp_query->current_post >= $this->wp_query->post_count - 2) {
+                        break;
+                    }
+                    $this->the_post();
+                    $this->renderLoopItem(
+                        $this->getCurrentPostItem()
+                    );
+                }
+
+                $this->loop_end(true);
+
+                // Create first post
+                $this->the_post();
+
+                $post = $this->getCurrentPostItem();
+                // Setup the post classes
+                $this->createCustomPostClass($post);
+
+                $this->templateEngine->render(array(
+                    $post->post_type . '-layout/preset2/large-item',
+                    'post-layout/preset2/large-item',
+                    'post-layout/large-item',
+                ));
+
                 wp_reset_postdata();
                 ?>
             </div>

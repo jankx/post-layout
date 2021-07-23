@@ -64,5 +64,9 @@
 @media (max-width: 767px) {
   .jankx-posts-layout.left-post .post-large-image {
     margin-bottom: 20px; } }
+.preset-2 {
+  display: flex; }
+  .preset-2 .jankx-posts-layout-inner {
+    width: 50%; }
 
 /*# sourceMappingURL=post-layout.css.map */
