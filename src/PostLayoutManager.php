@@ -55,6 +55,13 @@ class PostLayoutManager
                 : add_action('init', array($fetcher, 'init'));
         }
         $this->templateEngine = &$templateEngine;
+
+        if ($this->templateEngine) {
+            $this->templateEngine->registerFunction(
+                'get_meta_value',
+                array(PostLayout::class, 'get_meta_value')
+            );
+        }
     }
 
     public static function getLayouts($args = array(), $refresh = false)
