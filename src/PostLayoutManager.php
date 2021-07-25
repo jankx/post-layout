@@ -16,7 +16,7 @@ use Jankx\PostLayout\Layout\Preset2;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.38';
+    const VERSION = '1.0.0.40';
 
     protected static $instances;
     protected static $supportedLayouts;

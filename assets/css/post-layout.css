@@ -67,6 +67,15 @@
 .preset-2 {
   display: flex; }
   .preset-2 .jankx-posts-layout-inner {
-    width: 50%; }
+    width: 50%;
+    padding-left: 5px;
+    padding-right: 5px; }
+
+@media (min-width: 768px) {
+  .preset-2 .jankx-posts {
+    display: flex;
+    flex-wrap: wrap; }
+    .preset-2 .jankx-posts .loop-item {
+      width: 50%; } }
 
 /*# sourceMappingURL=post-layout.css.map */

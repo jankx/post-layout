@@ -40,8 +40,42 @@ class Preset2 extends PostLayout
             do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
         }
         ?>
-        <div class="jankx-posts-layout left-post right-list preset-2">
-            <div class="jankx-posts-layout-inner">
+        <div class="jankx-posts-layout preset-2">
+        <div class="jankx-posts-layout-inner top-list bottom-large">
+                <?php
+                // Create post list
+                $this->loop_start(true);
+
+                while ($this->checkNextPost()) {
+                    if ($this->wp_query->current_post === 3) {
+                        break;
+                    }
+                    $this->the_post();
+                    $this->renderLoopItem(
+                        $this->getCurrentPostItem()
+                    );
+                }
+
+                $this->loop_end(true);
+
+                // Create first post
+                $this->the_post();
+
+                $post = $this->getCurrentPostItem();
+                // Setup the post classes
+                $this->createCustomPostClass($post);
+
+                $this->templateEngine->render(array(
+                    $post->post_type . '-layout/preset2/large-item',
+                    'post-layout/preset2/large-item',
+                    'post-layout/large-item',
+                ));
+
+                wp_reset_postdata();
+                ?>
+            </div>
+
+            <div class="jankx-posts-layout-inner top-large bottom-list">
                 <?php
                 // Create first post
                 $this->the_post();
@@ -73,39 +107,7 @@ class Preset2 extends PostLayout
                 ?>
             </div>
 
-            <div class="jankx-posts-layout-inner">
-                <?php
-                // Create post list
-                $this->loop_start(true);
 
-                while ($this->checkNextPost()) {
-                    if ($this->wp_query->current_post >= $this->wp_query->post_count - 2) {
-                        break;
-                    }
-                    $this->the_post();
-                    $this->renderLoopItem(
-                        $this->getCurrentPostItem()
-                    );
-                }
-
-                $this->loop_end(true);
-
-                // Create first post
-                $this->the_post();
-
-                $post = $this->getCurrentPostItem();
-                // Setup the post classes
-                $this->createCustomPostClass($post);
-
-                $this->templateEngine->render(array(
-                    $post->post_type . '-layout/preset2/large-item',
-                    'post-layout/preset2/large-item',
-                    'post-layout/large-item',
-                ));
-
-                wp_reset_postdata();
-                ?>
-            </div>
 
             <?php if (array_get($this->options, 'show_paginate', false)) : ?>
                 <?php echo jankx_paginate(); ?>
