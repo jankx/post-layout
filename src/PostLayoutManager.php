@@ -16,7 +16,7 @@ use Jankx\PostLayout\Layout\Preset2;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.40';
+    const VERSION = '1.0.0.41';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -118,6 +118,18 @@ class PostLayoutManager
                         return is_a($value['class'], PostLayoutParent::class, true);
                     });
                     break;
+            }
+        }
+
+        if (isset($args['exclude'])) {
+            if ($args['exclude'] === 'parent') {
+                $ret = array_filter($ret, function ($item) {
+                    return !is_a($item['class'], PostLayoutParent::class, true);
+                });
+            } elseif (in_array($args['exclude'], array('child', 'children'))) {
+                $ret = array_filter($ret, function ($item) {
+                    return !is_a($item['class'], PostLayoutParent::class, true);
+                });
             }
         }
 

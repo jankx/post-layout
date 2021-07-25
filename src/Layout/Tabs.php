@@ -24,6 +24,10 @@ class Tabs extends PostLayout implements PostLayoutParent
 
     public function render($echo = true)
     {
+        if (!$this->childLayout) {
+            return;
+        }
+
         if (!$echo) {
             ob_start();
         }

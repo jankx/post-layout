@@ -41,12 +41,18 @@
         }
 
         &.columns- {
-            &4 {
+            &2 {
                 .loop-item {
                     width: 50%;
                 }
             }
             &3 {
+                .loop-item {
+                    width: 50%;
+                }
+            }
+
+            &4 {
                 .loop-item {
                     width: 50%;
                 }
@@ -58,14 +64,14 @@
 @media (min-width: 992px) {
     .jankx-posts {
         &.columns- {
-            &4 {
-                .loop-item {
-                    width: 25%;
-                }
-            }
             &3 {
                 .loop-item {
                     width: percentage(1/3);
+                }
+            }
+            &4 {
+                .loop-item {
+                    width: 25%;
                 }
             }
         }

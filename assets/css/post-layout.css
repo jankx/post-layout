@@ -21,15 +21,17 @@
     .jankx-posts .loop-item {
       padding-left: 10px;
       padding-right: 10px; }
-    .jankx-posts.columns-4 .loop-item {
+    .jankx-posts.columns-2 .loop-item {
       width: 50%; }
     .jankx-posts.columns-3 .loop-item {
+      width: 50%; }
+    .jankx-posts.columns-4 .loop-item {
       width: 50%; } }
 @media (min-width: 992px) {
-  .jankx-posts.columns-4 .loop-item {
-    width: 25%; }
   .jankx-posts.columns-3 .loop-item {
-    width: 33.3333333333%; } }
+    width: 33.3333333333%; }
+  .jankx-posts.columns-4 .loop-item {
+    width: 25%; } }
 .jankx-posts-layout .loop-item .post-title {
   font-size: 0.9rem; }
 .jankx-posts-layout .post-thumbnail {
