@@ -31,7 +31,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected $contentGenerator;
     protected $contentGeneratorArgs = array();
     protected $contentWrapperTag = false;
-    protected $mode = 'append';
+    protected $mode = 'replace';
 
 
     public function __construct($wp_query = null)
