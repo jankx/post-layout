@@ -8,6 +8,8 @@ class Grid extends PostLayout implements PostLayoutChildren
 {
     const LAYOUT_NAME = 'grid';
 
+    protected $supportColumns = true;
+
     public function get_name()
     {
         return static::LAYOUT_NAME;

@@ -7,6 +7,8 @@ class Preset1 extends PostLayout
 {
     const LAYOUT_NAME = 'preset-1';
 
+    protected $supportColumns = false;
+
     public function get_name()
     {
         return static::LAYOUT_NAME;

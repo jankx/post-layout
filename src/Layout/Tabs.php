@@ -9,6 +9,7 @@ class Tabs extends PostLayout implements PostLayoutParent
 {
     const LAYOUT_NAME = 'tabs';
 
+    protected $supportColumns = false;
     protected $tabs = array();
 
     public function get_name()

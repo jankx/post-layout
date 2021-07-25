@@ -8,6 +8,8 @@ class ListLayout extends PostLayout implements PostLayoutChildren
 {
     const LAYOUT_NAME = 'list';
 
+    protected $supportColumns = false;
+
     public function get_name()
     {
         return 'list';
