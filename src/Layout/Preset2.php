@@ -2,8 +2,9 @@
 namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\PostLayout;
+use Jankx\PostLayout\Constracts\PostLayoutChildren;
 
-class Preset2 extends PostLayout
+class Preset2 extends PostLayout implements PostLayoutChildren
 {
     const LAYOUT_NAME = 'preset-2';
 
