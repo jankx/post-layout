@@ -340,10 +340,11 @@ abstract class PostLayout implements PostLayoutConstract
 
             while ($this->checkNextPost()) {
                 $this->the_post();
+                $post = $this->getCurrentPostItem();
 
-                $this->renderLoopItem(
-                    $this->getCurrentPostItem()
-                );
+                do_action('jankx/layout/post/loop/item/before', $post, $this->wp_query, $this);
+                $this->renderLoopItem($post);
+                do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
             }
 
             $this->loop_end();
