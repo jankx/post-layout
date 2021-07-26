@@ -90,6 +90,11 @@ abstract class PostLayout implements PostLayoutConstract
             ),
             $this
         );
+
+        // Use this case when set option after create child layout
+        if ($this->childLayout) {
+            $this->childLayout->setOptions($this->options);
+        }
     }
 
     public function getOptions()
