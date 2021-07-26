@@ -1,31 +1,25 @@
-.preset-2 {
-    .jankx-posts-layout-inner {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .jankx-posts {
-        .loop-item {
-
-        }
+.preset-2-layout {
+    .loop-item {
     }
 }
 
-.jankx-posts-layout-inner {
+.preset-column {
 }
 
 @media(min-width: 768px) {
-    .preset-2 {
+    .preset-2-layout {
         display: flex;
-        .jankx-posts-layout-inner {
+        .preset-column {
             width: 50%;
-        }
 
-        .jankx-posts {
             display: flex;
             flex-wrap: wrap;
             .loop-item {
                 width: 50%;
+
+                &.post-large-image {
+                    width: 100%;
+                }
             }
         }
     }

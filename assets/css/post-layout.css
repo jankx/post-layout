@@ -66,19 +66,16 @@
 @media (max-width: 767px) {
   .jankx-posts-layout.left-post .post-large-image {
     margin-bottom: 20px; } }
-.preset-2 .jankx-posts-layout-inner {
-  padding-left: 5px;
-  padding-right: 5px; }
-
 @media (min-width: 768px) {
-  .preset-2 {
+  .preset-2-layout {
     display: flex; }
-    .preset-2 .jankx-posts-layout-inner {
-      width: 50%; }
-    .preset-2 .jankx-posts {
+    .preset-2-layout .preset-column {
+      width: 50%;
       display: flex;
       flex-wrap: wrap; }
-      .preset-2 .jankx-posts .loop-item {
-        width: 50%; } }
+      .preset-2-layout .preset-column .loop-item {
+        width: 50%; }
+        .preset-2-layout .preset-column .loop-item.post-large-image {
+          width: 100%; } }
 
 /*# sourceMappingURL=post-layout.css.map */
