@@ -387,6 +387,7 @@ abstract class PostLayout implements PostLayoutConstract
             $layoutName,
             $this->wp_query
         );
+        $this->childLayout->setOptions($this->options);
 
         // This case use when the content generator is set before add child layout
         if (is_callable($this->contentGenerator)) {
