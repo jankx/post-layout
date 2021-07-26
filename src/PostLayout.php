@@ -319,6 +319,16 @@ abstract class PostLayout implements PostLayoutConstract
         return $attributes;
     }
 
+    protected function beforeLoopItemActions($post)
+    {
+        do_action('jankx/layout/post/loop/item/before', $post, $this->wp_query, $this);
+    }
+
+    protected function afterLoopItemActions($post)
+    {
+        do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
+    }
+
     public function render($echo = true)
     {
         if (!$this->templateEngine) {
@@ -342,9 +352,9 @@ abstract class PostLayout implements PostLayoutConstract
                 $this->the_post();
                 $post = $this->getCurrentPostItem();
 
-                do_action('jankx/layout/post/loop/item/before', $post, $this->wp_query, $this);
+                $this->beforeLoopItemActions($post);
                 $this->renderLoopItem($post);
-                do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
+                $this->afterLoopItemActions($post);
             }
 
             $this->loop_end();
