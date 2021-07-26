@@ -15,18 +15,12 @@
     .loop-item ul.post-metas li + li {
       margin-left: 10px; }
 
-  .jankx-posts {
-    margin-left: -10px;
-    margin-right: -10px; }
-    .jankx-posts .loop-item {
-      padding-left: 10px;
-      padding-right: 10px; }
-    .jankx-posts.columns-2 .loop-item {
-      width: 50%; }
-    .jankx-posts.columns-3 .loop-item {
-      width: 50%; }
-    .jankx-posts.columns-4 .loop-item {
-      width: 50%; } }
+  .jankx-posts.columns-2 .loop-item {
+    width: 50%; }
+  .jankx-posts.columns-3 .loop-item {
+    width: 50%; }
+  .jankx-posts.columns-4 .loop-item {
+    width: 50%; } }
 @media (min-width: 992px) {
   .jankx-posts.columns-3 .loop-item {
     width: 33.3333333333%; }
