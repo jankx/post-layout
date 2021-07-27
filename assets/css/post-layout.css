@@ -60,6 +60,14 @@
 @media (max-width: 767px) {
   .jankx-posts-layout.left-post .post-large-image {
     margin-bottom: 20px; } }
+.post-layout-tabs {
+  display: flex; }
+  .post-layout-tabs .the-tab a {
+    padding: 5px 10px; }
+
+.preset-column {
+  height: 100%; }
+
 @media (min-width: 768px) {
   .preset-2-layout {
     display: flex; }
