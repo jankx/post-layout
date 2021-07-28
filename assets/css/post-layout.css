@@ -99,6 +99,12 @@
     margin-right: -10px; }
     .card-layout.columns-3 .loop-item, .grid-layout.columns-3 .loop-item {
       padding-left: 10px;
+      padding-right: 10px; }
+  .card-layout.columns-4, .grid-layout.columns-4 {
+    margin-left: -10px;
+    margin-right: -10px; }
+    .card-layout.columns-4 .loop-item, .grid-layout.columns-4 .loop-item {
+      padding-left: 10px;
       padding-right: 10px; } }
 @media (min-width: 1600px) {
   .card-layout.columns-2 .loop-item:nth-child(odd), .grid-layout.columns-2 .loop-item:nth-child(odd) {
@@ -110,23 +116,18 @@
     padding-right: 15px; }
   .preset-2-layout .preset-column:nth-child(even) {
     padding-left: 15px; } }
-.loop-item .post-thumbnail {
+.loop-item .post-thumbnail a {
+  display: block;
   height: 100%; }
-  .loop-item .post-thumbnail a {
-    display: block;
-    height: 100%; }
-  .loop-item .post-thumbnail img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover; }
+.loop-item .post-thumbnail img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; }
 
 .post-layout-tabs {
   display: flex; }
   .post-layout-tabs .the-tab a {
     padding: 5px 10px; }
-
-.carousel-layout {
-  overflow: hidden; }
 
 .preset-column {
   height: 100%; }
