@@ -1,0 +1,181 @@
+.card-layout, .grid-layout {
+	 &.columns-2 {
+
+	 }
+	 &.columns-3 {
+	 	
+	 }
+	 &.columns-4 {
+	 	
+	 }
+	 &.columns-5 {
+	 	
+	 }
+	 &.columns-6 {
+	 	
+	 }
+}
+
+.carousel-layout {
+	.splide__track {
+		margin-left: -10px;
+		margin-right: -10px;
+	}
+
+	.loop-item {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+@media(min-width: 767px) {
+	.card-layout, .grid-layout {
+		&.columns-2 {
+			.loop-item {
+				&:nth-child(odd) {
+					padding-right: 10px;
+				}
+				&:nth-child(even) {
+					padding-left: 10px;
+				}
+			}
+		}
+	}
+
+	.preset-2-layout {
+		.preset-column {
+			&:nth-child(odd) {
+				padding-right: 10px;
+			}
+			&:nth-child(even) {
+				padding-left: 10px;
+			}
+
+			&.column-1 {
+				.loop-item {
+					&:not(.post-large-image) {
+						&:nth-child(odd) {
+							padding-right: 10px;
+						}
+						&:nth-child(even) {
+							padding-left: 10px;
+						}
+					}
+				}
+			}
+			&.column-2 {
+				.loop-item {
+					&:not(.post-large-image) {
+						&:nth-child(odd) {
+							padding-left: 10px;
+						}
+						&:nth-child(even) {
+							padding-right: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.card-layout, .grid-layout{
+		&.columns-3 {
+		 	
+		 }
+		 &.columns-4 {
+		 	
+		 }
+		 &.columns-5 {
+		 	
+		 }
+		 &.columns-6 {
+		 	
+		 }
+	}
+}
+
+@media(min-width: 767px) and (max-width: 991px) {
+	.card-layout, .grid-layout {
+		&.columns-4 {
+			.loop-item {
+				&:nth-child(odd) {
+					padding-right: 10px;
+				}
+				&:nth-child(even) {
+					padding-left: 10px;
+				}
+			}
+		}
+	}
+}
+
+
+@media(min-width: 992px) {
+	.card-layout, .grid-layout {
+		 &.columns-2 {
+
+		 }
+		 &.columns-3 {
+		 	margin-left: -10px;
+		 	margin-right: -10px;
+		 	.loop-item {
+		 		padding-left: 10px;
+		 		padding-right: 10px;
+			}
+		 }
+		 &.columns-4 {
+		 	
+		 }
+		 &.columns-5 {
+		 	
+		 }
+		 &.columns-6 {
+		 	
+		 }
+	}
+}
+
+@media(min-width: 1200px) {
+	.card-layout, .grid-layout {
+		 &.columns-2 {
+
+		 }
+		 &.columns-3 {
+		 	
+		 }
+		 &.columns-4 {
+		 	
+		 }
+		 &.columns-5 {
+		 	
+		 }
+		 &.columns-6 {
+		 	
+		 }
+	}
+}
+
+@media(min-width: 1600px) {
+	.card-layout, .grid-layout {
+		 &.columns-2 {
+		 	.loop-item {
+		 		&:nth-child(odd) {
+			 		padding-right: 15px;
+			 	}
+			 	&:nth-child(even) {
+			 		padding-left: 15px;
+			 	}
+		 	}
+		 }
+	}
+	.preset-2-layout {
+		.preset-column {
+			&:nth-child(odd) {
+				padding-right: 15px;
+			}
+			&:nth-child(even) {
+				padding-left: 15px;
+			}
+		}
+	}
+}
