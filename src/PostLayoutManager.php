@@ -14,12 +14,15 @@ use Jankx\PostLayout\Layout\Tabs;
 use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Preset2;
 
+use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
+
 class PostLayoutManager
 {
     const VERSION = '1.0.0.76';
 
     protected static $instances;
     protected static $supportedLayouts;
+    protected static $supportedTermLayouts;
 
     protected static $assetsDirUrl;
 
@@ -64,58 +67,47 @@ class PostLayoutManager
         }
     }
 
+
     public static function getLayouts($args = array(), $refresh = false)
     {
-        if (is_null(static::$supportedLayouts) || $refresh) {
-            static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
-                ListLayout::LAYOUT_NAME => array(
-                    'name' => ListLayout::get_layout_label(),
-                    'class' => ListLayout::class,
-                ),
-                Card::LAYOUT_NAME => array(
-                    'name' => Card::get_layout_label(),
-                    'class' => Card::class,
-                ),
-                Carousel::LAYOUT_NAME => array(
-                    'name' => Carousel::get_layout_label(),
-                    'class' => Carousel::class,
-                ),
-                Grid::LAYOUT_NAME => array(
-                    'name' => Grid::get_layout_label(),
-                    'class' => Grid::class,
-                ),
-                Tabs::LAYOUT_NAME => array(
-                    'name' => Tabs::get_layout_label(),
-                    'class' => Tabs::class,
-                ),
-                Preset1::LAYOUT_NAME => array(
-                    'name' => Preset1::get_layout_label(),
-                    'class' => Preset1::class,
-                ),
-                Preset2::LAYOUT_NAME => array(
-                    'name' => Preset2::get_layout_label(),
-                    'class' => Preset2::class,
-                )
-            ));
-        }
-
         $args = wp_parse_args($args, array(
+            'data' => 'post',
             'field' => 'all',
             'type' => 'all',
         ));
-        $ret = static::$supportedLayouts;
+
+        if (is_null(static::$supportedLayouts) || $refresh) {
+            if ($args['data'] !== 'term') {
+                static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
+                    ListLayout::LAYOUT_NAME => ListLayout::class,
+                    Card::LAYOUT_NAME => Card::class,
+                    Carousel::LAYOUT_NAME => Carousel::class,
+                    Grid::LAYOUT_NAME => Grid::class,
+                    Tabs::LAYOUT_NAME => Tabs::class,
+                    Preset1::LAYOUT_NAME => Preset1::class,
+                    Preset2::LAYOUT_NAME => Preset2::class,
+                ));
+            } else {
+                static::$supportedTermLayouts = apply_filters('jankx_post_layout_term_layouts', array(
+                    TermCardLayout::LAYOUT_NAME => TermCardLayout::class,
+                ));
+            }
+        }
+
+
+        $ret = $args['data'] === 'post' ? static::$supportedLayouts : static::$supportedTermLayouts;
 
         if ($args['type'] !== 'all') {
             switch ($args['type']) {
                 case 'child':
                 case 'children':
-                    $ret = array_filter($ret, function ($value) {
-                        return is_a($value['class'], PostLayoutChildren::class, true);
+                    $ret = array_filter($ret, function ($layoutCls) {
+                        return is_a($layoutCls, PostLayoutChildren::class, true);
                     });
                     break;
                 case 'parent':
-                    $ret = array_filter($ret, function ($value) {
-                        return is_a($value['class'], PostLayoutParent::class, true);
+                    $ret = array_filter($ret, function ($layoutCls) {
+                        return is_a($layoutCls, PostLayoutParent::class, true);
                     });
                     break;
             }
@@ -123,19 +115,19 @@ class PostLayoutManager
 
         if (isset($args['exclude'])) {
             if ($args['exclude'] === 'parent') {
-                $ret = array_filter($ret, function ($item) {
-                    return !is_a($item['class'], PostLayoutParent::class, true);
+                $ret = array_filter($ret, function ($layoutCls) {
+                    return !is_a($layoutCls, PostLayoutParent::class, true);
                 });
             } elseif (in_array($args['exclude'], array('child', 'children'))) {
-                $ret = array_filter($ret, function ($item) {
-                    return !is_a($item['class'], PostLayoutParent::class, true);
+                $ret = array_filter($ret, function ($layoutCls) {
+                    return !is_a($layoutCls, PostLayoutParent::class, true);
                 });
             }
         }
 
         if ($args['field'] === 'names') {
-            return array_map(function ($value) {
-                return $value['name'];
+            return array_map(function ($layoutCls) {
+                return $layoutCls::get_layout_label();
             }, $ret);
         }
 
@@ -152,7 +144,7 @@ class PostLayoutManager
         if (empty($supportedLayouts[$layoutName])) {
             return;
         }
-        $layoutCls = array_get($supportedLayouts[$layoutName], 'class');
+        $layoutCls = $supportedLayouts[$layoutName];
         $layout    = new $layoutCls($wp_query);
 
         $layout->setTemplateEngine($this->templateEngine);
