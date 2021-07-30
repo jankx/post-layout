@@ -1,6 +1,6 @@
 <?php
 namespace Jankx\PostLayout\Constracts;
 
-interface TermLayout
+interface TermLayout extends LayoutBase
 {
 }

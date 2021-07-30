@@ -70,8 +70,6 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->instanceId;
     }
 
-    abstract public function get_name();
-
     protected function defaultOptions()
     {
         return array(

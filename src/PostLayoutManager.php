@@ -76,26 +76,25 @@ class PostLayoutManager
             'type' => 'all',
         ));
 
-        if (is_null(static::$supportedLayouts) || $refresh) {
-            if ($args['data'] !== 'term') {
-                static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
-                    ListLayout::LAYOUT_NAME => ListLayout::class,
-                    Card::LAYOUT_NAME => Card::class,
-                    Carousel::LAYOUT_NAME => Carousel::class,
-                    Grid::LAYOUT_NAME => Grid::class,
-                    Tabs::LAYOUT_NAME => Tabs::class,
-                    Preset1::LAYOUT_NAME => Preset1::class,
-                    Preset2::LAYOUT_NAME => Preset2::class,
-                ));
-            } else {
-                static::$supportedTermLayouts = apply_filters('jankx_post_layout_term_layouts', array(
-                    TermCardLayout::LAYOUT_NAME => TermCardLayout::class,
-                ));
-            }
+        if ((is_null(static::$supportedLayouts) && $args['data'] !== 'term') || $refresh) {
+            static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
+                ListLayout::LAYOUT_NAME => ListLayout::class,
+                Card::LAYOUT_NAME => Card::class,
+                Carousel::LAYOUT_NAME => Carousel::class,
+                Grid::LAYOUT_NAME => Grid::class,
+                Tabs::LAYOUT_NAME => Tabs::class,
+                Preset1::LAYOUT_NAME => Preset1::class,
+                Preset2::LAYOUT_NAME => Preset2::class,
+            ));
         }
 
+        if ((is_null(static::$supportedTermLayouts) && $args['data'] === 'term') || $refresh) {
+            static::$supportedTermLayouts = apply_filters('jankx_post_layout_term_layouts', array(
+                TermCardLayout::LAYOUT_NAME => TermCardLayout::class,
+            ));
+        }
 
-        $ret = $args['data'] === 'post' ? static::$supportedLayouts : static::$supportedTermLayouts;
+        $ret = $args['data'] !== 'term' ? static::$supportedLayouts : static::$supportedTermLayouts;
 
         if ($args['type'] !== 'all') {
             switch ($args['type']) {
@@ -126,9 +125,11 @@ class PostLayoutManager
         }
 
         if ($args['field'] === 'names') {
-            return array_map(function ($layoutCls) {
+            $names = array_map(function ($layoutCls) {
                 return $layoutCls::get_layout_label();
             }, $ret);
+
+            return $names;
         }
 
         if ($args['field'] === 'keys') {
@@ -146,6 +147,22 @@ class PostLayoutManager
         }
         $layoutCls = $supportedLayouts[$layoutName];
         $layout    = new $layoutCls($wp_query);
+
+        $layout->setTemplateEngine($this->templateEngine);
+
+        return $layout;
+    }
+
+    public function createTermLayout($layoutName, $wp_term_query = null)
+    {
+        $supportedLayouts = static::getLayouts(array(
+            'data' => 'term'
+        ));
+        if (empty($supportedLayouts[$layoutName])) {
+            return;
+        }
+        $layoutCls = $supportedLayouts[$layoutName];
+        $layout    = new $layoutCls($wp_term_query);
 
         $layout->setTemplateEngine($this->templateEngine);
 
