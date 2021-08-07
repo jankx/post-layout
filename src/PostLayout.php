@@ -289,10 +289,20 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->post;
     }
 
-    protected function generateSearchingTemplates($post)
+    protected function generateSearchingTemplates(&$post)
     {
+        if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
+            return array(
+                "post-layout/{$this->get_name()}/$post->post_type-{$item_style}-item",
+                "post-layout/{$this->get_name()}/{$item_style}-loop-item",
+                "post-layout/$post->post_type-{$item_style}-item",
+                "post-layout/{$item_style}-loop-item",
+                'post-layout/loop-item',
+            );
+        }
+
         return array(
-            "{$post->post_type}-layout/{$this->get_name()}/loop-item",
+            "post-layout/{$this->get_name()}/$post->post_type-item",
             "post-layout/{$this->get_name()}/loop-item",
             'post-layout/loop-item'
         );
@@ -347,11 +357,13 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected function beforeLoop()
     {
+        $post_type = $this->wp_query->get('post_type');
         do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
     }
 
     protected function afterLoop()
     {
+        $post_type = $this->wp_query->get('post_type');
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
     }
 
