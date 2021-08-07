@@ -20,6 +20,11 @@ class Carousel extends PostLayout implements PostLayoutChildren
         return __('Carousel', 'jankx');
     }
 
+    public function is_pro()
+    {
+        return true;
+    }
+
     protected function defaultOptions()
     {
         return array(
