@@ -28,4 +28,9 @@ class Preset1 extends PostLayout implements PostLayoutChildren
             'show_excerpt' => false,
         );
     }
+
+    public function is_pro()
+    {
+        return false;
+    }
 }

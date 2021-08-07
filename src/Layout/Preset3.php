@@ -17,6 +17,11 @@ class Preset3 extends Carousel
         return sprintf(__('Preset %d', 'jankx'), 3);
     }
 
+    public function is_pro()
+    {
+        return false;
+    }
+
     public function beforeLoop()
     {
         if ($this->checkNextPost()) {

@@ -102,6 +102,11 @@ abstract class PostLayout implements PostLayoutConstract
         return (array)$this->options;
     }
 
+    public function is_pro()
+    {
+        return false;
+    }
+
     public function disableLoopStartLoopEnd()
     {
         return $this->isContentOnly = true;
@@ -182,17 +187,6 @@ abstract class PostLayout implements PostLayoutConstract
         if (!$disableWTopWrapper) {
             echo '</div><!-- End .jankx-post-layout-wrap -->';
         }
-    }
-
-    public static function postClasses($classes)
-    {
-        global $post;
-        if (isset($post->custom_post_class)) {
-            $classes[] = is_array($post->custom_post_class)
-                ? implode(' ', $post->custom_post_class)
-                : $post->custom_post_class;
-        }
-        return $classes;
     }
 
     protected static function parse_internal_meta($feature, $default_value = false)

@@ -30,6 +30,11 @@ class Preset2 extends PostLayout implements PostLayoutChildren
         );
     }
 
+    public function is_pro()
+    {
+        return false;
+    }
+
     protected function beforeLoopItemActions($post)
     {
         $posts_per_page = $this->wp_query->get('posts_per_page');

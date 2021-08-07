@@ -84,10 +84,16 @@ class PostLayoutManager
                 Carousel::LAYOUT_NAME => Carousel::class,
                 Grid::LAYOUT_NAME => Grid::class,
                 Tabs::LAYOUT_NAME => Tabs::class,
-                Preset1::LAYOUT_NAME => Preset1::class,
-                Preset2::LAYOUT_NAME => Preset2::class,
-                Preset3::LAYOUT_NAME => Preset3::class,
             ));
+
+            // Support PRO layouts
+            if (true) {
+                static::$supportedLayouts = array_merge(static::$supportedLayouts, array(
+                    Preset1::LAYOUT_NAME => Preset1::class,
+                    Preset2::LAYOUT_NAME => Preset2::class,
+                    Preset3::LAYOUT_NAME => Preset3::class,
+                ));
+            }
         }
 
         if ((is_null(static::$supportedTermLayouts) && $args['data'] === 'term') || $refresh) {
