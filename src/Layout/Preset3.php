@@ -12,6 +12,11 @@ class Preset3 extends Carousel
         return static::LAYOUT_NAME;
     }
 
+    public static function get_layout_label()
+    {
+        return sprintf(__('Preset %d', 'jankx'), 3);
+    }
+
     public function beforeLoop()
     {
         if ($this->checkNextPost()) {
