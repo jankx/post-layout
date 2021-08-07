@@ -11,4 +11,16 @@ class Preset3 extends Carousel
     {
         return static::LAYOUT_NAME;
     }
+
+    public function beforeLoop() {
+        if ($this->checkNextPost()) {
+            $this->the_post();
+            $post = $this->getCurrentPostItem();
+
+            $this->beforeLoopItemActions($post);
+            $this->renderLoopItem($post);
+            $this->afterLoopItemActions($post);
+        }
+        parent::beforeLoop();
+    }
 }
