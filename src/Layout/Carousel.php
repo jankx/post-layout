@@ -44,55 +44,20 @@ class Carousel extends PostLayout implements PostLayoutChildren
         }
     }
 
-    public function render($echo = true)
+
+    public function loop_start()
     {
-        if (!$this->templateEngine) {
-            error_log(__('The template engine is not setted to render content', 'jankx_post_layout'));
-            return;
-        }
-        if (!$echo) {
-            ob_start();
-        }
-        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
-            // This hook use to stop custom render post layout
-            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
-        }
-        ?>
-        <div class="jankx-posts-layout carousel">
-            <?php
-            // Create post list
-            $this->loop_start();
-
+        parent::loop_start();
             $this->createSplide();
-
                 $this->createControls();
                 $this->createTrackList();
-            while ($this->checkNextPost()) {
-                $this->the_post();
-                $post = &$this->wp_query->post;
-                // Setup the post classes
-                $this->createCustomPostClass($post);
-                $this->createSlideItem();
-                $this->templateEngine->render(array(
-                    $post->post_type . '-layout/carousel/loop-item',
-                    'post-layout/carousel/loop-item',
-                    'post-layout/loop-item',
-                ), $this->prepareTemplateData());
-                $this->closeSlideItem();
-            }
+    }
+
+    public function loop_end()
+    {
                 $this->closeTrackList();
             $this->closeSplide();
-
-            $this->loop_end();
-            wp_reset_postdata();
-
-            $this->createSlidesOptionsVariable();
-            ?>
-        </div>
-        <?php
-        if (!$echo) {
-            return ob_get_clean();
-        }
+        parent::loop_end();
     }
 
     protected function createSplide()
@@ -113,19 +78,19 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function createTrackList()
     {
         ?>
-    <div class="splide__track">
-        <ul class="splide__list">
+        <div class="splide__track">
+            <ul class="splide__list">
         <?php
     }
 
-    protected function createSlideItem()
+    protected function beforeLoopItemActions()
     {
         if ($this->currentIndex === 0) {
             echo '<li class="splide__slide">';
         }
     }
 
-    protected function closeSlideItem()
+    protected function afterLoopItemActions()
     {
         $this->currentIndex += 1;
 
@@ -153,7 +118,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
         echo '</div> <!-- Close .splide -->';
     }
 
-    public function createSlidesOptionsVariable()
+    public function afterLayoutRendered()
     {
         $args = array(
             'perPage' => array_get($this->options, 'columns', 4),
