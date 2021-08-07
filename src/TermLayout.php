@@ -71,7 +71,7 @@ abstract class TermLayout implements TermLayoutConstract
         return $attributes;
     }
 
-    public function loop_start($disableWTopWrapper = false)
+    public function postLayoutStart($disableWTopWrapper = false)
     {
         if (!$disableWTopWrapper) {
             echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
@@ -97,7 +97,7 @@ abstract class TermLayout implements TermLayoutConstract
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
     }
 
-    public function loop_end($disableWTopWrapper = false)
+    public function postLayoutEnd($disableWTopWrapper = false)
     {
         // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
@@ -142,7 +142,7 @@ abstract class TermLayout implements TermLayoutConstract
         }
 
         if (!empty($terms)) {
-            $this->loop_start();
+            $this->postLayoutStart();
 
 
             foreach ($terms as $term) {
@@ -155,7 +155,7 @@ abstract class TermLayout implements TermLayoutConstract
 
             $this->current_term = null;
 
-            $this->loop_end();
+            $this->postLayoutEnd();
         }
 
 

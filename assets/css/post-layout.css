@@ -120,9 +120,20 @@
   display: block;
   height: 100%; }
 .loop-item .post-thumbnail img {
+  display: block;
   height: 100%;
   width: 100%;
   object-fit: cover; }
+
+.loop-item {
+  position: relative; }
+  .loop-item .post-thumbnail {
+    position: relative; }
+  .loop-item .overlay {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); }
 
 .post-layout-tabs {
   display: flex; }

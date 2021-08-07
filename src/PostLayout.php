@@ -123,7 +123,7 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->have_posts();
     }
 
-    public function loop_start($disableWTopWrapper = false)
+    public function postLayoutStart($disableWTopWrapper = false)
     {
         if ($this->isContentOnly) {
             return;
@@ -163,7 +163,7 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    public function loop_end($disableWTopWrapper = false)
+    public function postLayoutEnd($disableWTopWrapper = false)
     {
         if ($this->isContentOnly) {
             return;
@@ -285,6 +285,15 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->post;
     }
 
+    protected function generateSearchingTemplates($post)
+    {
+        return array(
+            "{$post->post_type}-layout/{$this->get_name()}/loop-item",
+            "post-layout/{$this->get_name()}/loop-item",
+            'post-layout/loop-item'
+        );
+    }
+
     public function renderLoopItem($post)
     {
         // Setup the post classes
@@ -292,11 +301,7 @@ abstract class PostLayout implements PostLayoutConstract
 
         if (is_null($this->contentGenerator)) {
             return $this->templateEngine->render(
-                array(
-                    $post->post_type . '-layout/carousel/loop-item',
-                    "post-layout/{$this->get_name()}/loop-item",
-                    'post-layout/loop-item'
-                ),
+                $this->generateSearchingTemplates($post),
                 $this->prepareTemplateData()
             );
         }
@@ -332,6 +337,23 @@ abstract class PostLayout implements PostLayoutConstract
         do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
     }
 
+    protected function afterRenderLayout()
+    {
+        if (array_get($this->options, 'show_paginate', false)) {
+            echo jankx_paginate();
+        }
+    }
+
+    protected function beforeLoop()
+    {
+        do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
+    }
+
+    protected function afterLoop()
+    {
+        do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
+    }
+
     public function render($echo = true)
     {
         if (!$this->templateEngine) {
@@ -339,18 +361,18 @@ abstract class PostLayout implements PostLayoutConstract
             return;
         }
 
+        $post_type = $this->wp_query->get('post_type');
         if (!$echo) {
             ob_start();
         }
-        foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
-            // This hook use to stop custom render post layout
-            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
-        }
+
+        do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
         ?>
             <?php
             // Create post list
-            $this->loop_start();
+            $this->postLayoutStart();
 
+            $this->beforeLoop();
             while ($this->checkNextPost()) {
                 $this->the_post();
                 $post = $this->getCurrentPostItem();
@@ -359,21 +381,15 @@ abstract class PostLayout implements PostLayoutConstract
                 $this->renderLoopItem($post);
                 $this->afterLoopItemActions($post);
             }
+            $this->afterLoop();
 
-            $this->loop_end();
+            $this->postLayoutEnd();
+            $this->afterRenderLayout();
 
             wp_reset_postdata();
-            ?>
-
-            <?php if (array_get($this->options, 'show_paginate', false)) : ?>
-                <?php echo jankx_paginate(); ?>
-            <?php endif; ?>
-
-        <?php
-        wp_reset_postdata();
-        if (!$echo) {
-            return ob_get_clean();
-        }
+            if (!$echo) {
+                return ob_get_clean();
+            }
     }
 
     public function addChildLayout($layoutName)

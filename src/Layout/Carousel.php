@@ -45,19 +45,19 @@ class Carousel extends PostLayout implements PostLayoutChildren
     }
 
 
-    public function loop_start()
+    public function beforeLoop()
     {
-        parent::loop_start();
+        parent::beforeLoop();
             $this->createSplide();
                 $this->createControls();
                 $this->createTrackList();
     }
 
-    public function loop_end()
+    public function afterLoop($disableWTopWrapper = false)
     {
                 $this->closeTrackList();
             $this->closeSplide();
-        parent::loop_end();
+        parent::afterLoop($disableWTopWrapper);
     }
 
     protected function createSplide()
@@ -83,14 +83,15 @@ class Carousel extends PostLayout implements PostLayoutChildren
         <?php
     }
 
-    protected function beforeLoopItemActions()
+    protected function beforeLoopItemActions($post)
     {
+        parent::beforeLoopItemActions($post);
         if ($this->currentIndex === 0) {
             echo '<li class="splide__slide">';
         }
     }
 
-    protected function afterLoopItemActions()
+    protected function afterLoopItemActions($post)
     {
         $this->currentIndex += 1;
 
@@ -103,13 +104,14 @@ class Carousel extends PostLayout implements PostLayoutChildren
         if ($this->currentIndex === 0 || $currentPostIndex >= $totalIndex) {
             echo '</li>';
         }
+        parent::afterLoopItemActions($post);
     }
 
     protected function closeTrackList()
     {
         ?>
-        </ul>
-    </div><!-- Close .splide__track -->
+            </ul>
+        </div><!-- Close .splide__track -->
         <?php
     }
 
@@ -118,7 +120,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
         echo '</div> <!-- Close .splide -->';
     }
 
-    public function afterLayoutRendered()
+    public function afterRenderLayout()
     {
         $args = array(
             'perPage' => array_get($this->options, 'columns', 4),

@@ -13,12 +13,13 @@ use Jankx\PostLayout\Layout\Grid;
 use Jankx\PostLayout\Layout\Tabs;
 use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Preset2;
+use Jankx\PostLayout\Layout\Preset3;
 
 use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.76';
+    const VERSION = '1.0.0.81';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -85,6 +86,7 @@ class PostLayoutManager
                 Tabs::LAYOUT_NAME => Tabs::class,
                 Preset1::LAYOUT_NAME => Preset1::class,
                 Preset2::LAYOUT_NAME => Preset2::class,
+                Preset3::LAYOUT_NAME => Preset3::class,
             ));
         }
 
