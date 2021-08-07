@@ -74,7 +74,7 @@ class PostLayoutManager
         $args = wp_parse_args($args, array(
             'data' => 'post',
             'field' => 'all',
-            'type' => 'all',
+            'type' => '',
         ));
 
         if ((is_null(static::$supportedLayouts) && $args['data'] !== 'term') || $refresh) {
@@ -111,6 +111,10 @@ class PostLayoutManager
                         return is_a($layoutCls, PostLayoutParent::class, true);
                     });
                     break;
+                default:
+                    $ret = array_filter($ret, function ($layoutCls) {
+                        return !is_a($layoutCls, PostLayoutParent::class, true);
+                    });
             }
         }
 
@@ -143,7 +147,9 @@ class PostLayoutManager
 
     public function createLayout($layoutName, $wp_query = null)
     {
-        $supportedLayouts = static::getLayouts();
+        $supportedLayouts = static::getLayouts([
+            'type' => 'all'
+        ]);
         if (empty($supportedLayouts[$layoutName])) {
             return;
         }
