@@ -29,7 +29,6 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'columns' => 4,
             'rows' => 1,
             'show_excerpt' => false,
-            'item_style' => 'card',
         );
     }
 
