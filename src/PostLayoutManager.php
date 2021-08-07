@@ -242,6 +242,9 @@ class PostLayoutManager
 
     public function postLayoutClasses($classes, $post, $layoutOptions = array())
     {
+        if ($layoutOptions['show_thumbnail']) {
+            $classes[] = 'thumbnail-' . $layoutOptions['thumbnail_position'];
+        }
         return $classes;
     }
 }
