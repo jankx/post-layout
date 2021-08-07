@@ -60,9 +60,6 @@ class Preset2 extends PostLayout implements PostLayoutChildren
 
     public function renderLoopItem($post)
     {
-        // Setup the post classes
-        $this->createCustomPostClass($post);
-
         if (is_null($this->contentGenerator)) {
             $posts_per_page = $this->wp_query->get('posts_per_page');
             $break_point = ceil($posts_per_page/2);

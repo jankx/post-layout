@@ -30,15 +30,4 @@ class ListLayout extends PostLayout implements PostLayoutChildren
             'show_excerpt' => false,
         );
     }
-
-    protected function createCustomPostClass(&$post = null)
-    {
-        if (is_a($post, \WP_Post::class)) {
-            $classes = array();
-            if ($this->options['show_thumbnail']) {
-                $classes[] = 'thumbnail-' . $this->options['thumbnail_position'];
-            }
-            $post->custom_post_class = $classes;
-        }
-    }
 }

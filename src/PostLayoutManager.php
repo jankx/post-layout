@@ -173,7 +173,7 @@ class PostLayoutManager
 
     public function initHooks()
     {
-        add_filter('post_class', array(PostLayout::class, 'postClasses'));
+        add_filter('jankx/layout/post/item/classes', array($this, 'postLayoutClasses'), 10, 3);
         add_action('wp', array($this, 'registerScripts'), 15);
     }
 
@@ -238,5 +238,10 @@ class PostLayoutManager
             css('jankx-post-layout');
             js('jankx-post-layout');
         }
+    }
+
+    public function postLayoutClasses($classes, $post, $layoutOptions = array())
+    {
+        return $classes;
     }
 }

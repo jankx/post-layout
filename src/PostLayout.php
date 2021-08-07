@@ -26,7 +26,9 @@ abstract class PostLayout implements PostLayoutConstract
     protected $hasChildren;
     protected $isContentOnly;
 
-    protected $options = array();
+    protected $options = array(
+        'item_style' => 'defaut',
+    );
     protected $supportColumns = false;
     protected $contentGenerator;
     protected $contentGeneratorArgs = array();
@@ -182,10 +184,6 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    protected function createCustomPostClass(&$post = null)
-    {
-    }
-
     public static function postClasses($classes)
     {
         global $post;
@@ -240,6 +238,12 @@ abstract class PostLayout implements PostLayoutConstract
                 'show_thumbnail'     => array_get($this->options, 'show_thumbnail', true),
                 'thumbnail_size'     => array_get($this->options, 'thumbnail_size', 'thumbnail'),
                 'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
+                'post_classes'       => apply_filters(
+                    'jankx/layout/post/item/classes',
+                    array('loop-item'),
+                    $this->getCurrentPostItem(),
+                    $this->options
+                )
             )
         );
 
@@ -296,9 +300,6 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function renderLoopItem($post)
     {
-        // Setup the post classes
-        $this->createCustomPostClass($post);
-
         if (is_null($this->contentGenerator)) {
             return $this->templateEngine->render(
                 $this->generateSearchingTemplates($post),
