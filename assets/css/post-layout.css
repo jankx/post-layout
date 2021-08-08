@@ -154,5 +154,27 @@
         width: 50%; }
         .preset-2-layout .preset-column .loop-item.post-large-image {
           width: 100%; } }
+.preset-4-layout .bottom-list {
+  display: flex;
+  flex-wrap: wrap; }
+  .preset-4-layout .bottom-list .loop-item {
+    width: 50%; }
+
+@media (min-width: 992px) {
+  .preset-4-layout {
+    display: flex; }
+    .preset-4-layout > .loop-item, .preset-4-layout .sub-layout {
+      width: 50%; } }
+.preset-5-layout {
+  display: flex; }
+  .preset-5-layout > .splide--slide, .preset-5-layout .sub-list {
+    width: 50%; }
+  .preset-5-layout .sub-list .loop-item {
+    display: flex; }
+  .preset-5-layout .sub-list .post-thumbnail {
+    height: 95px;
+    width: 135px; }
+  .preset-5-layout .sub-list .post-infos {
+    flex: 1; }
 
 /*# sourceMappingURL=post-layout.css.map */

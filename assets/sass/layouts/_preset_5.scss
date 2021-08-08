@@ -1,0 +1,18 @@
+.preset-5-layout {
+    display: flex;
+    >.splide--slide, .sub-list {
+        width: 50%;
+    }
+    .sub-list {
+        .loop-item {
+            display: flex;
+        }
+        .post-thumbnail {
+            height: 95px;
+            width: 135px;
+        }
+        .post-infos {
+            flex: 1;
+        }
+    }
+}

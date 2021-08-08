@@ -1,0 +1,18 @@
+.preset-4-layout {
+    .bottom-list {
+        display: flex;
+        flex-wrap: wrap;
+        .loop-item {
+            width: 50%;
+        }
+    }
+}
+
+@media(min-width: 992px) {
+    .preset-4-layout {
+        display: flex;
+        >.loop-item, .sub-layout {
+            width: 50%;
+        }
+    }
+}

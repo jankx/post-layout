@@ -14,12 +14,14 @@ use Jankx\PostLayout\Layout\Tabs;
 use Jankx\PostLayout\Layout\Preset1;
 use Jankx\PostLayout\Layout\Preset2;
 use Jankx\PostLayout\Layout\Preset3;
+use Jankx\PostLayout\Layout\Preset4;
+use Jankx\PostLayout\Layout\Preset5;
 
 use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.81';
+    const VERSION = '1.0.91';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -92,6 +94,8 @@ class PostLayoutManager
                     Preset1::LAYOUT_NAME => Preset1::class,
                     Preset2::LAYOUT_NAME => Preset2::class,
                     Preset3::LAYOUT_NAME => Preset3::class,
+                    Preset4::LAYOUT_NAME => Preset4::class,
+                    Preset5::LAYOUT_NAME => Preset5::class,
                 ));
             }
         }

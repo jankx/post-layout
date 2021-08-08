@@ -112,9 +112,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
         echo '</div> <!-- Close .splide -->';
     }
 
-    public function afterRenderLayout()
-    {
-        $args = array(
+    protected function generateCarouselOptions() {
+        return array(
             'perPage' => array_get($this->options, 'columns', 4),
             'breakpoints' => array(
                 '800' => array(
@@ -125,6 +124,11 @@ class Carousel extends PostLayout implements PostLayoutChildren
                 )
             )
         );
+    }
+
+    public function afterRenderLayout()
+    {
+        $args = $this->generateCarouselOptions();
 
         execute_script($this->templateEngine->render('post-layout/carousel/script', array(
             'id' => sprintf('jankx-post-layout-%d', $this->getId()),
