@@ -9,6 +9,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
     const LAYOUT_NAME = 'carousel';
 
     protected $currentIndex = 0;
+    protected $disableSplideItem = false;
+    protected $splideToPostClasses;
 
     public function get_name()
     {
@@ -69,31 +71,24 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function createTrackList()
     {
+        $post_type = $this->wp_query->get('post_type');
         ?>
         <div class="splide__track">
-            <ul class="splide__list">
+            <ul class="splide__list <?php echo $post_type; ?>s">
         <?php
     }
 
     protected function beforeLoopItemActions($post)
     {
         parent::beforeLoopItemActions($post);
-        if ($this->currentIndex === 0) {
+        if (!$this->disableSplideItem) {
             echo '<li class="splide__slide">';
         }
     }
 
     protected function afterLoopItemActions($post)
     {
-        $this->currentIndex += 1;
-
-        if ($this->currentIndex == $this->options['rows']) {
-            $this->currentIndex = 0;
-        }
-
-        $currentPostIndex = $this->wp_query->current_post;
-        $totalIndex = $this->wp_query->post_count - 1;
-        if ($this->currentIndex === 0 || $currentPostIndex >= $totalIndex) {
+        if (!$this->disableSplideItem) {
             echo '</li>';
         }
         parent::afterLoopItemActions($post);
@@ -112,7 +107,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
         echo '</div> <!-- Close .splide -->';
     }
 
-    protected function generateCarouselOptions() {
+    protected function generateCarouselOptions()
+    {
         return array(
             'perPage' => array_get($this->options, 'columns', 4),
             'breakpoints' => array(
@@ -128,6 +124,11 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     public function afterRenderLayout()
     {
+        if ($this->splideToPostClasses) {
+            remove_action('post_class', $this->splideToPostClasses);
+            unset($this->splideToPostClasses);
+        }
+
         $args = $this->generateCarouselOptions();
 
         execute_script($this->templateEngine->render('post-layout/carousel/script', array(
@@ -135,5 +136,16 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'var' => sprintf('jankx_post_layout_%d', $this->getId()),
             'config' => $args,
         ), null, false));
+    }
+
+    public function setItemAsSplide()
+    {
+        $this->disableSplideItem = true;
+        $this->splideToPostClasses = function ($classes) {
+            array_unshift($classes, 'splide__slide');
+
+            return $classes;
+        };
+        add_action('post_class', $this->splideToPostClasses);
     }
 }

@@ -25,7 +25,8 @@ class Preset5 extends Carousel
         return false;
     }
 
-    protected function get_number_of_items() {
+    protected function get_number_of_items()
+    {
         if (is_null($this->numOfLastItems)) {
             $this->numOfLastItems = apply_filters('jankx/layout/post/preset5/last_items', 4, $this);
 
@@ -50,7 +51,8 @@ class Preset5 extends Carousel
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
     }
 
-    protected function beforeLoopItemActions($post) {
+    protected function beforeLoopItemActions($post)
+    {
         $currentIndex = $this->wp_query->current_post;
         $numLastItems = $this->get_number_of_items();
         $newListIndex = $this->wp_query->post_count - $numLastItems;
@@ -63,7 +65,7 @@ class Preset5 extends Carousel
             );
             printf('<div %s>', jankx_generate_html_attributes($newListTagWrapAttrs));
         }
-        if ($currentIndex < $newListIndex ) {
+        if ($currentIndex < $newListIndex) {
             parent::beforeLoopItemActions($post);
         }
     }
@@ -74,7 +76,7 @@ class Preset5 extends Carousel
         $numLastItems = $this->get_number_of_items();
         $newListIndex = $this->wp_query->post_count - $numLastItems;
         $totalPost = $this->wp_query->post_count;
-        if ($currentIndex < $newListIndex ) {
+        if ($currentIndex < $newListIndex) {
             parent::afterLoopItemActions($post);
         }
 
@@ -83,7 +85,8 @@ class Preset5 extends Carousel
         }
     }
 
-    protected function generateCarouselOptions() {
+    protected function generateCarouselOptions()
+    {
         return array(
             'perPage' => 1,
             'breakpoints' => array(

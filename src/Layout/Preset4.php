@@ -24,7 +24,8 @@ class Preset4 extends PostLayout
         return false;
     }
 
-    protected function beforeLoopItemActions($post) {
+    protected function beforeLoopItemActions($post)
+    {
         $currentIndex = $this->wp_query->current_post;
         $totalPosts = $this->wp_query->post_count;
 
@@ -44,7 +45,8 @@ class Preset4 extends PostLayout
             }
         }
     }
-    protected function afterLoopItemActions($post) {
+    protected function afterLoopItemActions($post)
+    {
         $currentIndex = $this->wp_query->current_post;
         $totalPosts = $this->wp_query->post_count;
 

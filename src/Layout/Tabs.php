@@ -84,4 +84,12 @@ class Tabs extends PostLayout implements PostLayoutParent
             parent::setContentGenerator($generator);
         }
     }
+
+    public function setItemAsSplide()
+    {
+        $callback = array($this->childLayout, 'setItemAsSplide');
+        if (isset($this->childLayout) && is_callable($callback)) {
+            return call_user_func_array($callback, func_get_args());
+        }
+    }
 }
