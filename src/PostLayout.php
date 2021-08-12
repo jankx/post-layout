@@ -328,6 +328,7 @@ abstract class PostLayout implements PostLayoutConstract
             $attributes['data-posts-per-page'] = $this->wp_query->get('posts_per_page');
             $attributes['data-layout'] = $this->get_name();
             $attributes['data-engine-id'] = $this->templateEngine->getId();
+            $attributes['data-thumbnail-position'] = array_get($this->options, 'thumbnail_position', 'top');
         }
         return $attributes;
     }

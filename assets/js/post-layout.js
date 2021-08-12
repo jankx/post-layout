@@ -40,6 +40,8 @@ function jankx_post_layout_tab_link_click_event(e) {
     var posts_per_page = contentLayout.dataset.postsPerPage || 10;
     var layout = contentLayout.dataset.layout || 'card';
     var engine_id = contentLayout.dataset.engineId;
+    var thumb_pos = contentLayout.dataset.thumbnailPosition;
+
 
     if (!post_type || !engine_id) {
         tabsWrap.removeClass('blocked');
@@ -56,6 +58,7 @@ function jankx_post_layout_tab_link_click_event(e) {
         posts_per_page: posts_per_page,
         layout: layout,
         engine_id: engine_id,
+        thumb_pos: thumb_pos,
     }
 
     jankx_ajax(jkx_post_layout.ajax_url, 'GET', body, {

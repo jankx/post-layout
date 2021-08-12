@@ -15,6 +15,7 @@ class PostsFetcher
     protected $data_type;
     protected $type_name;
     protected $object_id;
+    protected $thumb_pos;
 
     protected $current_page = 1;
     protected $posts_per_page = 10;
@@ -94,6 +95,9 @@ class PostsFetcher
             $this->layout,
             $this->createWordPressQuery()
         );
+        $postLayout->setOptions([
+            'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',
+        ]);
 
         $postLayout->disableLoopStartLoopEnd();
 
