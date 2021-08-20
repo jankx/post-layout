@@ -81,14 +81,23 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function beforeLoopItemActions($post)
     {
         parent::beforeLoopItemActions($post);
-        if (!$this->disableSplideItem) {
+        $currentIndex = $this->wp_query->current_post;
+        $rows = array_get($this->options, 'rows', 1);
+        if (!$this->disableSplideItem && ($currentIndex % $rows == 0)) {
             echo '<li class="splide__slide">';
         }
     }
 
     protected function afterLoopItemActions($post)
     {
-        if (!$this->disableSplideItem) {
+        $rows         = array_get($this->options, 'rows', 1);
+        $currentIndex = $this->wp_query->current_post;
+        $totalPost    = $this->wp_query->post_count;
+
+        $isEndRowIndex = ($currentIndex / $rows) === ($rows - 1);
+        $isEndLoop     = $currentIndex === ($totalPost - 1);
+
+        if (!$this->disableSplideItem && ($isEndRowIndex || $isEndLoop)) {
             echo '</li>';
         }
         parent::afterLoopItemActions($post);
