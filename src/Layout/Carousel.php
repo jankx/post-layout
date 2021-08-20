@@ -36,6 +36,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'columns' => 4,
             'rows' => 1,
             'show_excerpt' => false,
+            'show_dot' => false,
         );
     }
 
@@ -120,6 +121,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
     {
         return array(
             'perPage' => array_get($this->options, 'columns', 4),
+            'pagination' => array_get($this->options, 'show_dot', false),
             'breakpoints' => array(
                 '800' => array(
                     'perPage' => 2,
