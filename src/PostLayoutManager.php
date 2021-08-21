@@ -21,7 +21,7 @@ use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.94';
+    const VERSION = '1.0.112';
 
     protected static $instances;
     protected static $supportedLayouts;

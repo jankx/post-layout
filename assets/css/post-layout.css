@@ -89,6 +89,9 @@
 .loop-item .post-title {
   font-size: 14px;
 }
+.loop-item.post-large-image .post-title {
+  margin-top: 10px;
+}
 
 .carousel-layout .splide__track {
   margin-left: -10px;
@@ -221,27 +224,70 @@
 .preset-4-layout .bottom-list {
   display: flex;
   flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
 }
 .preset-4-layout .bottom-list .loop-item {
   width: 50%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .preset-4-layout {
     display: flex;
+    margin-left: -5px;
+    margin-right: -5px;
   }
   .preset-4-layout > .loop-item, .preset-4-layout .sub-layout {
     width: 50%;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .preset-4-layout .sub-layout .loop-item:first-child .post-thumbnail {
+    height: 200px;
+  }
+  .preset-4-layout .bottom-list {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  .preset-4-layout .bottom-list .loop-item {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .preset-4-layout .bottom-list .loop-item .post-thumbnail {
+    height: 150px;
+  }
+}
+@media (min-width: 992px) {
+  .preset-4-layout {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .preset-4-layout > .loop-item, .preset-4-layout .sub-layout {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .preset-4-layout .bottom-list {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .preset-4-layout .bottom-list .loop-item {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 .preset-5-layout {
   display: flex;
 }
-.preset-5-layout > .splide--slide, .preset-5-layout .sub-list {
-  width: 50%;
-}
 .preset-5-layout .sub-list .loop-item {
   display: flex;
+  margin-left: -5px;
+  margin-right: 5px;
+}
+.preset-5-layout .sub-list .post-thumbnail, .preset-5-layout .sub-list .post-infos {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .preset-5-layout .sub-list .post-thumbnail {
   height: 95px;
@@ -249,6 +295,43 @@
 }
 .preset-5-layout .sub-list .post-infos {
   flex: 1;
+}
+
+@media (min-width: 640px) {
+  .preset-5-layout {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  .preset-5-layout .splide, .preset-5-layout .sub-list {
+    width: 50%;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+@media (min-width: 992px) {
+  .preset-5-layout {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .preset-5-layout .splide, .preset-5-layout .sub-list {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .preset-5-layout .splide {
+    width: 60%;
+  }
+  .preset-5-layout .sub-list {
+    width: 40%;
+  }
+}
+@media (max-width: 639px) {
+  .preset-5-layout {
+    flex-direction: column;
+  }
+  .preset-5-layout .splide, .preset-5-layout .sub-list {
+    flex: 1;
+    flex-basis: auto;
+  }
 }
 
 /*# sourceMappingURL=post-layout.css.map */

@@ -2,4 +2,10 @@
 	.post-title {
 		font-size: 14px;
 	}
+
+	&.post-large-image {
+		.post-title {
+			margin-top: 10px;
+		}
+	}
 }

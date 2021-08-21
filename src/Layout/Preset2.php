@@ -72,11 +72,14 @@ class Preset2 extends PostLayout implements PostLayoutChildren
             $max_items = $this->wp_query->post_count;
 
             if (in_array($current_index, array($break_point -1, $break_point))) {
-                return $this->templateEngine->render(array(
-                    $post->post_type . '-layout/preset2/large-item',
-                    'post-layout/preset2/large-item',
-                    'post-layout/large-item',
-                ));
+                return $this->templateEngine->render(
+                    array(
+                        $post->post_type . '-layout/preset2/large-item',
+                        'post-layout/preset2/large-item',
+                        'post-layout/large-item',
+                    ),
+                    $this->prepareTemplateData()
+                );
             }
 
             return $this->templateEngine->render(

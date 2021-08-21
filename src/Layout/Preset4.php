@@ -24,6 +24,27 @@ class Preset4 extends PostLayout
         return false;
     }
 
+    public function renderLoopItem($post)
+    {
+        if (is_null($this->contentGenerator)) {
+            if ($this->wp_query->current_post === 0) {
+                return $this->templateEngine->render(
+                    $this->generateSearchingLargeItemTemplates($post),
+                    $this->prepareTemplateData()
+                );
+            }
+            return $this->templateEngine->render(
+                $this->generateSearchingTemplates($post),
+                $this->prepareTemplateData()
+            );
+        }
+
+        $args = $this->contentGeneratorArgs;
+        array_push($args, $post);
+
+        return call_user_func_array($this->contentGenerator, $args);
+    }
+
     protected function beforeLoopItemActions($post)
     {
         $currentIndex = $this->wp_query->current_post;

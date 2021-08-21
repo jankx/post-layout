@@ -9,6 +9,7 @@ class Preset5 extends Carousel
 
     protected $supportColumns = false;
     protected $numOfLastItems;
+    protected $isCarouselItem = false;
 
     public function get_name()
     {
@@ -28,7 +29,11 @@ class Preset5 extends Carousel
     protected function get_number_of_items()
     {
         if (is_null($this->numOfLastItems)) {
-            $this->numOfLastItems = apply_filters('jankx/layout/post/preset5/last_items', 4, $this);
+            $this->numOfLastItems = apply_filters(
+                'jankx/layout/post/preset5/last_items',
+                array_get($this->options, 'last_columns_items', 3),
+                $this
+            );
 
             if (($this->wp_query->post_count - $this->numOfLastItems) <= 0) {
                 $this->numOfLastItems = $this->wp_query->post_count - 1;
@@ -49,6 +54,39 @@ class Preset5 extends Carousel
     {
         $post_type = $this->wp_query->get('post_type');
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
+    }
+
+    protected function createSplide()
+    {
+        parent::createSplide();
+        $this->isCarouselItem = true;
+    }
+
+    protected function closeSplide()
+    {
+        parent::closeSplide();
+        $this->isCarouselItem = false;
+    }
+
+    public function renderLoopItem($post)
+    {
+        if (is_null($this->contentGenerator)) {
+            if ($this->isCarouselItem) {
+                return $this->templateEngine->render(
+                    $this->generateSearchingLargeItemTemplates($post),
+                    $this->prepareTemplateData()
+                );
+            }
+            return $this->templateEngine->render(
+                $this->generateSearchingTemplates($post),
+                $this->prepareTemplateData()
+            );
+        }
+
+        $args = $this->contentGeneratorArgs;
+        array_push($args, $post);
+
+        return call_user_func_array($this->contentGenerator, $args);
     }
 
     protected function beforeLoopItemActions($post)
@@ -89,6 +127,7 @@ class Preset5 extends Carousel
     {
         return array(
             'perPage' => 1,
+            'pagination' => array_get($this->options, 'show_dot', false),
             'breakpoints' => array(
                 '800' => array(
                     'perPage' => 1,

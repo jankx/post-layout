@@ -119,12 +119,13 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function generateCarouselOptions()
     {
+        $columns = array_get($this->options, 'columns', 4);
         return array(
-            'perPage' => array_get($this->options, 'columns', 4),
+            'perPage' => $columns,
             'pagination' => array_get($this->options, 'show_dot', false),
             'breakpoints' => array(
                 '800' => array(
-                    'perPage' => 2,
+                    'perPage' => $columns >= 2 ? 2 : 1,
                 ),
                 '600' => array(
                     'perPage' => 1
