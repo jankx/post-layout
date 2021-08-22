@@ -283,7 +283,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->post;
     }
 
-    protected function generateSearchingLargeItemTemplates($post) {
+    protected function generateSearchingLargeItemTemplates($post)
+    {
         if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
                 "post-layout/{$this->get_name()}/$post->post_type-{$item_style}-large-item",

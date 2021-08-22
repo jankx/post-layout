@@ -22,6 +22,20 @@ class Preset3 extends Carousel
         return false;
     }
 
+    protected function generateCarouselOptions()
+    {
+        $columns = array_get($this->options, 'columns', 4);
+        return array(
+            'perPage' => $columns,
+            'pagination' => array_get($this->options, 'show_dot', false),
+            'breakpoints' => array(
+                '600' => array(
+                    'perPage' => 2
+                )
+            )
+        );
+    }
+
     public function beforeLoop()
     {
         if ($this->checkNextPost()) {

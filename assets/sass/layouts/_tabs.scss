@@ -1,5 +1,7 @@
 .post-layout-tabs {
     display: flex;
+    flex-wrap: wrap;
+
     .the-tab {
         a {
             padding: 5px 10px;
