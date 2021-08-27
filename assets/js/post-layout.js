@@ -97,9 +97,50 @@ function jankx_post_layout_tab_link_click_event(e) {
     });
 }
 
+/**
+ *
+ * @param {FsLightbox} lightboxInstance
+ * @param {Array} sources
+ */
+function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
+    lightboxInstance.props.sources = [];
+    for(i=0; i<sources.length; i++) {
+        var source = sources[i];
+        var dataset = source.dataset || {};
+        if (!dataset.src) {
+            continue;
+        }
+        source.addEventListener('click', function(e) {
+            var tag = e.target;
+            var target = tag.tagName === 'A' ? tag.querySelector('has-lightbox') : tag.findParent('.has-lightbox');
+            var galleryIndex = target.dataset.galleryIndex ? parseInt(target.dataset.galleryIndex) : 0;
+            lightboxInstance.open(galleryIndex);
+        });
+        lightboxInstance.props.sources.push(dataset.src);
+    }
+}
+
+function jankxPostLayoutSetupLightbox() {
+    // Get all post layouts
+    var jankxPostLayouts = document.querySelectorAll('.jankx-post-layout-wrap');
+    for(i=0; i<jankxPostLayouts.length; i++) {
+        var jankxPostLayout = jankxPostLayouts[i];
+        var lightboxes = jankxPostLayout.querySelectorAll('.has-lightbox');
+        if (lightboxes.length <= 0) {
+            continue;
+        }
+        window[camelize(jankxPostLayout.getAttribute('id'))] = new FsLightbox();
+        jankxPostLayoutSetupLightboxSources(
+            window[camelize(jankxPostLayout.getAttribute('id'))],
+            lightboxes
+        );
+    }
+}
+
 function jankx_post_layout_init() {
     var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li>a');
     jankx_post_layout_tab_links_create_trigger(post_layout_tab_links);
+    jankxPostLayoutSetupLightbox();
 }
 
 document.addEventListener(

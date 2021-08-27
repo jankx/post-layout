@@ -227,6 +227,8 @@ abstract class PostLayout implements PostLayoutConstract
         $templateData = wp_parse_args(
             $data,
             array(
+                'attributes'         => array(),
+                'data_index'         => $this->wp_query->current_post,
                 'show_title'         => array_get($this->options, 'show_title', true),
                 'show_excerpt'       => array_get($this->options, 'show_excerpt', false),
                 'show_thumbnail'     => array_get($this->options, 'show_thumbnail', true),
@@ -339,7 +341,8 @@ abstract class PostLayout implements PostLayoutConstract
     protected function createWrapAttributes()
     {
         $attributes = array(
-            'class' => array('jankx-post-layout-wrap')
+            'class' => array('jankx-post-layout-wrap'),
+            'id' => sprintf('post-%s-layout-%d', $this->get_name(), $this->getId())
         );
 
         if (!$this->hasChildren) {
