@@ -104,19 +104,30 @@ function jankx_post_layout_tab_link_click_event(e) {
  */
 function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
     lightboxInstance.props.sources = [];
+    lightboxInstance.props.currentIndex = 0;
+
     for(i=0; i<sources.length; i++) {
         var source = sources[i];
         var dataset = source.dataset || {};
         if (!dataset.src) {
             continue;
         }
+
+        var galleryIndex = dataset.galleryIndex ? parseInt(dataset.galleryIndex) : 0;
+        if (galleryIndex != lightboxInstance.props.currentIndex) {
+            target.setAttribute('data-gallery-index', lightboxInstance.props.currentIndex);
+        }
+
         source.addEventListener('click', function(e) {
             var tag = e.target;
             var target = tag.tagName === 'A' ? tag.querySelector('has-lightbox') : tag.findParent('.has-lightbox');
             var galleryIndex = target.dataset.galleryIndex ? parseInt(target.dataset.galleryIndex) : 0;
+
             lightboxInstance.open(galleryIndex);
         });
+
         lightboxInstance.props.sources.push(dataset.src);
+        lightboxInstance.props.currentIndex += 1;
     }
 }
 

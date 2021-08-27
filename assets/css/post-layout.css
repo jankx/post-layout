@@ -194,6 +194,9 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.loop-item .overlay, .loop-item .has-lightbox {
+  cursor: pointer;
+}
 
 .post-layout-tabs {
   display: flex;
