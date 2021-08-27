@@ -221,6 +221,14 @@ class PostLayoutManager
         );
 
         js(
+            'fslightbox',
+            $this->asset_url('libs/fslightbox-basic/fslightbox.js'),
+            array(),
+            '3.3',
+            true
+        );
+
+        js(
             'splide',
             $this->asset_url('libs/splide/js/splide.js'),
             array(),
@@ -231,7 +239,7 @@ class PostLayoutManager
         js(
             'jankx-post-layout',
             $this->asset_url('js/post-layout.js'),
-            array('jankx-common', 'splide'),
+            array('jankx-common', 'splide', 'fslightbox'),
             static::VERSION,
             true
         )
