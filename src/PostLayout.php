@@ -2,6 +2,7 @@
 namespace Jankx\PostLayout;
 
 use WP_Query;
+use WC_Product;
 use Jankx\Template\Template;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
@@ -278,6 +279,13 @@ abstract class PostLayout implements PostLayoutConstract
     public function the_post()
     {
         $this->wp_query->the_post();
+        if (is_a($this->wp_query->post, WC_Product::class)) {
+            $product = clone($this->wp_query->post);
+            $this->wp_query->post = get_post($this->wp_query->post->get_id());
+
+            $GLOBALS['post'] = $this->wp_query->post;
+            $GLOBALS['product'] = $product;
+        }
     }
 
     public function getCurrentPostItem()
@@ -334,7 +342,6 @@ abstract class PostLayout implements PostLayoutConstract
 
         $args = $this->contentGeneratorArgs;
         array_push($args, $post);
-
         return call_user_func_array($this->contentGenerator, $args);
     }
 

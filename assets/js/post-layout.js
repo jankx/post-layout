@@ -1,4 +1,5 @@
-function jankx_post_layout_tab_links_create_trigger(link_elements) {
+function jankx_post_layout_tab_links_create_trigger(link_elements)
+{
     for (i = 0; i < link_elements.length; i++) {
         var link_element = link_elements[i];
         link_element.addEventListener('click', jankx_post_layout_tab_link_click_event);
@@ -9,7 +10,8 @@ function jankx_post_layout_tab_links_create_trigger(link_elements) {
  *
  * @param {HTMLElement} e
  */
-function jankx_post_layout_tab_link_click_event(e) {
+function jankx_post_layout_tab_link_click_event(e)
+{
     e.preventDefault();
     var clickedTab = e.target.parent();
     var tabsWrap = clickedTab.findParent('.jankx-tabs');
@@ -62,10 +64,10 @@ function jankx_post_layout_tab_link_click_event(e) {
     }
 
     jankx_ajax(jkx_post_layout.ajax_url, 'GET', body, {
-        beforeSend: function() {
+        beforeSend: function () {
             tabsWrap.find('.active');
         },
-        complete: function(xhr) {
+        complete: function (xhr) {
             var jankx_post_wrap = contentLayout.find('.jankx-posts');
             var mode = jankx_post_wrap.dataset.mode || 'append';
 
@@ -102,11 +104,12 @@ function jankx_post_layout_tab_link_click_event(e) {
  * @param {FsLightbox} lightboxInstance
  * @param {Array} sources
  */
-function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
+function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources)
+{
     lightboxInstance.props.sources = [];
     lightboxInstance.props.currentIndex = 0;
 
-    for(i=0; i<sources.length; i++) {
+    for (i=0; i<sources.length; i++) {
         var source = sources[i];
         var dataset = source.dataset || {};
         if (!dataset.src) {
@@ -115,10 +118,10 @@ function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
 
         var galleryIndex = dataset.galleryIndex ? parseInt(dataset.galleryIndex) : 0;
         if (galleryIndex != lightboxInstance.props.currentIndex) {
-            target.setAttribute('data-gallery-index', lightboxInstance.props.currentIndex);
+            source.setAttribute('data-gallery-index', lightboxInstance.props.currentIndex);
         }
 
-        source.addEventListener('click', function(e) {
+        source.addEventListener('click', function (e) {
             var tag = e.target;
             var target = tag.tagName === 'A' ? tag.querySelector('has-lightbox') : tag.findParent('.has-lightbox');
             var galleryIndex = target.dataset.galleryIndex ? parseInt(target.dataset.galleryIndex) : 0;
@@ -131,10 +134,11 @@ function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
     }
 }
 
-function jankxPostLayoutSetupLightbox() {
+function jankxPostLayoutSetupLightbox()
+{
     // Get all post layouts
     var jankxPostLayouts = document.querySelectorAll('.jankx-post-layout-wrap');
-    for(i=0; i<jankxPostLayouts.length; i++) {
+    for (i=0; i<jankxPostLayouts.length; i++) {
         var jankxPostLayout = jankxPostLayouts[i];
         var lightboxes = jankxPostLayout.querySelectorAll('.has-lightbox');
         if (lightboxes.length <= 0) {
@@ -148,7 +152,8 @@ function jankxPostLayoutSetupLightbox() {
     }
 }
 
-function jankx_post_layout_init() {
+function jankx_post_layout_init()
+{
     var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li>a');
     jankx_post_layout_tab_links_create_trigger(post_layout_tab_links);
     jankxPostLayoutSetupLightbox();
