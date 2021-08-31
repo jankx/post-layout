@@ -228,7 +228,7 @@ abstract class PostLayout implements PostLayoutConstract
         $templateData = wp_parse_args(
             $data,
             array(
-                'attributes'         => array(),
+                'attributes'         => jankx_generate_html_attributes(array()),
                 'data_index'         => $this->wp_query->current_post,
                 'show_title'         => array_get($this->options, 'show_title', true),
                 'show_excerpt'       => array_get($this->options, 'show_excerpt', false),
