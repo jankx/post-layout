@@ -134,6 +134,12 @@ abstract class PostLayout implements PostLayoutConstract
     public function postLayoutStart($disableWTopWrapper = false)
     {
         if ($this->isContentOnly) {
+            if (!$this->hasChildren) {
+                foreach ($post_types as $post_type) {
+                    // This hook use to start custom render post layout
+                    do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
+                }
+            }
             return;
         }
         if (!$disableWTopWrapper) {
@@ -173,16 +179,15 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function postLayoutEnd($disableWTopWrapper = false)
     {
-        if ($this->isContentOnly) {
-            return;
-        }
         if (!$this->hasChildren) {
             foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
                 // This hook use to stop custom render post layout
                 do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
             }
         }
-
+        if ($this->isContentOnly) {
+            return;
+        }
             // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
         if (!$disableWTopWrapper) {
