@@ -55,6 +55,14 @@ abstract class TermLayout implements TermLayoutConstract
         return (array)$this->options;
     }
 
+    public function getOption($optionName, $defaultValue = null)
+    {
+        if (isset($this->options[$optionName])) {
+            return $this->options[$optionName];
+        }
+        return $defaultValue;
+    }
+
     protected function prepareTemplateData($data)
     {
         $data = array_merge(array(

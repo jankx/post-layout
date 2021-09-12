@@ -12,4 +12,6 @@ interface LayoutBase
     public function setOptions($options);
 
     public function getOptions();
+
+    public function getOption($optionName, $defaultValue = null);
 }

@@ -82,23 +82,38 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function beforeLoopItemActions($post)
     {
         parent::beforeLoopItemActions($post);
-        $currentIndex = $this->wp_query->current_post;
+        if ($this->disableSplideItem) {
+            return;
+        }
+
         $rows = array_get($this->options, 'rows', 1);
-        if (!$this->disableSplideItem && ($currentIndex % $rows == 0)) {
+        if ($rows > 1) {
+            $currentIndex = $this->wp_query->current_post;
+            if ($currentIndex % intval($rows) == 0) {
+                echo '<li class="splide__slide">';
+            }
+        } else {
             echo '<li class="splide__slide">';
         }
     }
 
     protected function afterLoopItemActions($post)
     {
-        $rows         = array_get($this->options, 'rows', 1);
-        $currentIndex = $this->wp_query->current_post;
-        $totalPost    = $this->wp_query->post_count;
+        if ($this->disableSplideItem) {
+            return parent::afterLoopItemActions($post);
+        }
 
-        $isEndRowIndex = ($currentIndex / $rows) === ($rows - 1);
-        $isEndLoop     = $currentIndex === ($totalPost - 1);
+        $rows = array_get($this->options, 'rows', 1);
+        if ($rows > 1) {
+            $currentIndex = $this->wp_query->current_post;
+            $isEndRowIndex = ($currentIndex / $rows) === ($rows - 1);
 
-        if (!$this->disableSplideItem && ($isEndRowIndex || $isEndLoop)) {
+            $totalPost    = $this->wp_query->post_count;
+            $isEndLoop     = $currentIndex === ($totalPost - 1);
+            if ($isEndRowIndex || $isEndLoop) {
+                echo '</li>';
+            }
+        } else {
             echo '</li>';
         }
         parent::afterLoopItemActions($post);
@@ -120,15 +135,17 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function generateCarouselOptions()
     {
         $columns = array_get($this->options, 'columns', 4);
+        $mobile_columns = array_get($this->options, 'columns_mobile', 4);
+        $tablet_columns = array_get($this->options, 'columns_tablet', 4);
         return array(
             'perPage' => $columns,
             'pagination' => array_get($this->options, 'show_dot', false),
             'breakpoints' => array(
                 '800' => array(
-                    'perPage' => $columns >= 2 ? 2 : 1,
+                    'perPage' => $tablet_columns ? $tablet_columns : 2,
                 ),
                 '600' => array(
-                    'perPage' => 1
+                    'perPage' => $mobile_columns ? $mobile_columns : 1
                 )
             )
         );

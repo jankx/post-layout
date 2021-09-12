@@ -18,6 +18,7 @@ use Jankx\PostLayout\Layout\Preset4;
 use Jankx\PostLayout\Layout\Preset5;
 
 use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
+use Jankx\PostLayout\TermLayout\Carousel as TermCarouselLayout;
 
 class PostLayoutManager
 {
@@ -103,6 +104,7 @@ class PostLayoutManager
         if ((is_null(static::$supportedTermLayouts) && $args['data'] === 'term') || $refresh) {
             static::$supportedTermLayouts = apply_filters('jankx_post_layout_term_layouts', array(
                 TermCardLayout::LAYOUT_NAME => TermCardLayout::class,
+                TermCarouselLayout::LAYOUT_NAME => TermCarouselLayout::class,
             ));
         }
 

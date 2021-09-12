@@ -464,4 +464,12 @@ abstract class PostLayout implements PostLayoutConstract
         }
         return $this->childLayout;
     }
+
+    public function getOption($optionName, $defaultValue = null)
+    {
+        if (isset($this->options[$optionName])) {
+            return $this->options[$optionName];
+        }
+        return $defaultValue;
+    }
 }
