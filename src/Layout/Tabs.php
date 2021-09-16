@@ -10,7 +10,7 @@ class Tabs extends PostLayout implements PostLayoutParent
     const LAYOUT_NAME = 'tabs';
 
     protected $supportColumns = false;
-    protected $enableTabCarousel = false;
+    protected $mobileCarouselTabs = 0;
 
     protected $tabs = array();
 
@@ -24,9 +24,9 @@ class Tabs extends PostLayout implements PostLayoutParent
         return __('Tabs', 'jankx');
     }
 
-    public function enableCarouselOnMobile()
+    public function enableCarouselOnMobile($perPage = 2)
     {
-        $this->enableTabCarousel = true;
+        $this->mobileCarouselTabs = $perPage;
     }
 
     public function render($echo = true)
@@ -50,8 +50,9 @@ class Tabs extends PostLayout implements PostLayoutParent
             'id' => sprintf('post-%s-%s', $this->get_name(), $this->instanceId)
         );
 
-        if ($this->enableTabCarousel) {
+        if ($this->mobileCarouselTabs > 0) {
             $attributes['data-tab-carousel'] = true;
+            $attributes['data-columns'] = $this->mobileCarouselTabs;
         }
         ?>
         <div <?php echo jankx_generate_html_attributes($attributes); ?>>

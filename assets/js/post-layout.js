@@ -176,9 +176,10 @@ function jankxSetupMobileCarousel(tabCarousel)
     carouselHTML = '<div class="tabs-carousel-wrap"><div class="splide__track">' + tabs.outerHTML + '</div></div>';
     tabs.outerHTML = carouselHTML;
     window.jankxCarouselTabs['tabsCarouselWrap' + i] = new Splide(tabCarousel.querySelector('.tabs-carousel-wrap'), {
-        perPage: 3,
+        perPage: tabCarousel.dataset.columns || 2,
     });
     window.jankxCarouselTabs['tabsCarouselWrap' + i].mount();
+    tabCarousel.addClass('is-tabs-carousel');
 }
 
 /**
@@ -198,6 +199,7 @@ function jankxDestroyMobileCarouselList(tabCarousel)
  */
 function jankxDestroyMobileCarousel(tabCarousel)
 {
+    tabCarousel.removeClass('is-tabs-carousel');
     if (window.jankxCarouselTabs['tabsCarouselWrap' + i]) {
         window.jankxCarouselTabs['tabsCarouselWrap' + i].destroy();
     }
