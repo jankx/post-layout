@@ -117,16 +117,16 @@
   .preset-2-layout .preset-column:nth-child(even) {
     padding-left: 10px;
   }
-  .preset-2-layout .preset-column.column-1 .loop-item:not(.post-large-image):nth-child(odd) {
+  .preset-2-layout .preset-column.group-1 .loop-item:not(.post-large-image):nth-child(odd) {
     padding-right: 10px;
   }
-  .preset-2-layout .preset-column.column-1 .loop-item:not(.post-large-image):nth-child(even) {
+  .preset-2-layout .preset-column.group-1 .loop-item:not(.post-large-image):nth-child(even) {
     padding-left: 10px;
   }
-  .preset-2-layout .preset-column.column-2 .loop-item:not(.post-large-image):nth-child(odd) {
+  .preset-2-layout .preset-column.group-2 .loop-item:not(.post-large-image):nth-child(odd) {
     padding-left: 10px;
   }
-  .preset-2-layout .preset-column.column-2 .loop-item:not(.post-large-image):nth-child(even) {
+  .preset-2-layout .preset-column.group-2 .loop-item:not(.post-large-image):nth-child(even) {
     padding-right: 10px;
   }
 }
@@ -206,6 +206,10 @@
   padding: 5px 10px;
 }
 
+.tabs-carousel-wrap .splide__list {
+  display: flex;
+}
+
 .preset-column {
   height: 100%;
 }
@@ -226,6 +230,29 @@
     width: 100%;
   }
 }
+@media (max-width: 767px) {
+  .preset-2-layout .preset-column {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -1px;
+    margin-right: -1px;
+  }
+  .preset-2-layout .preset-column .loop-item {
+    width: 50%;
+    order: 2;
+    padding: 0 1px;
+  }
+  .preset-2-layout .preset-column .loop-item.post-large-image {
+    order: 1;
+    width: 100%;
+  }
+  .preset-2-layout .preset-column .loop-item:not(.post-large-image) {
+    height: 140px;
+  }
+  .preset-2-layout .preset-column .loop-item .post-title {
+    font-size: 11px;
+  }
+}
 .preset3-layout .splide {
   margin-left: -5px;
   margin-right: -5px;
@@ -241,7 +268,24 @@
 .preset3-layout .splide .loop-item .post-thumbnail {
   height: 140px;
 }
-
+@media (max-width: 767px) {
+  .preset3-layout .columns-3 .loop-item .overlay {
+    height: 50px;
+    width: 50px;
+  }
+  .preset3-layout .columns-3 .loop-item .post-thumbnail {
+    height: 120px;
+  }
+}
+@media (max-width: 480px) {
+  .preset3-layout .columns-3 .loop-item .overlay {
+    height: 40px;
+    width: 40px;
+  }
+  .preset3-layout .columns-3 .loop-item .post-thumbnail {
+    height: 90px;
+  }
+}
 .preset-4-layout .bottom-list {
   display: flex;
   flex-wrap: wrap;

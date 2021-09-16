@@ -25,3 +25,30 @@
         }
     }
 }
+
+@media(max-width: 767px) {
+    .preset-2-layout {
+        .preset-column {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -1px;
+            margin-right: -1px;
+            .loop-item {
+                width: 50%;
+                order: 2;
+                padding: 0 1px;
+                &.post-large-image {
+                    order: 1;
+                    width: 100%;
+                }
+                &:not(.post-large-image) {
+                    height: 140px;
+                }
+
+                .post-title{
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}

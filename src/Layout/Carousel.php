@@ -37,6 +37,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'rows' => 1,
             'show_excerpt' => false,
             'show_dot' => false,
+            'show_nav' => true,
         );
     }
 
@@ -57,7 +58,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function createSplide()
     {
-        $splideClasses = array('splide');
+        $splideClasses = array('splide', 'carousel-wrapper', sprintf('columns-%d', $this->options['columns']));
         $attributes = array(
             'class' => $splideClasses,
             'id' => sprintf('jankx-post-layout-%d', $this->getId())
@@ -67,7 +68,9 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function createControls()
     {
-        $this->templateEngine->render('post-layout/carousel/nav');
+        if (array_get($this->options, 'show_nav')) {
+            $this->templateEngine->render('post-layout/carousel/nav');
+        }
     }
 
     protected function createTrackList()
@@ -137,9 +140,11 @@ class Carousel extends PostLayout implements PostLayoutChildren
         $columns = array_get($this->options, 'columns', 4);
         $mobile_columns = array_get($this->options, 'columns_mobile', 4);
         $tablet_columns = array_get($this->options, 'columns_tablet', 4);
+
         return array(
             'perPage' => $columns,
             'pagination' => array_get($this->options, 'show_dot', false),
+            'arrows' => array_get($this->options, 'show_nav', false),
             'breakpoints' => array(
                 '800' => array(
                     'perPage' => $tablet_columns ? $tablet_columns : 2,

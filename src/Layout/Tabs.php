@@ -10,6 +10,8 @@ class Tabs extends PostLayout implements PostLayoutParent
     const LAYOUT_NAME = 'tabs';
 
     protected $supportColumns = false;
+    protected $enableTabCarousel = false;
+
     protected $tabs = array();
 
     public function get_name()
@@ -22,24 +24,37 @@ class Tabs extends PostLayout implements PostLayoutParent
         return __('Tabs', 'jankx');
     }
 
+    public function enableCarouselOnMobile()
+    {
+        $this->enableTabCarousel = true;
+    }
+
     public function render($echo = true)
     {
         if (!$this->childLayout) {
             return;
         }
+        $post_type = $this->wp_query->get('post_type');
+
+        do_action("jankx/layout/tabs/{$post_type}/init", $this, $post_type);
 
         if (!$echo) {
             ob_start();
         }
-        $post_types = (array)$this->wp_query->query_vars['post_type'];
-        $wrapClass = array_merge(
-            array('jankx-parent-layout', 'tabs', sprintf('%s-layout', $this->get_name())),
-            array_map(function ($post_type) {
-                return 'post-type-' . $post_type;
-            }, $post_types)
-        )
+        $wrapClass = array('jankx-parent-layout', 'tabs', sprintf('%s-layout', $this->get_name()));
+        $wrapClass[] = is_array($post_type) ? array_map(function ($post_type) {
+            return 'post-type-' . $post_type;
+        }, $post_type) : sprintf('post-type-%s', $post_type);
+        $attributes = array(
+            'class' => $wrapClass,
+            'id' => sprintf('post-%s-%s', $this->get_name(), $this->instanceId)
+        );
+
+        if ($this->enableTabCarousel) {
+            $attributes['data-tab-carousel'] = true;
+        }
         ?>
-        <div <?php echo jankx_generate_html_attributes(array('class' => $wrapClass)); ?>>
+        <div <?php echo jankx_generate_html_attributes($attributes); ?>>
         <?php
             $this->templateEngine->render(
                 'post-layout/tabs/tabs',

@@ -35,14 +35,26 @@ class Preset2 extends PostLayout implements PostLayoutChildren
         return false;
     }
 
-    protected function beforeLoopItemActions($post)
+    public function getBreakpoint()
     {
         $posts_per_page = $this->wp_query->get('posts_per_page');
-        $break_point = ceil($posts_per_page/2);
+        return $posts_per_page > 10 ? ceil($posts_per_page/2) : 5;
+    }
+
+    protected function beforeLoopItemActions($post)
+    {
+        $break_point = $this->getBreakpoint();
         $current_index = $this->wp_query->current_post;
 
         if (in_array($current_index, array(0, $break_point))) {
-            echo '<div class="preset-column column-'. $this->currentPresetColumnIndex .'">';
+            $attributes = array(
+                'class' => array(
+                    'preset-column',
+                    sprintf('group-%d', $this->currentPresetColumnIndex),
+                    sprintf('columns-%s', array_get($this->options, 'columns', 1))
+                )
+            );
+            echo sprintf('<div %s>', jankx_generate_html_attributes($attributes));
 
             $this->currentPresetColumnIndex += 1;
         }
@@ -54,8 +66,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
     {
         parent::afterLoopItemActions($post);
 
-        $posts_per_page = $this->wp_query->get('posts_per_page');
-        $break_point = ceil($posts_per_page/2);
+        $break_point = $this->getBreakpoint();
         $current_index = $this->wp_query->current_post;
         $max_items = $this->wp_query->post_count;
         if ($current_index === intval($break_point - 1) || $current_index === ($max_items -1)) {
@@ -66,10 +77,8 @@ class Preset2 extends PostLayout implements PostLayoutChildren
     public function renderLoopItem($post)
     {
         if (is_null($this->contentGenerator)) {
-            $posts_per_page = $this->wp_query->get('posts_per_page');
-            $break_point = ceil($posts_per_page/2);
+            $break_point = $this->getBreakpoint();
             $current_index = $this->wp_query->current_post;
-            $max_items = $this->wp_query->post_count;
 
             if (in_array($current_index, array($break_point -1, $break_point))) {
                 return $this->templateEngine->render(
@@ -94,7 +103,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
 
         $args = $this->contentGeneratorArgs;
         array_push($args, $post);
-        array_push($args, $wp_query);
+        array_push($args, $this->wp_query);
 
         return call_user_func_array($this->contentGenerator, $args);
     }

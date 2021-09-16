@@ -3,16 +3,16 @@
 
 	 }
 	 &.columns-3 {
-	 	
+
 	 }
 	 &.columns-4 {
-	 	
+
 	 }
 	 &.columns-5 {
-	 	
+
 	 }
 	 &.columns-6 {
-	 	
+
 	 }
 }
 
@@ -51,7 +51,7 @@
 				padding-left: 10px;
 			}
 
-			&.column-1 {
+			&.group-1 {
 				.loop-item {
 					&:not(.post-large-image) {
 						&:nth-child(odd) {
@@ -63,7 +63,7 @@
 					}
 				}
 			}
-			&.column-2 {
+			&.group-2 {
 				.loop-item {
 					&:not(.post-large-image) {
 						&:nth-child(odd) {
@@ -80,16 +80,16 @@
 
 	.card-layout, .grid-layout{
 		&.columns-3 {
-		 	
+
 		 }
 		 &.columns-4 {
-		 	
+
 		 }
 		 &.columns-5 {
-		 	
+
 		 }
 		 &.columns-6 {
-		 	
+
 		 }
 	}
 }
@@ -132,10 +132,10 @@
 			}
 		 }
 		 &.columns-5 {
-		 	
+
 		 }
 		 &.columns-6 {
-		 	
+
 		 }
 	}
 }
@@ -146,16 +146,16 @@
 
 		 }
 		 &.columns-3 {
-		 	
+
 		 }
 		 &.columns-4 {
-		 	
+
 		 }
 		 &.columns-5 {
-		 	
+
 		 }
 		 &.columns-6 {
-		 	
+
 		 }
 	}
 }

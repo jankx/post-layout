@@ -17,4 +17,38 @@
             }
         }
     }
+    .columns-3 {
+    }
+}
+
+@media(max-width: 767px) {
+    .preset3-layout {
+        .columns-3 {
+            .loop-item {
+                .overlay {
+                    height: 50px;
+                    width: 50px;
+                }
+                .post-thumbnail {
+                    height: 120px;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 480px) {
+    .preset3-layout {
+        .columns-3 {
+            .loop-item {
+                .overlay {
+                    height: 40px;
+                    width: 40px;
+                }
+                .post-thumbnail {
+                    height: 90px;
+                }
+            }
+        }
+    }
 }

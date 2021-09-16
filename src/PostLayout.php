@@ -133,12 +133,11 @@ abstract class PostLayout implements PostLayoutConstract
 
     public function postLayoutStart($disableWTopWrapper = false)
     {
+        $post_type = $this->wp_query->get('post_type');
         if ($this->isContentOnly) {
             if (!$this->hasChildren) {
-                foreach ($post_types as $post_type) {
-                    // This hook use to start custom render post layout
-                    do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
-                }
+                // This hook use to start custom render post layout
+                do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
             }
             return;
         }
@@ -170,10 +169,7 @@ abstract class PostLayout implements PostLayoutConstract
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
 
         if (!$this->hasChildren) {
-            foreach ($post_types as $post_type) {
-                // This hook use to start custom render post layout
-                do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
-            }
+            do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
         }
     }
 

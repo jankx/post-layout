@@ -46,7 +46,11 @@ class Preset5 extends Carousel
     public function beforeLoop()
     {
         $this->createSplide();
-        $this->createControls();
+
+        if (array_get($this->options, 'show_nav')) {
+            $this->createControls();
+        }
+
         $this->createTrackList();
     }
 
