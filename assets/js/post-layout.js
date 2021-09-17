@@ -85,6 +85,17 @@ function jankxPostLaoutTabLinkClickEvent(e)
                     } else {
                         realContentWrap.appendHTML(xhr.responseJSON.data.content);
                     }
+
+                    if (['carousel', 'preset-3', 'preset-5'].indexOf(layout) >= 0) {
+                        var carouselWrap = parentTabWrap.find('.splide');
+                        var carouselId = carouselWrap.getAttribute('id').replaceAll(/-/ig, '_');
+                        if (window[carouselId]) {
+                            window[carouselId].destroy();
+                        }
+                        configs = window[carouselId + '__configs'] || {};
+                        window[carouselId] = new Splide(carouselWrap, configs);
+                        window[carouselId].mount();
+                    }
                 }
 
                 // Support callback
@@ -245,7 +256,6 @@ function jankx_post_layout_init()
     var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li>a');
     jankxPostLayoutCreateTabLinksTrigger(post_layout_tab_links);
     jankxPostLayoutSetupLightbox();
-
 
     var tabCarousels = document.querySelectorAll('[data-tab-carousel]');
     if (tabCarousels.length > 0) {

@@ -44,15 +44,19 @@ class Carousel extends PostLayout implements PostLayoutChildren
     public function beforeLoop()
     {
         parent::beforeLoop();
+        if (!$this->isContentOnly) {
             $this->createSplide();
                 $this->createControls();
                 $this->createTrackList();
+        }
     }
 
     public function afterLoop($disableWTopWrapper = false)
     {
+        if (!$this->isContentOnly) {
                 $this->closeTrackList();
             $this->closeSplide();
+        }
         parent::afterLoop($disableWTopWrapper);
     }
 
