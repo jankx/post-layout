@@ -1,8 +1,8 @@
-function jankx_post_layout_tab_links_create_trigger(link_elements)
+function jankxPostLayoutCreateTabLinksTrigger(link_elements)
 {
     for (i = 0; i < link_elements.length; i++) {
         var link_element = link_elements[i];
-        link_element.addEventListener('click', jankx_post_layout_tab_link_click_event);
+        link_element.addEventListener('click', jankxPostLaoutTabLinkClickEvent);
     }
 }
 
@@ -10,7 +10,7 @@ function jankx_post_layout_tab_links_create_trigger(link_elements)
  *
  * @param {HTMLElement} e
  */
-function jankx_post_layout_tab_link_click_event(e)
+function jankxPostLaoutTabLinkClickEvent(e)
 {
     e.preventDefault();
     var clickedTab = e.target.parent();
@@ -227,22 +227,23 @@ function jankxMakeTabsIsCarouselOnMobile()
         hasTrackList = tabCarousel.querySelector('.tabs-carousel-wrap');
         if (isMobile) {
             if (hasTrackList) {
-                break;
+                continue;
             }
             jankxSetupMobileCarousel(tabCarousel);
         } else {
             if (!hasTrackList) {
-                break;
+                continue;
             }
             jankxDestroyMobileCarousel(tabCarousel);
         }
+        jankxPostLayoutCreateTabLinksTrigger(tabCarousel.querySelectorAll('.the-tab a'));
     }
 }
 
 function jankx_post_layout_init()
 {
     var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li>a');
-    jankx_post_layout_tab_links_create_trigger(post_layout_tab_links);
+    jankxPostLayoutCreateTabLinksTrigger(post_layout_tab_links);
     jankxPostLayoutSetupLightbox();
 
 
