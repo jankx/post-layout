@@ -142,8 +142,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function generateCarouselOptions()
     {
         $columns = array_get($this->options, 'columns', 4);
-        $mobile_columns = array_get($this->options, 'columns_mobile', 4);
-        $tablet_columns = array_get($this->options, 'columns_tablet', 4);
+        $mobile_columns = array_get($this->options, 'columns_mobile', 1);
+        $tablet_columns = array_get($this->options, 'columns_tablet', 2);
 
         return array(
             'perPage' => $columns,

@@ -188,6 +188,8 @@ function jankxSetupMobileCarousel(tabCarousel)
     tabs.outerHTML = carouselHTML;
     window.jankxCarouselTabs['tabsCarouselWrap' + i] = new Splide(tabCarousel.querySelector('.tabs-carousel-wrap'), {
         perPage: tabCarousel.dataset.columns || 2,
+        arrows: true,
+        pagination: false,
     });
     window.jankxCarouselTabs['tabsCarouselWrap' + i].mount();
     tabCarousel.addClass('is-tabs-carousel');
