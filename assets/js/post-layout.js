@@ -113,18 +113,17 @@ function jankxPostLaoutTabLinkClickEvent(e)
 /**
  *
  * @param {FsLightbox} lightboxInstance
- * @param {Array} sources
+ * @param {NodeList} sources
  */
 function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources)
 {
     lightboxInstance.props.sources = [];
     lightboxInstance.props.currentIndex = 0;
 
-    for (i=0; i<sources.length; i++) {
-        var source = sources[i];
+    sources.forEach(function(source) {
         var dataset = source.dataset || {};
         if (!dataset.src) {
-            continue;
+            return;
         }
 
         var galleryIndex = dataset.galleryIndex ? parseInt(dataset.galleryIndex) : 0;
@@ -142,7 +141,7 @@ function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources)
 
         lightboxInstance.props.sources.push(dataset.src);
         lightboxInstance.props.currentIndex += 1;
-    }
+    });
 }
 
 function jankxPostLayoutSetupLightbox()
