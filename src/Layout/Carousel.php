@@ -95,8 +95,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
         $rows = array_get($this->options, 'rows', 1);
         if ($rows > 1) {
-            $currentIndex = $this->wp_query->current_post;
-            if ($currentIndex % intval($rows) == 0) {
+            if ($this->currentIndex % intval($rows) === 0) {
                 echo '<li class="splide__slide">';
             }
         } else {
@@ -110,16 +109,14 @@ class Carousel extends PostLayout implements PostLayoutChildren
             return parent::afterLoopItemActions($post);
         }
 
-        $rows = array_get($this->options, 'rows', 1);
+        $rows = intval(array_get($this->options, 'rows', 1));
         if ($rows > 1) {
-            $currentIndex = $this->wp_query->current_post;
-            $isEndRowIndex = ($currentIndex / $rows) === ($rows - 1);
-
-            $totalPost    = $this->wp_query->post_count;
-            $isEndLoop     = $currentIndex === ($totalPost - 1);
-            if ($isEndRowIndex || $isEndLoop) {
+            if ($this->currentIndex % $rows === ($rows - 1)) {
+                echo '</li>';
+            } elseif ($this->wp_query->current_post === ($this->wp_query->post_count - 1)) {
                 echo '</li>';
             }
+            $this->currentIndex += 1;
         } else {
             echo '</li>';
         }

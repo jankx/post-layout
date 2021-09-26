@@ -33,5 +33,6 @@ class Preset3 extends Carousel
             $this->afterLoopItemActions($post);
         }
         parent::beforeLoop();
+        $this->currentIndex = 0;
     }
 }
