@@ -3,7 +3,6 @@ namespace Jankx\PostLayout;
 
 use WP_Query;
 use WC_Product;
-use Jankx\Template\Template;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
