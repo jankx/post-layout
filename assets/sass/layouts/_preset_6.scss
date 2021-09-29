@@ -1,24 +1,53 @@
 .preset-6-layout {
     &.jankx-posts {
+        margin-left: -5px;
+        margin-right: -5px;
         >.loop-item {
             width: 100%;
+        }
+
+        >.loop-item, .sub-list {
+            padding-left: 5px;
+            padding-right: 5px;
         }
     }
     .sub-list {
         display: flex;
         flex-wrap: wrap;
+        margin-left: -5px;
+        margin-right: -5px;
+
+        .loop-item {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
     }
 }
 
 @media(min-width: 992px) {
     .preset-6-layout {
         &.jankx-posts {
+            margin-left: -10px;
+            margin-right: -10px;
+
             >.loop-item {
                 width: 50%;
             }
+            >.loop-item, .sub-list {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
+
         .sub-list {
             width: 50%;
+            margin-left: -10px;
+            margin-right: -10px;
+
+            .loop-item {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
     }
 }
