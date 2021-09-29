@@ -55,6 +55,32 @@
     }
 }
 
+@media (min-width: 768px) and (max-width: 991px) {
+    @media(max-width: 767px) {
+        .jankx-posts {
+            &.tablet-columns- {
+                &2 {
+                    .loop-item {
+                        width: 50%;
+                    }
+                }
+                &3 {
+                    .loop-item {
+                        width: 50%;
+                    }
+                }
+
+                &4 {
+                    .loop-item {
+                        width: 50%;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 @media (min-width: 992px) {
     .jankx-posts {
         &.columns- {
@@ -141,6 +167,26 @@
         &.left-post {
             .post-large-image {
                 margin-bottom: 20px;
+            }
+        }
+    }
+    .jankx-posts {
+        &.mobile-columns- {
+            &2 {
+                .loop-item {
+                    width: 50%;
+                }
+            }
+            &3 {
+                .loop-item {
+                    width: 50%;
+                }
+            }
+
+            &4 {
+                .loop-item {
+                    width: 50%;
+                }
             }
         }
     }

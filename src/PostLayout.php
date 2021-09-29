@@ -154,6 +154,14 @@ abstract class PostLayout implements PostLayoutConstract
 
         if ($this->supportColumns && !empty($this->options['columns'])) {
             $postsListClasses[] = 'columns-' . $this->options['columns'];
+            $tabletColumns = array_get($this->options, 'columns_mobile');
+            if ($tabletColumns > 0) {
+                $postsListClasses[] = "tablet-columns-{$tabletColumns}";
+            }
+            $mobileColumns = array_get($this->options, 'columns_mobile');
+            if ($mobileColumns > 0) {
+                $postsListClasses[] = "mobile-columns-{$mobileColumns}";
+            }
         }
 
         $attributes = array(

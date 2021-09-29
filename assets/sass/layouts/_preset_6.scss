@@ -1,0 +1,24 @@
+.preset-6-layout {
+    &.jankx-posts {
+        >.loop-item {
+            width: 100%;
+        }
+    }
+    .sub-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media(min-width: 992px) {
+    .preset-6-layout {
+        &.jankx-posts {
+            >.loop-item {
+                width: 50%;
+            }
+        }
+        .sub-list {
+            width: 50%;
+        }
+    }
+}

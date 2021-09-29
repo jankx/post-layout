@@ -16,13 +16,14 @@ use Jankx\PostLayout\Layout\Preset2;
 use Jankx\PostLayout\Layout\Preset3;
 use Jankx\PostLayout\Layout\Preset4;
 use Jankx\PostLayout\Layout\Preset5;
+use Jankx\PostLayout\Layout\Preset6;
 
 use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
 use Jankx\PostLayout\TermLayout\Carousel as TermCarouselLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.7';
+    const VERSION = '1.0.0.14';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -97,6 +98,7 @@ class PostLayoutManager
                     Preset3::LAYOUT_NAME => Preset3::class,
                     Preset4::LAYOUT_NAME => Preset4::class,
                     Preset5::LAYOUT_NAME => Preset5::class,
+                    Preset6::LAYOUT_NAME => Preset6::class,
                 ));
             }
         }
