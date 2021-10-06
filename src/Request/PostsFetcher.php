@@ -71,9 +71,10 @@ class PostsFetcher
         }
     }
 
-    protected function createWooCommerceProductOrders(&$args, $orderBy, $direction) {
+    protected function createWooCommerceProductOrders(&$args, $orderBy, $direction)
+    {
         $direction = strtoupper($direction);
-        switch($orderBy) {
+        switch ($orderBy) {
             case 'price':
                 $args['orderby']  = 'meta_value_num';
                 $args['order']    = in_array($direction, array('ASC', 'DESC')) ? $direction : 'ASC';
