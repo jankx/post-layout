@@ -21,6 +21,12 @@ class PostsFetcher
     protected $posts_per_page = 10;
     protected $layout = 'card';
 
+    // Jankx Global filters supports
+    protected $taxonomy = array();
+
+    // Support Woocommerce
+    protected $order_product;
+
     public function init()
     {
         add_action('wp_ajax_' . static::FETCH_POSTS_ACTION, array($this, 'fetch'));
@@ -78,6 +84,17 @@ class PostsFetcher
 
         if ($this->data_type & $this->type_name & $this->object_id) {
             $this->createQueryDataTypeArgs($args);
+        }
+
+        if (!empty($this->taxonomy)) {
+            foreach ($this->taxonomy as $taxonomy => $terms) {
+                $args['tax_query'][] = array(
+                    'taxonomy' => $taxonomy,
+                    'field' => 'term_id',
+                    'terms' => $terms,
+                    'operator' => 'IN'
+                );
+            }
         }
 
         return new WP_Query($args);
