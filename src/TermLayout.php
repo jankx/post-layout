@@ -124,14 +124,19 @@ abstract class TermLayout implements TermLayoutConstract
         do_action('jankx/layout/term/loop/item/after', $term, $this->wp_term_query, $this);
     }
 
+    protected function generateSearchingTemplates($term)
+    {
+        return array(
+            $term->taxonomy . '-layout/' . $this->get_name() . '/term-item',
+            "post-layout/{$this->get_name()}/term-item",
+            'post-layout/term-item'
+        );
+    }
+
     public function renderLoopItem($term)
     {
         return $this->templateEngine->render(
-            array(
-                $term->taxonomy . '-layout/' . $this->get_name() . '/loop-item',
-                "post-layout/{$this->get_name()}/loop-item",
-                'post-layout/term-item'
-            ),
+            $this->generateSearchingTemplates($term),
             $this->prepareTemplateData(array(
                 'term' => new Term($term),
             ))
