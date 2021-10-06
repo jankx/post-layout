@@ -2,7 +2,7 @@ function jankxPostLayoutCreateTabLinksTrigger(link_elements)
 {
     for (i = 0; i < link_elements.length; i++) {
         var link_element = link_elements[i];
-        link_element.addEventListener('click', jankxPostLaoutTabLinkClickEvent);
+        link_element.addEventListener('click', jankxPostLayoutTabLinkClickEvent);
     }
 }
 
@@ -10,7 +10,7 @@ function jankxPostLayoutCreateTabLinksTrigger(link_elements)
  *
  * @param {HTMLElement} e
  */
-function jankxPostLaoutTabLinkClickEvent(e)
+function jankxPostLayoutTabLinkClickEvent(e)
 {
     e.preventDefault();
     var clickedTab = e.target.parent();
