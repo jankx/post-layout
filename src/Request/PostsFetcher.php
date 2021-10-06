@@ -71,6 +71,17 @@ class PostsFetcher
         }
     }
 
+    protected function createWooCommerceProductOrders(&$args, $orderBy, $direction) {
+        $direction = strtoupper($direction);
+        switch($orderBy) {
+            case 'price':
+                $args['orderby']  = 'meta_value_num';
+                $args['order']    = in_array($direction, array('ASC', 'DESC')) ? $direction : 'ASC';
+                $args['meta_key'] = '_price';
+                return $args;
+        }
+    }
+
     public function createWordPressQuery()
     {
         $args = array(
@@ -97,8 +108,19 @@ class PostsFetcher
             }
         }
 
+        if ($this->order_product) {
+            $sort_order = explode('-', $this->order_product);
+            $this->createWooCommerceProductOrders(
+                $args,
+                array_get($sort_order, 0),
+                array_get($sort_order, 1, 'asc')
+            );
+        }
+
         return new WP_Query($args);
     }
+
+
 
     public function fetch()
     {
