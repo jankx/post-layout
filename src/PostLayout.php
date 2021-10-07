@@ -20,6 +20,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected static $customDataFields = array();
     protected static $instanceIndex = 1;
 
+    protected $id;
     protected $instanceId;
 
     protected $wp_query;
@@ -51,11 +52,13 @@ abstract class PostLayout implements PostLayoutConstract
             ));
         }
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
-        $this->instanceId = sprintf('post-card-layout-%s', static::$instanceIndex);
+        $this->id = self::$instanceIndex;
+        $this->instanceId = sprintf('post-card-layout-%s', self::$instanceIndex);
+
         if (is_a($this->wp_query, WP_Query::class) && $this->wp_query->is_main_query()) {
             $this->instanceId = 'jankx-main-layout';
         }
-        static::$instanceIndex += 1;
+        self::$instanceIndex++;
 
         array_push(static::$layoutInstances, $this->instanceId);
 
@@ -70,15 +73,21 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    public function getInstanceId($id)
+    public function setInstanceId($id)
     {
         $this->instanceId = $id;
     }
 
-    public function getId()
+    public function getInstanceId()
     {
         return $this->instanceId;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
 
     protected function defaultOptions()
     {

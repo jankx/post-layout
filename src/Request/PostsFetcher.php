@@ -2,6 +2,7 @@
 namespace Jankx\PostLayout\Request;
 
 use WP_Query;
+use WC_Query;
 use Jankx\PostLayout\PostLayoutManager;
 use Jankx\Template\Template;
 
@@ -73,14 +74,13 @@ class PostsFetcher
 
     protected function createWooCommerceProductOrders(&$args, $orderBy, $direction)
     {
-        $direction = strtoupper($direction);
-        switch ($orderBy) {
-            case 'price':
-                $args['orderby']  = 'meta_value_num';
-                $args['order']    = in_array($direction, array('ASC', 'DESC')) ? $direction : 'ASC';
-                $args['meta_key'] = '_price';
-                return $args;
+        if (!class_exists(WC_Query::class)) {
+            return $args;
         }
+        $wc_query = new WC_Query();
+        $orderArgs = $wc_query->get_catalog_ordering_args($orderBy, $direction);
+
+        return array_merge($args, $orderArgs);
     }
 
     public function createWordPressQuery()
