@@ -31,13 +31,13 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected $options = array(
         'item_style' => 'defaut',
+        'excerpt_length' => false,
     );
     protected $supportColumns = false;
     protected $contentGenerator;
     protected $contentGeneratorArgs = array();
     protected $contentWrapperTag = false;
     protected $mode = 'replace';
-
 
     public function __construct($wp_query = null)
     {
@@ -416,6 +416,15 @@ abstract class PostLayout implements PostLayoutConstract
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
     }
 
+    public function excerptLenght($length)
+    {
+        if (array_get($this->options, 'excerpt_length')) {
+            return $this->options['excerpt_length'];
+        }
+        return $length;
+    }
+
+
     public function render($echo = true)
     {
         if (!$this->templateEngine) {
@@ -429,6 +438,7 @@ abstract class PostLayout implements PostLayoutConstract
         }
 
         do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
+        add_filter('excerpt_length', array($this, 'excerptLenght'));
         ?>
             <?php
             // Create post list
@@ -449,6 +459,7 @@ abstract class PostLayout implements PostLayoutConstract
             $this->afterRenderLayout();
 
             wp_reset_postdata();
+            remove_filter('excerpt_length', array($this, 'excerptLenght'));
             if (!$echo) {
                 return ob_get_clean();
             }
