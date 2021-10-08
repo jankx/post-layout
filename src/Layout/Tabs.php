@@ -36,7 +36,16 @@ class Tabs extends PostLayout implements PostLayoutParent
         }
         $post_type = $this->wp_query->get('post_type');
 
-        do_action("jankx/layout/tabs/{$post_type}/init", $this, $post_type);
+        if (is_array($post_type)) {
+            foreach($post_type as $t) {
+                do_action("jankx/layout/tabs/{$t}/init", $this, $t);
+            }
+            $post_type = array_shift($post_type);
+        } else {
+            do_action("jankx/layout/tabs/{$post_type}/init", $this, $post_type);
+        }
+
+
 
         if (!$echo) {
             ob_start();

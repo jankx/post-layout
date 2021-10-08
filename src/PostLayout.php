@@ -150,6 +150,9 @@ abstract class PostLayout implements PostLayoutConstract
     public function postLayoutStart($disableWTopWrapper = false)
     {
         $post_type = $this->wp_query->get('post_type');
+        if (is_array($post_type)) {
+            $post_type = array_shift($post_type);
+        }
         if ($this->isContentOnly) {
             if (!$this->hasChildren) {
                 // This hook use to start custom render post layout
@@ -407,12 +410,18 @@ abstract class PostLayout implements PostLayoutConstract
     protected function beforeLoop()
     {
         $post_type = $this->wp_query->get('post_type');
+        if (is_array($post_type)) {
+            $post_type = array_shift($post_type);
+        }
         do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
     }
 
     protected function afterLoop()
     {
         $post_type = $this->wp_query->get('post_type');
+        if (is_array($post_type)) {
+            $post_type = array_shift($post_type);
+        }
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
     }
 
@@ -432,12 +441,18 @@ abstract class PostLayout implements PostLayoutConstract
             return;
         }
 
-        $post_type = $this->wp_query->get('post_type');
         if (!$echo) {
             ob_start();
         }
 
-        do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
+        $post_type = $this->wp_query->get('post_type');
+        if (is_array($post_type)) {
+            foreach($post_type as $t) {
+                do_action("jankx/layout/{$t}/loop/init", $this->get_name(), $this);
+            }
+        } else {
+            do_action("jankx/layout/{$post_type}/loop/init", $this->get_name(), $this);
+        }
         add_filter('excerpt_length', array($this, 'excerptLenght'));
         ?>
             <?php
