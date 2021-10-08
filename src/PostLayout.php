@@ -374,7 +374,7 @@ abstract class PostLayout implements PostLayoutConstract
     {
         $attributes = array(
             'class' => array('jankx-post-layout-wrap'),
-            'id' => $this->getId(),
+            'id' => $this->getInstanceId(),
         );
 
         if (!$this->hasChildren) {
