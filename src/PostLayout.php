@@ -53,7 +53,7 @@ abstract class PostLayout implements PostLayoutConstract
         }
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
         $this->id = self::$instanceIndex;
-        $this->instanceId = sprintf('post-card-layout-%s', self::$instanceIndex);
+        $this->instanceId = sprintf('post-%s-layout-%s', $this->get_name(), self::$instanceIndex);
 
         if (is_a($this->wp_query, WP_Query::class) && $this->wp_query->is_main_query()) {
             $this->instanceId = 'jankx-main-layout';

@@ -65,7 +65,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
         $splideClasses = array('splide', 'carousel-wrapper', sprintf('columns-%d', $this->options['columns']));
         $attributes = array(
             'class' => $splideClasses,
-            'id' => $this->getInstanceId(),
+            'id' => sprintf('%s--Carousel', $this->getInstanceId()),
         );
         echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
     }
@@ -167,7 +167,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
         $args = $this->generateCarouselOptions();
 
         execute_script($this->templateEngine->render('post-layout/carousel/script', array(
-            'id' => $this->getInstanceId(),
+            'id' => sprintf('%s--Carousel', $this->getInstanceId()),
             'var' => preg_replace('/[\s|\-]/', '_',$this->getInstanceId()),
             'config' => $args,
         ), null, false));
