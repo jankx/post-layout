@@ -508,4 +508,11 @@ abstract class PostLayout implements PostLayoutConstract
         }
         return $defaultValue;
     }
+
+    public function hasContent() {
+        if (is_a($this->wp_query, WP_Query::class)) {
+            return $this->wp_query->have_posts();
+        }
+        return false;
+    }
 }
