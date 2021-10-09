@@ -203,7 +203,7 @@ abstract class PostLayout implements PostLayoutConstract
     public function postLayoutEnd($disableWTopWrapper = false)
     {
         if (!$this->hasChildren) {
-            foreach ((array)$this->wp_query->query_vars['post_type'] as $post_type) {
+            foreach ((array)$this->wp_query->get('post_type') as $post_type) {
                 // This hook use to stop custom render post layout
                 do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
             }
