@@ -43,6 +43,7 @@ function jankxPostLayoutTabLinkClickEvent(e)
     var layout = contentLayout.dataset.layout || 'card';
     var engine_id = contentLayout.dataset.engineId;
     var thumb_pos = contentLayout.dataset.thumbnailPosition;
+    var data_preset = contentLayout.dataset.preset;
 
 
     if (!post_type || !engine_id) {
@@ -61,6 +62,9 @@ function jankxPostLayoutTabLinkClickEvent(e)
         layout: layout,
         engine_id: engine_id,
         thumb_pos: thumb_pos,
+    }
+    if (data_preset) {
+        body.data_preset = data_preset;
     }
 
     jankx_ajax(jkx_post_layout.ajax_url, 'GET', body, {

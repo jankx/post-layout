@@ -168,7 +168,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
         execute_script($this->templateEngine->render('post-layout/carousel/script', array(
             'id' => sprintf('%s--Carousel', $this->getInstanceId()),
-            'var' => preg_replace('/[\s|\-]/', '_',$this->getInstanceId()),
+            'var' => preg_replace('/[\s|\-]/', '_', $this->getInstanceId()),
             'config' => $args,
         ), null, false));
     }

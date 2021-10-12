@@ -272,6 +272,10 @@ abstract class PostLayout implements PostLayoutConstract
             )
         );
 
+        if (($data_preset = array_get($this->options, 'data_preset'))) {
+            $templateData['data_preset'] = $data_preset;
+        }
+
         foreach (static::$customDataFields as $field => $defaultValue) {
             if (!isset($this->options[$field])) {
                 $this->options[$field] = $defaultValue;
@@ -387,6 +391,11 @@ abstract class PostLayout implements PostLayoutConstract
             $attributes['data-engine-id'] = $this->templateEngine->getId();
             $attributes['data-thumbnail-position'] = array_get($this->options, 'thumbnail_position', 'top');
         }
+
+        if (($data_preset = array_get($this->options, 'data_preset'))) {
+            $attributes['data-preset'] = $data_preset;
+        }
+
         return $attributes;
     }
 
@@ -447,7 +456,7 @@ abstract class PostLayout implements PostLayoutConstract
 
         $post_type = $this->wp_query->get('post_type');
         if (is_array($post_type)) {
-            foreach($post_type as $t) {
+            foreach ($post_type as $t) {
                 do_action("jankx/layout/{$t}/loop/init", $this->get_name(), $this);
             }
         } else {
@@ -524,7 +533,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $defaultValue;
     }
 
-    public function hasContent() {
+    public function hasContent()
+    {
         if (is_a($this->wp_query, WP_Query::class)) {
             return $this->wp_query->have_posts();
         }

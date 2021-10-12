@@ -17,6 +17,7 @@ class PostsFetcher
     protected $type_name;
     protected $object_id;
     protected $thumb_pos;
+    protected $data_preset;
 
     protected $current_page = 1;
     protected $posts_per_page = 10;
@@ -115,6 +116,14 @@ class PostsFetcher
                 $args,
                 array_get($sort_order, 0),
                 array_get($sort_order, 1, 'asc')
+            );
+        }
+
+        if ($this->data_preset) {
+            $args = apply_filters(
+                "jankx/layout/{$this->post_type}/{$this->data_preset}/args",
+                $args,
+                $this
             );
         }
 
