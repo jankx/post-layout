@@ -207,6 +207,10 @@ class PostLayoutManager
 
     public function registerScripts()
     {
+        $assetsDir     = sprintf('%s/assets/', dirname(__DIR__));
+        $fslightbox    = $assetsDir . 'libs/fslightbox-basic/fslightbox.js';
+        $fslightboxVer = substr(md5(fileatime($fslightbox)), 0, 5);
+
         $splideCss = apply_filters('jankx_post_layout_use_splide_core_css', false)
             ? 'splide-core.min'
             : 'splide.min';
@@ -228,7 +232,7 @@ class PostLayoutManager
             'fslightbox',
             $this->asset_url('libs/fslightbox-basic/fslightbox.js'),
             array(),
-            '3.3',
+            '3.3-' . $fslightboxVer,
             true
         );
 
