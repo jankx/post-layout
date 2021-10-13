@@ -23,7 +23,7 @@ use Jankx\PostLayout\TermLayout\Carousel as TermCarouselLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.18';
+    const VERSION = '1.0.0.21';
 
     protected static $instances;
     protected static $supportedLayouts;

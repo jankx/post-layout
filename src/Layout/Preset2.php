@@ -54,6 +54,10 @@ class Preset2 extends PostLayout implements PostLayoutChildren
                     sprintf('columns-%s', array_get($this->options, 'columns', 1))
                 )
             );
+
+            if ($this->wp_query->post_count <= 5) {
+                $attributes['class'][] = 'full-width';
+            }
             echo sprintf('<div %s>', jankx_generate_html_attributes($attributes));
 
             $this->currentPresetColumnIndex += 1;
