@@ -252,13 +252,13 @@ function jankxMakeTabsIsCarouselOnMobile()
             }
             jankxDestroyMobileCarousel(tabCarousel);
         }
-        jankxPostLayoutCreateTabLinksTrigger(tabCarousel.querySelectorAll('.the-tab a'));
+        jankxPostLayoutCreateTabLinksTrigger(tabCarousel.querySelectorAll('.the-tab.has-event a'));
     }
 }
 
 function jankx_post_layout_init()
 {
-    var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li>a');
+    var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li.has-event>a');
     jankxPostLayoutCreateTabLinksTrigger(post_layout_tab_links);
     jankxPostLayoutSetupLightbox();
 
