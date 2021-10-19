@@ -114,9 +114,12 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    public function getOptions()
+    public function getOptions($key = null)
     {
-        return (array)$this->options;
+        if (is_null($key)) {
+            return (array)$this->options;
+        }
+        return isset($this->options[$key]) ? $this->options[$key] : null;
     }
 
     public function is_pro()
@@ -253,6 +256,11 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected function prepareTemplateData($data = array())
     {
+        $postClasses = array('loop-item');
+        if (($itemStyle = array_get($this->options, 'item_style', 'default')) != 'default') {
+            array_push($postClasses, sprintf('style-%s', $itemStyle));
+        }
+
         $templateData = wp_parse_args(
             $data,
             array(
@@ -265,7 +273,7 @@ abstract class PostLayout implements PostLayoutConstract
                 'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
                 'post_classes'       => apply_filters(
                     'jankx/layout/post/item/classes',
-                    array('loop-item'),
+                    $postClasses,
                     $this->getCurrentPostItem(),
                     $this->options
                 )
