@@ -398,6 +398,7 @@ abstract class PostLayout implements PostLayoutConstract
             $attributes['data-layout'] = $this->get_name();
             $attributes['data-engine-id'] = $this->templateEngine->getId();
             $attributes['data-thumbnail-position'] = array_get($this->options, 'thumbnail_position', 'top');
+            $attributes['data-thumbnail-size'] = array_get($this->options, 'thumbnail_size');
         }
 
         if (($data_preset = array_get($this->options, 'data_preset'))) {

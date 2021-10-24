@@ -18,6 +18,7 @@ class PostsFetcher
     protected $object_id;
     protected $thumb_pos;
     protected $data_preset;
+    protected $thumb_size;
 
     protected $current_page = 1;
     protected $posts_per_page = 10;
@@ -146,6 +147,7 @@ class PostsFetcher
         );
         $postLayout->setOptions([
             'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',
+            'thumbnail_size' => $this->thumb_size ? $this->thumb_size : 'medium',
         ]);
 
         $postLayout->disableLoopStartLoopEnd();
