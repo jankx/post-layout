@@ -96,17 +96,19 @@ abstract class PostLayout implements PostLayoutConstract
         );
     }
 
+
+    public function addOption($optionName, $optionValue)
+    {
+        $this->options[$optionName] = $optionValue;
+    }
+
     public function setOptions($options)
     {
         // Parse post layout with default options
-        $this->options =  apply_filters(
-            "jankx_post_layout_{$this::get_name()}_set_options",
-            wp_parse_args(
-                $options,
-                $this->options
-            ),
-            $this
-        );
+        $options = apply_filters("jankx_post_layout_{$this::get_name()}_set_options", $options);
+        foreach ($options as $optionName => $optionValue) {
+            $this->addOption($optionName, $optionValue);
+        }
 
         // Use this case when set option after create child layout
         if ($this->childLayout) {
@@ -421,7 +423,7 @@ abstract class PostLayout implements PostLayoutConstract
     protected function afterRenderLayout()
     {
         if (array_get($this->options, 'show_paginate', false)) {
-            echo jankx_paginate();
+            echo jankx_paginate($this->wp_query);
         }
     }
 
