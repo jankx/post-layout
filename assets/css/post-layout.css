@@ -338,7 +338,7 @@
     padding-left: 5px;
     padding-right: 5px;
   }
-  .preset-4-layout .sub-layout .loop-item:first-child .post-thumbnail {
+  .preset-4-layout .sub-layout > .loop-item:first-child .post-thumbnail {
     height: 200px;
   }
   .preset-4-layout .bottom-list {

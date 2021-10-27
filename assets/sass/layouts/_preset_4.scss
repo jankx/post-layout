@@ -25,7 +25,7 @@
         }
 
         .sub-layout {
-            .loop-item {
+            >.loop-item {
                 &:first-child {
                     .post-thumbnail {
                         height: 200px;
