@@ -384,7 +384,10 @@ abstract class PostLayout implements PostLayoutConstract
         }
 
         $args = $this->contentGeneratorArgs;
+
         array_push($args, $post);
+        array_push($args, $this->wp_query);
+
         return call_user_func_array($this->contentGenerator, $args);
     }
 

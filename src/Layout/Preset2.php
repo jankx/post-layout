@@ -86,21 +86,13 @@ class Preset2 extends PostLayout implements PostLayoutChildren
 
             if (in_array($current_index, array($break_point -1, $break_point))) {
                 return $this->templateEngine->render(
-                    array(
-                        $post->post_type . '-layout/preset2/large-item',
-                        'post-layout/preset2/large-item',
-                        'post-layout/large-item',
-                    ),
+                    $this->generateSearchingLargeItemTemplates($post),
                     $this->prepareTemplateData()
                 );
             }
 
             return $this->templateEngine->render(
-                array(
-                    $post->post_type . '-layout/carousel/loop-item',
-                    "post-layout/{$this->get_name()}/loop-item",
-                    'post-layout/loop-item'
-                ),
+                $this->generateSearchingTemplates($post),
                 $this->prepareTemplateData()
             );
         }
