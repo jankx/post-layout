@@ -424,10 +424,35 @@ abstract class PostLayout implements PostLayoutConstract
         do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
     }
 
+    protected function renderDefaultPagination($paginationType) {
+        switch($paginationType) {
+            case 'load_more';
+                $this->templateEngine->render(
+                    'common/paginate/load_more',
+                    array(
+                        'items' => array_get(
+                            $this->options,
+                            'load_more_items',
+                            apply_filters('jankx/commom/load_more/items', 6)
+                        ),
+                    )
+                );
+                break;
+            default:
+                echo jankx_paginate($this->wp_query);
+                break;
+        }
+    }
+
     protected function afterRenderLayout()
     {
         if (array_get($this->options, 'show_paginate', false)) {
-            echo jankx_paginate($this->wp_query);
+            $paginationType = array_get($this->options, 'pagination_type');
+            $customPagination = "paginate_{$paginationType}_actions";
+            if (has_action($customPagination)) {
+                return do_action($customPagination);
+            }
+            $this->renderDefaultPagination($paginationType);
         }
     }
 
