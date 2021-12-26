@@ -1,8 +1,18 @@
-function jankxPostLayoutCreateTabLinksTrigger(link_elements)
-{
+/**
+ *
+ * @param {NodeList} link_elements
+ */
+function jankxPostLayoutCreateTabLinksTrigger(link_elements) {
     for (i = 0; i < link_elements.length; i++) {
         var link_element = link_elements[i];
         link_element.addEventListener('click', jankxPostLayoutTabLinkClickEvent);
+    }
+}
+
+function jankxPostLayoutCreateLoadMoreButtonTrigger(buttons) {
+    for (i = 0; i < buttons.length; i++) {
+        var moreMoreButton = buttons[i];
+        moreMoreButton.addEventListener('click', jankxPostLayoutTabLinkClickEvent);
     }
 }
 
@@ -10,32 +20,54 @@ function jankxPostLayoutCreateTabLinksTrigger(link_elements)
  *
  * @param {HTMLElement} e
  */
-function jankxPostLayoutTabLinkClickEvent(e)
-{
+function jankxPostLayoutTabLinkClickEvent(e) {
     e.preventDefault();
-    var clickedTab = e.target.parent();
-    var tabsWrap = clickedTab.findParent('.jankx-tabs');
-    if (tabsWrap.hasClass('blocked')) {
-        return;
+
+    var target = e.target;
+    var isLoadMore = target.dataset.loadMore || false;
+
+    // Get clicked element
+    var clickedTab = isLoadMore ? target : target.parent();
+    var contentLayout = null;
+
+    // Tabs objects
+    var tabsWrap = null;
+    var dynamicData = {};
+
+    // Tab item click event
+    if (!isLoadMore) {
+        tabsWrap = clickedTab.findParent('.jankx-tabs');
+        if (tabsWrap.hasClass('blocked')) {
+            return;
+        }
+
+        var data_type = clickedTab.dataset.type;
+        var data_type_name = clickedTab.dataset.typeName;
+        var object_id = clickedTab.dataset.objectId;
+        if (!(data_type && data_type_name && object_id)) {
+            return;
+        }
+        Object.assign(dynamicData, {
+            data_type: data_type,
+            type_name: data_type_name,
+            object_id: object_id,
+        });
+
+        var currentActiveTab = tabsWrap.find('.the-tab.active');
+        var parentTabWrap = tabsWrap.findParent('.jankx-parent-layout');
+        contentLayout = parentTabWrap.find('.jankx-post-layout-wrap');
+
+        tabsWrap.addClass('blocked');
+        currentActiveTab.removeClass('active');
+        clickedTab.addClass('active');
+    } else {
+        // This case for load more button
+        contentLayout = document.getElementById(clickedTab.dataset.loadMore);
     }
 
-    var data_type = clickedTab.dataset.type;
-    var data_type_name = clickedTab.dataset.typeName;
-    var object_id = clickedTab.dataset.objectId;
-    if (!(data_type && data_type_name && object_id)) {
-        return;
-    }
-
-    var currentActiveTab = tabsWrap.find('.the-tab.active');
-    var parentTabWrap = tabsWrap.findParent('.jankx-parent-layout');
-    var contentLayout = parentTabWrap.find('.jankx-post-layout-wrap');
     if (!contentLayout) {
         return;
     }
-
-    tabsWrap.addClass('blocked');
-    currentActiveTab.removeClass('active');
-    clickedTab.addClass('active');
 
     var post_type = contentLayout.dataset.postType;
     var current_page = contentLayout.dataset.currentPage || 1;
@@ -46,33 +78,40 @@ function jankxPostLayoutTabLinkClickEvent(e)
     var thumb_size = contentLayout.dataset.thumbnailSize || 'medium';
     var data_preset = contentLayout.dataset.preset;
 
-
     if (!post_type || !engine_id) {
-        tabsWrap.removeClass('blocked');
+        if (tabsWrap) {
+            tabsWrap.removeClass('blocked');
+        }
         return;
+    }
+
+    if (isLoadMore) {
+        dynamicData.posts_per_page = clickedTab.dataset.loadItems;
+        dynamicData.offset = posts_per_page;
+    } else {
+        dynamicData.posts_per_page = posts_per_page;
     }
 
     var body = {
         action: jkx_post_layout.action,
-        data_type: data_type,
-        type_name: data_type_name,
-        object_id: object_id,
         post_type: post_type,
         current_page: current_page,
-        posts_per_page: posts_per_page,
         layout: layout,
         engine_id: engine_id,
         thumb_pos: thumb_pos,
         thumb_size: thumb_size,
     }
+
+    if (tabsWrap) {
+        Object.assign(body, dynamicData)
+    }
+
     if (data_preset) {
         body.data_preset = data_preset;
     }
 
     jankx_ajax(jkx_post_layout.ajax_url, 'GET', body, {
-        beforeSend: function () {
-            tabsWrap.find('.active');
-        },
+        beforeSend: function () {},
         complete: function (xhr) {
             var jankx_post_wrap = contentLayout.find('.jankx-posts');
             var mode = jankx_post_wrap.dataset.mode || 'append';
@@ -82,9 +121,9 @@ function jankxPostLayoutTabLinkClickEvent(e)
 
                 // Success case
                 if (success_flag) {
-                    var realContentWrap = jankx_post_wrap.dataset.contentWrapper
-                        ? jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper)
-                        : jankx_post_wrap;
+                    var realContentWrap = jankx_post_wrap.dataset.contentWrapper ?
+                        jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper) :
+                        jankx_post_wrap;
 
                     if (mode === 'replace') {
                         realContentWrap.html(xhr.responseJSON.data.content);
@@ -105,12 +144,14 @@ function jankxPostLayoutTabLinkClickEvent(e)
                 }
 
                 // Support callback
-                var jankx_callback = jkx_post_layout['jankx_tabs_' + engine_id + '_' + layout  + '_' + post_type];
+                var jankx_callback = jkx_post_layout['jankx_tabs_' + engine_id + '_' + layout + '_' + post_type];
                 if (window[jankx_callback]) {
                     window[jankx_callback](realContentWrap, body, success_flag);
                 }
 
-                tabsWrap.removeClass('blocked');
+                if (tabsWrap) {
+                    tabsWrap.removeClass('blocked');
+                }
             }
         }
     });
@@ -121,12 +162,11 @@ function jankxPostLayoutTabLinkClickEvent(e)
  * @param {FsLightbox} lightboxInstance
  * @param {NodeList} sources
  */
-function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources)
-{
+function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources) {
     lightboxInstance.props.sources = [];
     lightboxInstance.props.currentIndex = 0;
 
-    sources.forEach(function(source) {
+    sources.forEach(function (source) {
         var dataset = source.dataset || {};
         if (!dataset.src) {
             return;
@@ -150,11 +190,10 @@ function jankxPostLayoutSetupLightboxSources(lightboxInstance, sources)
     });
 }
 
-function jankxPostLayoutSetupLightbox()
-{
+function jankxPostLayoutSetupLightbox() {
     // Get all post layouts
     var jankxPostLayouts = document.querySelectorAll('.jankx-post-layout-wrap');
-    for (i=0; i<jankxPostLayouts.length; i++) {
+    for (i = 0; i < jankxPostLayouts.length; i++) {
         var jankxPostLayout = jankxPostLayouts[i];
         var lightboxes = jankxPostLayout.querySelectorAll('.has-lightbox');
         if (lightboxes.length <= 0) {
@@ -174,15 +213,14 @@ window['jankxCarouselTabs'] = {};
  *
  * @param {HTMLElement} tabCarousel
  */
-function jankxSetupMobileCarouselList(tabCarousel)
-{
+function jankxSetupMobileCarouselList(tabCarousel) {
     var listItems = tabCarousel.querySelectorAll('li.the-tab');
-    for (var i=0; i< listItems.length; i++) {
+    for (var i = 0; i < listItems.length; i++) {
         listItems[i].addClass('splide__slide');
     }
 }
-function jankxSetupMobileCarousel(tabCarousel)
-{
+
+function jankxSetupMobileCarousel(tabCarousel) {
     var tabs = tabCarousel.querySelector('ul.post-layout-tabs');
 
     jankxSetupMobileCarouselList(tabCarousel);
@@ -204,10 +242,9 @@ function jankxSetupMobileCarousel(tabCarousel)
  *
  * @param {HTMLElement} tabCarousel
  */
-function jankxDestroyMobileCarouselList(tabCarousel)
-{
+function jankxDestroyMobileCarouselList(tabCarousel) {
     var listItems = tabCarousel.querySelectorAll('li.the-tab');
-    for (var i=0; i< listItems.length; i++) {
+    for (var i = 0; i < listItems.length; i++) {
         listItems[i].removeClass('splide__slide');
     }
 }
@@ -215,8 +252,7 @@ function jankxDestroyMobileCarouselList(tabCarousel)
  *
  * @param {HTMLElement} tabCarousel
  */
-function jankxDestroyMobileCarousel(tabCarousel)
-{
+function jankxDestroyMobileCarousel(tabCarousel) {
     tabCarousel.removeClass('is-tabs-carousel');
     if (window.jankxCarouselTabs['tabsCarouselWrap' + i]) {
         window.jankxCarouselTabs['tabsCarouselWrap' + i].destroy();
@@ -232,15 +268,14 @@ function jankxDestroyMobileCarousel(tabCarousel)
     jankxDestroyMobileCarouselList(tabCarousel);
 }
 
-function jankxMakeTabsIsCarouselOnMobile()
-{
+function jankxMakeTabsIsCarouselOnMobile() {
     var tabCarousels = document.querySelectorAll('[data-tab-carousel]');
     var jankxConfigs = window.jankx || {};
 
 
     breakpoint = jankxConfigs['mobile_breakpoint'] || 600;
-    isMobile   = window.innerWidth <= breakpoint;
-    for (i=0; i<tabCarousels.length; i++) {
+    isMobile = window.innerWidth <= breakpoint;
+    for (i = 0; i < tabCarousels.length; i++) {
         var tabCarousel = tabCarousels[i];
         hasTrackList = tabCarousel.querySelector('.tabs-carousel-wrap');
         if (isMobile) {
@@ -258,10 +293,13 @@ function jankxMakeTabsIsCarouselOnMobile()
     }
 }
 
-function jankx_post_layout_init()
-{
+function jankx_post_layout_init() {
     var post_layout_tab_links = document.querySelectorAll('.jankx-tabs.post-layout-tabs>li.has-event>a');
     jankxPostLayoutCreateTabLinksTrigger(post_layout_tab_links);
+
+    var moreMoreButtons = document.querySelectorAll('[data-load-more]');
+    jankxPostLayoutCreateLoadMoreButtonTrigger(moreMoreButtons);
+
     jankxPostLayoutSetupLightbox();
 
     var tabCarousels = document.querySelectorAll('[data-tab-carousel]');

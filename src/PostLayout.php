@@ -152,6 +152,15 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->have_posts();
     }
 
+    protected function createDataTaxonomiesAttributes() {
+        $ret = array();
+        $tax_query = $this->wp_query->tax_query;
+        if (!empty($tax_query->queries)) {
+            $ret = $tax_query->queries;
+        }
+        return $ret;
+    }
+
     public function postLayoutStart($disableWTopWrapper = false)
     {
         $post_type = $this->wp_query->get('post_type');
@@ -191,7 +200,8 @@ abstract class PostLayout implements PostLayoutConstract
 
         $attributes = array(
             'class' => $postsListClasses,
-            'data-mode' => $this->mode,
+            'data-mode' => array_get($this->options, 'pagination_type') == 'load_more' ? static::MODE_APPEND : $this->mode,
+            'data-tax_query' => json_encode($this->createDataTaxonomiesAttributes()),
         );
 
         if ($this->contentWrapperTag) {
@@ -428,13 +438,14 @@ abstract class PostLayout implements PostLayoutConstract
         switch($paginationType) {
             case 'load_more';
                 $this->templateEngine->render(
-                    'common/paginate/load_more',
+                    'common/paginate/load-more',
                     array(
                         'items' => array_get(
                             $this->options,
                             'load_more_items',
                             apply_filters('jankx/commom/load_more/items', 6)
                         ),
+                        'wrap_id' => $this->getInstanceId(),
                     )
                 );
                 break;
