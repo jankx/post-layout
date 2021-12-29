@@ -19,10 +19,12 @@ class PostsFetcher
     protected $thumb_pos;
     protected $data_preset;
     protected $thumb_size;
+    protected $tax_query;
 
     protected $current_page = 1;
     protected $posts_per_page = 10;
     protected $layout = 'card';
+    protected $offset;
 
     // Jankx Global filters supports
     protected $taxonomy = array();
@@ -39,6 +41,17 @@ class PostsFetcher
     protected function parseRequestParams()
     {
         foreach ($_GET as $key => $value) {
+            if ($key === "tax_query") {
+                // Fix JSON when call JSON.stringify
+                $value = trim($value, '\\"');
+
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+
+                // Decode JSON string
+                $this->tax_query = json_decode($value, true);
+                continue;
+            }
             if (property_exists($this, $key)) {
                 $this->$key = apply_filters(
                     'jankx_post_layout_ajax_{$key}_args',
@@ -128,6 +141,17 @@ class PostsFetcher
             );
         }
 
+        if (!empty($this->tax_query)) {
+            if (isset($args['tax_query'])) {
+                $args['tax_query'] = array_merge($args['tax_query'], $this->tax_query);
+            } else {
+                $args['tax_query'] = $this->tax_query;
+            }
+        }
+
+        if ($this->offset > 0) {
+            $args['offset'] = intval($this->offset);
+        }
         return new WP_Query($args);
     }
 
@@ -141,9 +165,10 @@ class PostsFetcher
         }
         $templateEngine = Template::getEngine($this->engine_id);
         $postLayoutManager = PostLayoutManager::getInstance($templateEngine->getId());
+        $wp_query = $this->createWordPressQuery();
         $postLayout = $postLayoutManager->createLayout(
             $this->layout,
-            $this->createWordPressQuery()
+            $wp_query
         );
         $postLayout->setOptions([
             'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',
@@ -152,9 +177,15 @@ class PostsFetcher
 
         $postLayout->disableLoopStartLoopEnd();
 
-        wp_send_json_success(array(
+        $response = array(
             'content' => $postLayout->render(false),
             'more_posts' => $this->checkHasMorePost(),
-        ));
+        );
+
+        if ($this->offset > 0) {
+            $response['next_offset'] = $wp_query->get('posts_per_page') + $wp_query->get('offset');
+        }
+
+        wp_send_json_success($response);
     }
 }

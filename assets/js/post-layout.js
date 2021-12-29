@@ -70,7 +70,6 @@ function jankxPostLayoutTabLinkClickEvent(e) {
     }
 
     var post_type = contentLayout.dataset.postType;
-    var current_page = contentLayout.dataset.currentPage || 1;
     var posts_per_page = contentLayout.dataset.postsPerPage || 10;
     var layout = contentLayout.dataset.layout || 'card';
     var engine_id = contentLayout.dataset.engineId;
@@ -90,45 +89,47 @@ function jankxPostLayoutTabLinkClickEvent(e) {
         dynamicData.offset = posts_per_page;
     } else {
         dynamicData.posts_per_page = posts_per_page;
+        dynamicData.current_page = contentLayout.dataset.currentPage || 1;
     }
+
+    var jankx_post_wrap = contentLayout.find('.jankx-posts');
+    var tax_query = jankx_post_wrap.dataset.tax_query;
 
     var body = {
         action: jkx_post_layout.action,
         post_type: post_type,
-        current_page: current_page,
         layout: layout,
         engine_id: engine_id,
         thumb_pos: thumb_pos,
         thumb_size: thumb_size,
-    }
-
-    if (tabsWrap) {
-        Object.assign(body, dynamicData)
+        tax_query: JSON.stringify(tax_query),
     }
 
     if (data_preset) {
         body.data_preset = data_preset;
     }
 
+    body = Object.assign(body, dynamicData);
     jankx_ajax(jkx_post_layout.ajax_url, 'GET', body, {
         beforeSend: function () {},
         complete: function (xhr) {
-            var jankx_post_wrap = contentLayout.find('.jankx-posts');
             var mode = jankx_post_wrap.dataset.mode || 'append';
 
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var success_flag = xhr.responseJSON && xhr.responseJSON.success;
+                var response = xhr.responseJSON || {};
+                var success_flag = response.success || false;
 
                 // Success case
                 if (success_flag) {
+                    var data = response.data || {};
                     var realContentWrap = jankx_post_wrap.dataset.contentWrapper ?
                         jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper) :
                         jankx_post_wrap;
 
                     if (mode === 'replace') {
-                        realContentWrap.html(xhr.responseJSON.data.content);
+                        realContentWrap.html(data.content);
                     } else {
-                        realContentWrap.appendHTML(xhr.responseJSON.data.content);
+                        realContentWrap.appendHTML(data.content);
                     }
 
                     if (['carousel', 'preset-3', 'preset-5'].indexOf(layout) >= 0) {
@@ -140,6 +141,10 @@ function jankxPostLayoutTabLinkClickEvent(e) {
                         configs = window[carouselId + '__configs'] || {};
                         window[carouselId] = new Splide(carouselWrap, configs);
                         window[carouselId].mount();
+                    }
+
+                    if (data.next_offset > 0) {
+                        contentLayout.setAttribute('data-posts-per-page', data.next_offset);
                     }
                 }
 
