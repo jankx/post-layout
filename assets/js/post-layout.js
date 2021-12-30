@@ -94,6 +94,9 @@ function jankxPostLayoutTabLinkClickEvent(e) {
 
     var jankx_post_wrap = contentLayout.find('.jankx-posts');
     var tax_query = jankx_post_wrap.dataset.tax_query;
+    if (tax_query) {
+        dynamicData.tax_query = JSON.stringify(tax_query);
+    }
 
     var body = {
         action: jkx_post_layout.action,
@@ -102,7 +105,6 @@ function jankxPostLayoutTabLinkClickEvent(e) {
         engine_id: engine_id,
         thumb_pos: thumb_pos,
         thumb_size: thumb_size,
-        tax_query: JSON.stringify(tax_query),
     }
 
     if (data_preset) {

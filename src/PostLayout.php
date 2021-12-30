@@ -201,8 +201,12 @@ abstract class PostLayout implements PostLayoutConstract
         $attributes = array(
             'class' => $postsListClasses,
             'data-mode' => array_get($this->options, 'pagination_type') == 'load_more' ? static::MODE_APPEND : $this->mode,
-            'data-tax_query' => json_encode($this->createDataTaxonomiesAttributes()),
         );
+
+        $paginationType = array_get($this->options, 'pagination_type');
+        if (array_get($this->options, 'show_paginate') &&  in_array($paginationType, array('load_more'))) {
+            $attributes['data-tax_query'] = json_encode($this->createDataTaxonomiesAttributes());
+        }
 
         if ($this->contentWrapperTag) {
             $attributes['data-content-wrapper'] = $this->contentWrapperTag;
