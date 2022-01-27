@@ -14,4 +14,6 @@ interface LayoutBase
     public function getOptions();
 
     public function getOption($optionName, $defaultValue = null);
+
+    public function addDataProcessor($callback);
 }

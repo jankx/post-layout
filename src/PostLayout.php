@@ -6,6 +6,7 @@ use WC_Product;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
+use Jankx\PostLayout\Exceptions\PropertyNotFoundException;
 use Jankx\PostLayout\PostLayoutManager;
 
 use function wp_parse_args;
@@ -17,7 +18,6 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected static $layoutInstances = array();
     protected static $isElementor = false;
-    protected static $customDataFields = array();
     protected static $instanceIndex = 1;
 
     protected $id;
@@ -38,6 +38,8 @@ abstract class PostLayout implements PostLayoutConstract
     protected $contentGeneratorArgs = array();
     protected $contentWrapperTag = false;
     protected $mode = 'replace';
+
+    protected $dataProcessors = array();
 
     public function __construct($wp_query = null)
     {
@@ -64,6 +66,18 @@ abstract class PostLayout implements PostLayoutConstract
 
         $this->options     = $this->defaultOptions();
         $this->hasChildren = is_a($this, PostLayoutParent::class);
+    }
+
+    public function __get($name)
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+
+        throw new PropertyNotFoundException(
+            sprintf('Property "%s" is not found', $name),
+            40001
+        );
     }
 
     public function setTemplateEngine($engine)
@@ -296,15 +310,26 @@ abstract class PostLayout implements PostLayoutConstract
             )
         );
 
-        if (($data_preset = array_get($this->options, 'data_preset'))) {
-            $templateData['data_preset'] = $data_preset;
+        if (!empty($this->dataProcessors)) {
+            foreach($this->dataProcessors as $dataProcessor) {
+                $data = call_user_func_array(
+                    $dataProcessor,
+                    array(
+                        $templateData,
+                        $this->wp_query->post,
+                        $this->options,
+                        $this
+                    )
+                );
+
+                if (is_array($data)) {
+                    $templateData = $data;
+                }
+            }
         }
 
-        foreach (static::$customDataFields as $field => $defaultValue) {
-            if (!isset($this->options[$field])) {
-                $this->options[$field] = $defaultValue;
-            }
-            $templateData[$field] = $this->options[$field];
+        if (($data_preset = array_get($this->options, 'data_preset'))) {
+            $templateData['data_preset'] = $data_preset;
         }
 
         return apply_filters(
@@ -313,11 +338,6 @@ abstract class PostLayout implements PostLayoutConstract
             $this->wp_query->post,
             $this
         );
-    }
-
-    public static function addCustomDataField($fieldName, $defaultValue = null)
-    {
-        static::$customDataFields[$fieldName] = $defaultValue;
     }
 
     public function setContentGenerator($generator)
@@ -594,5 +614,12 @@ abstract class PostLayout implements PostLayoutConstract
             return $this->wp_query->have_posts();
         }
         return false;
+    }
+
+    public function addDataProcessor($callback)
+    {
+        if (is_callable($callback)) {
+            array_push($this->dataProcessors, $callback);
+        }
     }
 }

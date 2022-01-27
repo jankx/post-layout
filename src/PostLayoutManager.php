@@ -43,6 +43,9 @@ class PostLayoutManager
         }
     }
 
+    /**
+     * @return self
+     */
     public static function createInstance($templateEngine)
     {
         $id = $templateEngine->getId();
