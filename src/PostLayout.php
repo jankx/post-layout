@@ -261,29 +261,6 @@ abstract class PostLayout implements PostLayoutConstract
         }
     }
 
-    public static function get_meta_value($value, $feature)
-    {
-        $func = false;
-        $args = array();
-
-        if (isset($value['function']) && is_callable($value['function'])) {
-            $func = $value['function'];
-            if (isset($value['args'])) {
-                $args = $value['args'];
-            }
-        } elseif (is_callable($value)) {
-            $func = $value;
-        } else {
-            return static::parse_internal_meta($feature, $value);
-        }
-        if ($func !== false) {
-            return call_user_func_array(
-                $func,
-                $args
-            );
-        }
-    }
-
     protected function prepareTemplateData($data = array())
     {
         $postClasses = array('loop-item');
