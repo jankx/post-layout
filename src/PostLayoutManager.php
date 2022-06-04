@@ -70,7 +70,7 @@ class PostLayoutManager
         if ($this->templateEngine) {
             $this->templateEngine->registerFunction(
                 'get_meta_value',
-                array(PostLayout::class, 'get_meta_value')
+                array(Utils::class, 'get_meta_value')
             );
         }
     }

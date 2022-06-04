@@ -166,7 +166,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $this->wp_query->have_posts();
     }
 
-    protected function createDataTaxonomiesAttributes() {
+    protected function createDataTaxonomiesAttributes()
+    {
         $ret = array();
         $tax_query = $this->wp_query->tax_query;
         if (!empty($tax_query->queries)) {
@@ -288,7 +289,7 @@ abstract class PostLayout implements PostLayoutConstract
         );
 
         if (!empty($this->dataProcessors)) {
-            foreach($this->dataProcessors as $dataProcessor) {
+            foreach ($this->dataProcessors as $dataProcessor) {
                 $data = call_user_func_array(
                     $dataProcessor,
                     array(
@@ -435,8 +436,9 @@ abstract class PostLayout implements PostLayoutConstract
         do_action('jankx/layout/post/loop/item/after', $post, $this->wp_query, $this);
     }
 
-    protected function renderDefaultPagination($paginationType) {
-        switch($paginationType) {
+    protected function renderDefaultPagination($paginationType)
+    {
+        switch ($paginationType) {
             case 'load_more';
                 $this->templateEngine->render(
                     'common/paginate/load-more',
