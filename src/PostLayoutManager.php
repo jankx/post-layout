@@ -30,9 +30,9 @@ class PostLayoutManager
     protected static $supportedTermLayouts;
 
     protected static $assetsDirUrl;
+    protected static $registeredFunctions = false;
 
     protected $templateEngine;
-    protected $registeredFunctions = false;
 
     public static function getInstance($engineId = null)
     {
@@ -68,13 +68,12 @@ class PostLayoutManager
         }
         $this->templateEngine = &$templateEngine;
 
-        if ($this->templateEngine && !$this->registeredFunctions) {
+        if ($this->templateEngine && !static::$registeredFunctions) {
             $this->templateEngine->registerFunction(
                 'get_meta_value',
                 array(Utils::class, 'get_meta_value')
             );
-
-            $this->registeredFunctions = true;
+            static::$registeredFunctions = true;
         }
     }
 
