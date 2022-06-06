@@ -32,6 +32,7 @@ class PostLayoutManager
     protected static $assetsDirUrl;
 
     protected $templateEngine;
+    protected $registeredFunctions = false;
 
     public static function getInstance($engineId = null)
     {
@@ -67,11 +68,13 @@ class PostLayoutManager
         }
         $this->templateEngine = &$templateEngine;
 
-        if ($this->templateEngine) {
+        if ($this->templateEngine && !$this->registeredFunctions) {
             $this->templateEngine->registerFunction(
                 'get_meta_value',
                 array(Utils::class, 'get_meta_value')
             );
+
+            $this->registeredFunctions = true;
         }
     }
 
