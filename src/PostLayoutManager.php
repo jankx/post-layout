@@ -34,6 +34,11 @@ class PostLayoutManager
 
     protected $templateEngine;
 
+    /**
+     * @param null|Jankx\TemplateEngine\Engine|string $engineId
+     *
+     * @return static
+     */
     public static function getInstance($engineId = null)
     {
         if (is_a($engineId, Engine::class)) {
@@ -164,6 +169,9 @@ class PostLayoutManager
         return $ret;
     }
 
+    /**
+     * @return \Jankx\PostLayout\PostLayout
+     */
     public function createLayout($layoutName, $wp_query = null)
     {
         $supportedLayouts = static::getLayouts([

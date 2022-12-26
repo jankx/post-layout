@@ -23,6 +23,9 @@ class Tab
 
     public function validateObject()
     {
+        if (is_null($this->type)) {
+            return !empty($this->url);
+        }
         return $this->type && $this->type_name && $this->object_id;
     }
 

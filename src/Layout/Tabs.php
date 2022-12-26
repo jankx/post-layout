@@ -45,8 +45,6 @@ class Tabs extends PostLayout implements PostLayoutParent
             do_action("jankx/layout/tabs/{$post_type}/init", $this, $post_type);
         }
 
-
-
         if (!$echo) {
             ob_start();
         }
@@ -54,6 +52,7 @@ class Tabs extends PostLayout implements PostLayoutParent
         $wrapClass[] = is_array($post_type) ? array_map(function ($post_type) {
             return 'post-type-' . $post_type;
         }, $post_type) : sprintf('post-type-%s', $post_type);
+
         $attributes = array(
             'class' => $wrapClass,
             'id' => sprintf('post-%s-%s', $this->get_name(), $this->instanceId)
@@ -90,14 +89,22 @@ class Tabs extends PostLayout implements PostLayoutParent
         );
     }
 
-    public function addTabs($tabs)
+    /**
+     * @param \Jankx\PostLayout\Layout\Tabs\Tab[] | array $tabs
+     *
+     * @return void
+     */
+    public function setTabs($tabs)
     {
+        // Reset tabs data
+        $this->tabs = [];
+
         foreach ($tabs as $tab) {
-            if (!isset($tab['title'], $tab['object'])) {
-                error_log(sprintf('Jankx post layout has skipped tab: %s', json_encode($tab)));
-                continue;
+            if (is_a($tab, Tab::class)) {
+                array_push($this->tabs, $tab);
+            } elseif(is_array($tab)) {
+                $this->addTab($tab['title'], $tab['object'], array_get($tab, 'url'));
             }
-            $this->addTab($tab['title'], $tab['object'], array_get($tab, 'url'));
         }
     }
 
