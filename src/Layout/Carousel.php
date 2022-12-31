@@ -164,7 +164,12 @@ class Carousel extends PostLayout implements PostLayoutChildren
             unset($this->splideToPostClasses);
         }
 
-        $args = $this->generateCarouselOptions();
+        $args = apply_filters(
+            'jankx/post/layout/carousel/args',
+            $this->generateCarouselOptions(),
+            $this->getInstanceId(),
+            $this->options
+        );
 
         execute_script($this->templateEngine->render('post-layout/carousel/script', array(
             'id' => sprintf('%s--Carousel', $this->getInstanceId()),
