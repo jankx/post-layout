@@ -382,7 +382,7 @@ abstract class PostLayout implements PostLayoutConstract
         return array(
             "post-layout/{$this->get_name()}/$post->post_type-item",
             "post-layout/{$this->get_name()}/loop-item",
-            "post-layout/$post->post_type-item",
+            "post-layout/{$post->post_type}-item",
             'post-layout/loop-item'
         );
     }
