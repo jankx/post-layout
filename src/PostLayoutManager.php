@@ -225,18 +225,24 @@ class PostLayoutManager
         $fslightboxVer = substr(md5(fileatime($fslightbox)), 0, 5);
 
         $splideCss = apply_filters('jankx_post_layout_use_splide_core_css', false)
-            ? 'splide-core.min'
-            : 'splide.min';
+            ? 'splide-core'
+            : 'splide';
         css(
             'splide',
-            $this->asset_url("libs/splide/css/{$splideCss}.css"),
+            [
+                'url' => $this->asset_url("libs/splide/css/{$splideCss}.css"),
+                'url.min' => $this->asset_url("libs/splide/css/{$splideCss}.min.css")
+            ],
             array(),
             '2.4.12'
         );
 
         css(
             'jankx-post-layout',
-            $this->asset_url('css/post-layout.css'),
+            [
+                'url' => $this->asset_url('css/post-layout.css'),
+                'url.min' => $this->asset_url('css/post-layout.min.css')
+            ],
             array('splide'),
             static::VERSION
         );
@@ -251,7 +257,10 @@ class PostLayoutManager
 
         js(
             'splide',
-            $this->asset_url('libs/splide/js/splide.js'),
+            [
+                'url' => $this->asset_url('libs/splide/js/splide.js'),
+                'url.min' => $this->asset_url('libs/splide/js/splide.min.js')
+            ],
             array(),
             '2.4.12',
             true
@@ -259,7 +268,10 @@ class PostLayoutManager
 
         js(
             'jankx-post-layout',
-            $this->asset_url('js/post-layout.js'),
+            [
+                'url' => $this->asset_url('js/post-layout.js'),
+                'url.min' => $this->asset_url('js/post-layout.min.js'),
+            ],
             array('jankx-common', 'splide', 'fslightbox'),
             static::VERSION,
             true
