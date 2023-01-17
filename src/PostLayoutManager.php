@@ -230,7 +230,7 @@ class PostLayoutManager
         css(
             'splide',
             [
-                'url' => $this->asset_url("libs/splide/css/{$splideCss}.css"),
+                'url' => $this->asset_url("libs/splide/css/{$splideCss}.min.css"),
                 'url.min' => $this->asset_url("libs/splide/css/{$splideCss}.min.css")
             ],
             array(),
@@ -258,7 +258,7 @@ class PostLayoutManager
         js(
             'splide',
             [
-                'url' => $this->asset_url('libs/splide/js/splide.js'),
+                'url' => $this->asset_url('libs/splide/js/splide.min.js'),
                 'url.min' => $this->asset_url('libs/splide/js/splide.min.js')
             ],
             array(),
