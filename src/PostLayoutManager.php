@@ -30,9 +30,10 @@ class PostLayoutManager
     protected static $supportedTermLayouts;
 
     protected static $assetsDirUrl;
-    protected static $registeredFunctions = false;
 
     protected $templateEngine;
+    protected $registeredFunctions = false;
+
 
     /**
      * @param null|Jankx\TemplateEngine\Engine|string $engineId
@@ -73,12 +74,12 @@ class PostLayoutManager
         }
         $this->templateEngine = &$templateEngine;
 
-        if ($this->templateEngine && !static::$registeredFunctions) {
+        if ($this->templateEngine && !$this->registeredFunctions) {
             $this->templateEngine->registerFunction(
                 'get_meta_value',
                 array(Utils::class, 'get_meta_value')
             );
-            static::$registeredFunctions = true;
+            $this->registeredFunctions = true;
         }
     }
 
