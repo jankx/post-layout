@@ -1,6 +1,7 @@
 <?php
 namespace Jankx\PostLayout;
 
+use Jankx\Asset\AssetManager;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayoutChildren;
@@ -34,6 +35,7 @@ class PostLayoutManager
     protected $templateEngine;
     protected $registeredFunctions = false;
 
+    protected static $isBootstrap = false;
 
     /**
      * @param null|Jankx\TemplateEngine\Engine|string $engineId
@@ -80,6 +82,11 @@ class PostLayoutManager
                 array(Utils::class, 'get_meta_value')
             );
             $this->registeredFunctions = true;
+        }
+
+        if (!self::$isBootstrap) {
+            AssetManager::instance();
+            self::$isBootstrap = true;
         }
     }
 
