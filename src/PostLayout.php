@@ -8,6 +8,7 @@ use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
 use Jankx\PostLayout\Exceptions\PropertyNotFoundException;
 use Jankx\PostLayout\PostLayoutManager;
+use WP_Post;
 
 use function wp_parse_args;
 
@@ -527,10 +528,17 @@ abstract class PostLayout implements PostLayoutConstract
             while ($this->checkNextPost()) {
                 $this->the_post();
                 $post = $this->getCurrentPostItem();
+                $isFakePost = isset($post->fakePost) && boolval($post->fakePost);
+                if ($isFakePost) {
+                    $this->makeFakePostFilters();
+                }
 
                 $this->beforeLoopItemActions($post);
                 $this->renderLoopItem($post);
                 $this->afterLoopItemActions($post);
+                if ($isFakePost) {
+                    $this->removeFakePostFilters();
+                }
             }
             $this->afterLoop();
 
@@ -542,6 +550,42 @@ abstract class PostLayout implements PostLayoutConstract
             if (!$echo) {
                 return ob_get_clean();
             }
+    }
+
+    public function useOriginalPostTitle($post_title) {
+        $post = $this->getCurrentPostItem();
+        if ($post instanceof WP_Post) {
+            return $post->post_title;
+        }
+        return $post_title;
+    }
+
+    public function checkCustomImageId($has_thumbnail) {
+        $post = $this->getCurrentPostItem();
+        if (isset($post->image_id) && intval($post->image_id) > 0) {
+            return true;
+        }
+        return $has_thumbnail;
+    }
+
+    public function loadCustomImageId($imageId) {
+        $post = $this->getCurrentPostItem();
+        if (isset($post->image_id) && intval($post->image_id) > 0) {
+            return intval($post->image_id);
+        }
+        return $imageId;
+    }
+
+    protected function makeFakePostFilters() {
+        add_filter('the_title', [$this, 'useOriginalPostTitle'], 99);
+        add_filter('has_post_thumbnail', [$this, 'checkCustomImageId'], 99);
+        add_filter('post_thumbnail_id', [$this, 'loadCustomImageId'], 99);
+    }
+
+    protected function removeFakePostFilters() {
+        remove_filter('the_title', [$this, 'useOriginalPostTitle'], 99);
+        remove_filter('has_post_thumbnail', [$this, 'checkCustomImageId'], 99);
+        remove_filter('post_thumbnail_id', [$this, 'loadCustomImageId'], 99);
     }
 
     public function addChildLayout($layoutName)
