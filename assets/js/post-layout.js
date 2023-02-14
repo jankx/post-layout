@@ -135,14 +135,10 @@ function jankxPostLayoutTabLinkClickEvent(e) {
                     }
 
                     if (['carousel', 'preset-3', 'preset-5'].indexOf(layout) >= 0) {
-                        var carouselWrap = parentTabWrap.find('.splide');
+                        var carouselWrap = parentTabWrap.find('.carousel-wrapper');
                         var carouselId = carouselWrap.getAttribute('id').replaceAll(/-/ig, '_');
-                        if (window[carouselId]) {
-                            window[carouselId].destroy();
-                        }
-                        configs = window[carouselId + '__configs'] || {};
-                        window[carouselId] = new Splide(carouselWrap, configs);
-                        window[carouselId].mount();
+                        //loads specific slider
+                        swiffyslider.initSlider(document.getElementById(carouselId));
                     }
 
                     if (data.next_offset > 0) {
@@ -320,3 +316,7 @@ document.addEventListener(
     'DOMContentLoaded',
     jankx_post_layout_init
 );
+
+window.addEventListener("load", () => {
+    swiffyslider.init();
+});

@@ -119,7 +119,7 @@ class Tabs extends PostLayout implements PostLayoutParent
 
     public function setItemAsSplide()
     {
-        $callback = array($this->childLayout, 'setItemAsSplide');
+        $callback = array($this->childLayout, 'addCustomClassToPostItem');
         if (isset($this->childLayout) && is_callable($callback)) {
             return call_user_func_array($callback, func_get_args());
         }
