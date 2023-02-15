@@ -76,7 +76,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function generateCarouselOptions()
     {
-        $optionByCssClasses = ['swiffy-slider'];
+        $optionByCssClasses = ['carousel-wrapper', 'swiffy-slider'];
 
         $optionByCssClasses[] = sprintf('slider-item-show%d', $this->getOption('columns', 4));
         if (static::getDragEnable()) {
@@ -95,8 +95,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function openTrackList()
     {
-        $post_type = $this->wp_query->get('post_type');
-        $classes = [$post_type, 'slider-container'];
+        $classes = [sprintf('%s-list', $this->wp_query->get('post_type')), 'slider-container'];
         echo sprintf('<ul %s>', jankx_generate_html_attributes([
             'class' =>  $classes
         ]));

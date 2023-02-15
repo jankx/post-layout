@@ -124,6 +124,7 @@ function jankxPostLayoutTabLinkClickEvent(e) {
                 // Success case
                 if (success_flag) {
                     var data = response.data || {};
+
                     var realContentWrap = jankx_post_wrap.dataset.contentWrapper ?
                         jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper) :
                         jankx_post_wrap;
@@ -135,10 +136,7 @@ function jankxPostLayoutTabLinkClickEvent(e) {
                     }
 
                     if (['carousel', 'preset-3', 'preset-5'].indexOf(layout) >= 0) {
-                        var carouselWrap = parentTabWrap.find('.carousel-wrapper');
-                        var carouselId = carouselWrap.getAttribute('id').replaceAll(/-/ig, '_');
-                        //loads specific slider
-                        swiffyslider.initSlider(document.getElementById(carouselId));
+                        swiffyslider.init();
                     }
 
                     if (data.next_offset > 0) {
