@@ -259,11 +259,13 @@ class PostLayoutManager
             'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.min.js')
         ], [], '1.6.0');
 
-        if (apply_filters('jankx/post/layout/slider/drag/enable', true)) {
+        $jsDeps = ['jankx-common', 'swiffy-slider', 'fslightbox'];
+        if (Carousel::getDragEnable()) {
             js('swiffy-slider-drag', [
-                'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.extensions.js'),
-                'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.extensions.min.js')
+                'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.js'),
+                'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.min.js')
             ], ['swiffy-slider'], '1.6.0');
+            $jsDeps[] = 'swiffy-slider-drag';
         }
 
         js(
@@ -272,7 +274,7 @@ class PostLayoutManager
                 'url' => $this->asset_url('js/post-layout.js'),
                 'url.min' => $this->asset_url('js/post-layout.min.js'),
             ],
-            array('jankx-common', 'swiffy-slider', 'fslightbox'),
+            $jsDeps,
             static::VERSION,
             true
         )
