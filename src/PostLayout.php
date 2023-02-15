@@ -552,7 +552,8 @@ abstract class PostLayout implements PostLayoutConstract
             }
     }
 
-    public function useOriginalPostTitle($post_title) {
+    public function useOriginalPostTitle($post_title)
+    {
         $post = $this->getCurrentPostItem();
         if ($post instanceof WP_Post) {
             return $post->post_title;
@@ -560,7 +561,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $post_title;
     }
 
-    public function checkCustomImageId($has_thumbnail) {
+    public function checkCustomImageId($has_thumbnail)
+    {
         $post = $this->getCurrentPostItem();
         if (isset($post->image_id) && intval($post->image_id) > 0) {
             return true;
@@ -568,7 +570,8 @@ abstract class PostLayout implements PostLayoutConstract
         return $has_thumbnail;
     }
 
-    public function loadCustomImageId($imageId) {
+    public function loadCustomImageId($imageId)
+    {
         $post = $this->getCurrentPostItem();
         if (isset($post->image_id) && intval($post->image_id) > 0) {
             return intval($post->image_id);
@@ -576,13 +579,15 @@ abstract class PostLayout implements PostLayoutConstract
         return $imageId;
     }
 
-    protected function makeFakePostFilters() {
+    protected function makeFakePostFilters()
+    {
         add_filter('the_title', [$this, 'useOriginalPostTitle'], 99);
         add_filter('has_post_thumbnail', [$this, 'checkCustomImageId'], 99);
         add_filter('post_thumbnail_id', [$this, 'loadCustomImageId'], 99);
     }
 
-    protected function removeFakePostFilters() {
+    protected function removeFakePostFilters()
+    {
         remove_filter('the_title', [$this, 'useOriginalPostTitle'], 99);
         remove_filter('has_post_thumbnail', [$this, 'checkCustomImageId'], 99);
         remove_filter('post_thumbnail_id', [$this, 'loadCustomImageId'], 99);

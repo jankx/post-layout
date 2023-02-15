@@ -9,8 +9,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
     const LAYOUT_NAME = 'carousel';
 
     protected $currentIndex = 0;
-    protected $disableSplideItem = false;
-    protected $splideToPostClasses;
+    protected $disableCarouselItem = false;
+    protected $addCustomPostClassClosure;
 
     public function get_name()
     {
@@ -45,9 +45,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
     {
         parent::beforeLoop();
         if (!$this->isContentOnly) {
-            $this->createSplide();
-                $this->createControls();
-                $this->createTrackList();
+            $this->openCarouselWrapper();
+                $this->openTrackList();
         }
     }
 
@@ -55,19 +54,36 @@ class Carousel extends PostLayout implements PostLayoutChildren
     {
         if (!$this->isContentOnly) {
                 $this->closeTrackList();
-            $this->closeSplide();
+                $this->createControls();
+                $this->createIndicators();
+            $this->closeCarouselWrap();
         }
         parent::afterLoop($disableWTopWrapper);
     }
 
-    protected function createSplide()
+    protected function openCarouselWrapper()
     {
-        $splideClasses = array('splide', 'carousel-wrapper', sprintf('columns-%d', $this->options['columns']));
-        $attributes = array(
-            'class' => $splideClasses,
-            'id' => sprintf('%s--Carousel', $this->getInstanceId()),
-        );
-        echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
+        echo sprintf('<div %s>', jankx_generate_html_attributes([
+            'id' => $this->getId(),
+            'class' => $this->generateCarouselOptions(),
+        ]));
+    }
+
+    protected function closeCarouselWrap()
+    {
+        echo '</div>';
+    }
+
+    protected function generateCarouselOptions()
+    {
+        $optionByCssClasses = ['carousel-wrapper', 'swiffy-slider'];
+
+        $optionByCssClasses[] = sprintf('slider-item-show%d', $this->getOption('columns', 4));
+        if (static::getDragEnable()) {
+            $optionByCssClasses[] = 'slider-nav-mousedrag';
+        }
+
+        return $optionByCssClasses;
     }
 
     protected function createControls()
@@ -77,115 +93,72 @@ class Carousel extends PostLayout implements PostLayoutChildren
         }
     }
 
-    protected function createTrackList()
+    protected function openTrackList()
     {
-        $post_type = $this->wp_query->get('post_type');
-        ?>
-        <div class="splide__track">
-            <ul class="splide__list <?php echo $post_type; ?>s">
-        <?php
+        $classes = [sprintf('%s-list', $this->wp_query->get('post_type')), 'slider-container'];
+        echo sprintf('<ul %s>', jankx_generate_html_attributes([
+            'class' =>  $classes
+        ]));
+    }
+
+
+    protected function closeTrackList()
+    {
+        echo '</ul>';
     }
 
     protected function beforeLoopItemActions($post)
     {
-        parent::beforeLoopItemActions($post);
-        if ($this->disableSplideItem) {
-            return;
-        }
+    }
 
-        $rows = array_get($this->options, 'rows', 1);
-        if ($rows > 1) {
-            if ($this->currentIndex % intval($rows) === 0) {
-                echo '<li class="splide__slide">';
-            }
-        } else {
-            echo '<li class="splide__slide">';
+    protected function createIndicators()
+    {
+        if (array_get($this->options, 'show_dot')) {
+            $this->templateEngine->render(
+                'post-layout/carousel/indicators',
+                [
+                    'layout' => $this,
+                    'total_items' => $this->wp_query->found_posts,
+                    'wp_query' => $this->wp_query,
+                ]
+            );
         }
     }
 
     protected function afterLoopItemActions($post)
     {
-        if ($this->disableSplideItem) {
+        if ($this->disableCarouselItem) {
             return parent::afterLoopItemActions($post);
         }
 
-        $rows = intval(array_get($this->options, 'rows', 1));
-        if ($rows > 1) {
-            if ($this->currentIndex % $rows === ($rows - 1)) {
-                echo '</li>';
-            } elseif ($this->wp_query->current_post === ($this->wp_query->post_count - 1)) {
-                echo '</li>';
-            }
-            $this->currentIndex += 1;
-        } else {
-            echo '</li>';
-        }
+
         parent::afterLoopItemActions($post);
     }
 
-    protected function closeTrackList()
-    {
-        ?>
-            </ul>
-        </div><!-- Close .splide__track -->
-        <?php
-    }
-
-    protected function closeSplide()
-    {
-        echo '</div> <!-- Close .splide -->';
-    }
-
-    protected function generateCarouselOptions()
-    {
-        $columns = array_get($this->options, 'columns', 4);
-        $mobile_columns = array_get($this->options, 'columns_mobile', 1);
-        $tablet_columns = array_get($this->options, 'columns_tablet', 2);
-
-        return array(
-            'perPage' => $columns,
-            'pagination' => array_get($this->options, 'show_dot', false),
-            'arrows' => array_get($this->options, 'show_nav', false),
-            'breakpoints' => array(
-                '800' => array(
-                    'perPage' => $tablet_columns ? $tablet_columns : 2,
-                ),
-                '600' => array(
-                    'perPage' => $mobile_columns ? $mobile_columns : 1
-                )
-            )
-        );
-    }
 
     public function afterRenderLayout()
     {
-        if ($this->splideToPostClasses) {
-            remove_action('post_class', $this->splideToPostClasses);
-            unset($this->splideToPostClasses);
+        if ($this->addCustomPostClassClosure) {
+            remove_action('post_class', $this->addCustomPostClassClosure);
+            unset($this->addCustomPostClassClosure);
         }
-
-        $args = apply_filters(
-            'jankx/post/layout/carousel/args',
-            $this->generateCarouselOptions(),
-            $this->getInstanceId(),
-            $this->options
-        );
-
-        execute_script($this->templateEngine->render('post-layout/carousel/script', array(
-            'id' => sprintf('%s--Carousel', $this->getInstanceId()),
-            'var' => preg_replace('/[\s|\-]/', '_', $this->getInstanceId()),
-            'config' => $args,
-        ), null, false));
     }
 
-    public function setItemAsSplide()
+    public function addCustomClassToPostItem($customClass)
     {
-        $this->disableSplideItem = true;
-        $this->splideToPostClasses = function ($classes) {
-            array_unshift($classes, 'splide__slide');
-
-            return $classes;
+        $this->disableCarouselItem = true;
+        $this->addCustomPostClassClosure = function ($classes) use ($customClass) {
+            $classes = array_merge(
+                $classes,
+                is_array($customClass) ? $customClass : [$customClass]
+            );
+            return array_unique($classes);
         };
-        add_action('post_class', $this->splideToPostClasses);
+        add_action('post_class', $this->addCustomPostClassClosure);
+    }
+
+    public static function getDragEnable()
+    {
+        return apply_filters('jankx/post/layout/slider/drag/enable', false);
     }
 }

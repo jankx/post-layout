@@ -7,7 +7,6 @@ use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\Constracts\PostLayoutChildren;
 use Jankx\PostLayout\Request\PostsFetcher;
 use Jankx\PostLayout\Layout\ListLayout;
-use Jankx\PostLayout\Layout\Mansory;
 use Jankx\PostLayout\Layout\Card;
 use Jankx\PostLayout\Layout\Carousel;
 use Jankx\PostLayout\Layout\Grid;
@@ -24,7 +23,7 @@ use Jankx\PostLayout\TermLayout\Carousel as TermCarouselLayout;
 
 class PostLayoutManager
 {
-    const VERSION = '1.0.0.25';
+    const VERSION = '1.0.1';
 
     protected static $instances;
     protected static $supportedLayouts;
@@ -232,18 +231,10 @@ class PostLayoutManager
         $fslightbox    = $assetsDir . 'libs/fslightbox-basic/fslightbox.js';
         $fslightboxVer = substr(md5(fileatime($fslightbox)), 0, 5);
 
-        $splideCss = apply_filters('jankx_post_layout_use_splide_core_css', false)
-            ? 'splide-core'
-            : 'splide';
-        css(
-            'splide',
-            [
-                'url' => $this->asset_url("libs/splide/css/{$splideCss}.min.css"),
-                'url.min' => $this->asset_url("libs/splide/css/{$splideCss}.min.css")
-            ],
-            array(),
-            '2.4.12'
-        );
+        css('swiffy-slider', [
+            'url' => $this->asset_url('libs/swiffy-slider/css/swiffy-slider.css'),
+            'url.min' => $this->asset_url('libs/swiffy-slider/css/swiffy-slider.min.css')
+        ], [], '1.6.0');
 
         css(
             'jankx-post-layout',
@@ -251,7 +242,7 @@ class PostLayoutManager
                 'url' => $this->asset_url('css/post-layout.css'),
                 'url.min' => $this->asset_url('css/post-layout.min.css')
             ],
-            array('splide'),
+            array('swiffy-slider'),
             static::VERSION
         );
 
@@ -263,16 +254,19 @@ class PostLayoutManager
             true
         );
 
-        js(
-            'splide',
-            [
-                'url' => $this->asset_url('libs/splide/js/splide.min.js'),
-                'url.min' => $this->asset_url('libs/splide/js/splide.min.js')
-            ],
-            array(),
-            '2.4.12',
-            true
-        );
+        js('swiffy-slider', [
+            'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.js'),
+            'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.min.js')
+        ], [], '1.6.0');
+
+        $jsDeps = ['jankx-common', 'swiffy-slider', 'fslightbox'];
+        if (Carousel::getDragEnable()) {
+            js('swiffy-slider-drag', [
+                'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.js'),
+                'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.min.js')
+            ], ['swiffy-slider'], '1.6.0');
+            $jsDeps[] = 'swiffy-slider-drag';
+        }
 
         js(
             'jankx-post-layout',
@@ -280,7 +274,7 @@ class PostLayoutManager
                 'url' => $this->asset_url('js/post-layout.js'),
                 'url.min' => $this->asset_url('js/post-layout.min.js'),
             ],
-            array('jankx-common', 'splide', 'fslightbox'),
+            $jsDeps,
             static::VERSION,
             true
         )

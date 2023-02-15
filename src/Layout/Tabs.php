@@ -102,7 +102,7 @@ class Tabs extends PostLayout implements PostLayoutParent
         foreach ($tabs as $tab) {
             if (is_a($tab, Tab::class)) {
                 array_push($this->tabs, $tab);
-            } elseif(is_array($tab)) {
+            } elseif (is_array($tab)) {
                 $this->addTab($tab['title'], $tab['object'], array_get($tab, 'url'));
             }
         }
@@ -119,7 +119,7 @@ class Tabs extends PostLayout implements PostLayoutParent
 
     public function setItemAsSplide()
     {
-        $callback = array($this->childLayout, 'setItemAsSplide');
+        $callback = array($this->childLayout, 'addCustomClassToPostItem');
         if (isset($this->childLayout) && is_callable($callback)) {
             return call_user_func_array($callback, func_get_args());
         }
