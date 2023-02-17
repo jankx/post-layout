@@ -35,6 +35,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'header_text' => '',
             'columns' => 4,
             'rows' => 1,
+            'wrap_tag' => 'div',
             'show_excerpt' => false,
             'show_dot' => false,
             'show_nav' => true,
@@ -96,7 +97,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function openTrackList()
     {
         $classes = [sprintf('%s-list', $this->wp_query->get('post_type')), 'slider-container'];
-        echo sprintf('<ul %s>', jankx_generate_html_attributes([
+        echo sprintf('<%s %s>', $this->getOption('wrap_tag', 'div'), jankx_generate_html_attributes([
             'class' =>  $classes
         ]));
     }
@@ -104,7 +105,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function closeTrackList()
     {
-        echo '</ul>';
+        echo '</' . $this->getOption('wrap_tag', 'div') . '>';
     }
 
     protected function beforeLoopItemActions($post)
