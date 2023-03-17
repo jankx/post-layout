@@ -45,13 +45,13 @@ class Preset5 extends Carousel
 
     public function beforeLoop()
     {
-        $this->createSplide();
+        $this->openCarouselWrapper();
 
         if (array_get($this->options, 'show_nav')) {
             $this->createControls();
         }
 
-        $this->createTrackList();
+        $this->openTrackList();
     }
 
     public function afterLoop($disableWTopWrapper = false)
@@ -60,15 +60,15 @@ class Preset5 extends Carousel
         do_action("jankx/layout/{$post_type}/loop/end", $this->get_name(), $this);
     }
 
-    protected function createSplide()
+    protected function openCarouselWrapper()
     {
-        parent::createSplide();
+        parent::openCarouselWrapper();
         $this->isCarouselItem = true;
     }
 
-    protected function closeSplide()
+    protected function closeCarouselWrap()
     {
-        parent::closeSplide();
+        parent::closeCarouselWrap();
         $this->isCarouselItem = false;
     }
 
@@ -100,7 +100,7 @@ class Preset5 extends Carousel
         $newListIndex = $this->wp_query->post_count - $numLastItems;
         if ($currentIndex === $newListIndex) {
             $this->closeTrackList();
-            $this->closeSplide();
+            $this->closeCarouselWrap();
 
             $newListTagWrapAttrs = array(
                 'class' => array('sub-list'),
