@@ -1,3 +1,6 @@
+/*!***********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./assets/scss/post-layout.scss ***!
+  \***********************************************************************************************************************/
 .jankx-posts[class*=columns-] {
   display: flex;
   flex-wrap: wrap;
@@ -20,7 +23,6 @@
   .loop-item ul.post-metas li + li {
     margin-left: 10px;
   }
-
   .jankx-posts.columns-2 .loop-item {
     width: 50%;
   }
@@ -96,7 +98,6 @@
   .jankx-posts-layout.left-post .post-large-image {
     margin-bottom: 20px;
   }
-
   .jankx-posts.mobile-columns-2 .loop-item {
     width: 50%;
   }
@@ -131,7 +132,6 @@
   .card-layout.columns-2 .loop-item:nth-child(even), .grid-layout.columns-2 .loop-item:nth-child(even) {
     padding-left: 10px;
   }
-
   .preset-2-layout .preset-column:nth-child(odd) {
     padding-right: 10px;
   }
@@ -184,7 +184,6 @@
   .card-layout.columns-2 .loop-item:nth-child(even), .grid-layout.columns-2 .loop-item:nth-child(even) {
     padding-left: 15px;
   }
-
   .preset-2-layout .preset-column:nth-child(odd) {
     padding-right: 15px;
   }
@@ -472,4 +471,4 @@
   }
 }
 
-/*# sourceMappingURL=post-layout.css.map */
+/*# sourceMappingURL=post-layout.css.map*/
