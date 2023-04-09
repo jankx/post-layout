@@ -65,7 +65,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function openCarouselWrapper()
     {
         echo sprintf('<div %s>', jankx_generate_html_attributes([
-            'id' => $this->getId(),
+            'id' => $this->getInstanceId(),
             'class' => $this->generateCarouselOptions(),
         ]));
     }
@@ -82,6 +82,9 @@ class Carousel extends PostLayout implements PostLayoutChildren
         $optionByCssClasses[] = sprintf('slider-item-show%d', $this->getOption('columns', 4));
         if (static::getDragEnable()) {
             $optionByCssClasses[] = 'slider-nav-mousedrag';
+        }
+        if ($this->getOption('autoplay', false)) {
+            $optionByCssClasses[] = 'slider-nav-autoplay';
         }
 
         return $optionByCssClasses;

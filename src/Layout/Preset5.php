@@ -127,19 +127,23 @@ class Preset5 extends Carousel
         }
     }
 
+    /**
+     * Generate carousel options for Preset 5
+     *
+     * @return array
+     */
     protected function generateCarouselOptions()
     {
-        return array(
-            'perPage' => 1,
-            'pagination' => array_get($this->options, 'show_dot', false),
-            'breakpoints' => array(
-                '800' => array(
-                    'perPage' => 1,
-                ),
-                '600' => array(
-                    'perPage' => 1
-                )
-            )
-        );
+        $optionByCssClasses = ['carousel-wrapper', 'swiffy-slider'];
+
+        $optionByCssClasses[] = sprintf('slider-item-show%d', 1);
+        if (static::getDragEnable()) {
+            $optionByCssClasses[] = 'slider-nav-mousedrag';
+        }
+        if ($this->getOption('autoplay', true)) {
+            $optionByCssClasses[] = 'slider-nav-autoplay';
+        }
+
+        return $optionByCssClasses;
     }
 }
