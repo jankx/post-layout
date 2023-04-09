@@ -39,6 +39,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'show_excerpt' => false,
             'show_dot' => false,
             'show_nav' => true,
+            'autoplay_interval' => 3000
         );
     }
 
@@ -64,10 +65,15 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function openCarouselWrapper()
     {
-        echo sprintf('<div %s>', jankx_generate_html_attributes([
+
+
+        $carouselWrapperAttributes = [
             'id' => $this->getInstanceId(),
             'class' => $this->generateCarouselOptions(),
-        ]));
+            'data-slider-nav-autoplay-interval'=> $this->getOption('autoplay_interval', 3000),
+        ];
+
+        echo sprintf('<div %s>', jankx_generate_html_attributes($carouselWrapperAttributes));
     }
 
     protected function closeCarouselWrap()
@@ -77,7 +83,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
     protected function generateCarouselOptions()
     {
-        $optionByCssClasses = ['carousel-wrapper', 'swiffy-slider'];
+        $optionByCssClasses = ['carousel-wrapper', 'swiffy-slider', 'slider-nav-touch'];
 
         $optionByCssClasses[] = sprintf('slider-item-show%d', $this->getOption('columns', 4));
         if (static::getDragEnable()) {
