@@ -39,7 +39,7 @@ class PostLayoutManager
     /**
      * @param null|Jankx\TemplateEngine\Engine|string $engineId
      *
-     * @return static
+     * @return static|null
      */
     public static function getInstance($engineId = null)
     {
