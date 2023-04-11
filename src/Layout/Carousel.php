@@ -106,7 +106,8 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function openTrackList()
     {
         $classes = [sprintf('%s-list', $this->wp_query->get('post_type')), 'slider-container'];
-        echo sprintf('<%s %s>', $this->getOption('wrap_tag', 'div'), jankx_generate_html_attributes([
+
+        echo sprintf('<%s %s>', $this->getOption('wrap_tag_name', 'div'), jankx_generate_html_attributes([
             'class' =>  $classes
         ]));
     }

@@ -191,7 +191,11 @@ abstract class PostLayout implements PostLayoutConstract
             return;
         }
         if (!$disableWTopWrapper) {
-            echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
+            echo sprintf(
+                '<%s %s>',
+                $this->getOption('wrap_tag_name', 'div'),
+                jankx_generate_html_attributes($this->createWrapAttributes())
+            );
         }
 
         $post_types = (array)$this->wp_query->query_vars['post_type'];
@@ -249,7 +253,7 @@ abstract class PostLayout implements PostLayoutConstract
             // Close posts list wrapper
         echo '</div><!-- End .jankx-posts -->';
         if (!$disableWTopWrapper) {
-            echo '</div><!-- End .jankx-post-layout-wrap -->';
+            echo sprintf('</%s><!-- End .jankx-post-layout-wrap -->', $this->getOption('wrap_tag_name', 'div'));
         }
     }
 
