@@ -68,7 +68,6 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
 
         $carouselWrapperAttributes = [
-            'id' => $this->getInstanceId(),
             'class' => $this->generateCarouselOptions(),
             'data-slider-nav-autoplay-interval'=> $this->getOption('autoplay_interval', 3000),
         ];
