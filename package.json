@@ -39,7 +39,6 @@
     "workbox-webpack-plugin": "^6.5.4"
   },
   "dependencies": {
-    "swiffy-slider": "file:swiffy-slider",
     "terser-webpack-plugin": "^5.3.7"
   }
 }
