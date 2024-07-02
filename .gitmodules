@@ -1,0 +1,3 @@
+[submodule "modular-slider"]
+	path = modular-slider
+	url = git@github.com:jankx/modular-slider.git
