@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\PostLayout;
@@ -38,7 +39,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
     public function getBreakpoint()
     {
         $posts_per_page = $this->wp_query->get('posts_per_page');
-        return $posts_per_page > 10 ? ceil($posts_per_page/2) : 5;
+        return $posts_per_page > 10 ? ceil($posts_per_page / 2) : 5;
     }
 
     protected function beforeLoopItemActions($post)
@@ -73,7 +74,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
         $break_point = $this->getBreakpoint();
         $current_index = $this->wp_query->current_post;
         $max_items = $this->wp_query->post_count;
-        if ($current_index === intval($break_point - 1) || $current_index === ($max_items -1)) {
+        if ($current_index === intval($break_point - 1) || $current_index === ($max_items - 1)) {
             echo '</div>';
         }
     }
@@ -84,7 +85,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
             $break_point = $this->getBreakpoint();
             $current_index = $this->wp_query->current_post;
 
-            if (in_array($current_index, array($break_point -1, $break_point))) {
+            if (in_array($current_index, array($break_point - 1, $break_point))) {
                 return $this->templateEngine->render(
                     $this->generateSearchingLargeItemTemplates($post),
                     $this->prepareTemplateData()

@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\TermLayout;
 
 use Jankx\PostLayout\TermLayout;

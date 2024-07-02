@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Request;
 
 use WP_Query;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout;
 
 use WP_Term_Query;

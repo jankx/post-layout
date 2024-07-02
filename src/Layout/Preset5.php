@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\Layout\Carousel;
@@ -122,7 +123,7 @@ class Preset5 extends Carousel
             parent::afterLoopItemActions($post);
         }
 
-        if ($currentIndex === $totalPost-1) {
+        if ($currentIndex === $totalPost - 1) {
             echo '</div><!-- /.sub-list -->';
         }
     }

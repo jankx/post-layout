@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Exceptions;
 
 use Exception;

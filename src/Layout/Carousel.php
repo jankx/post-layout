@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\Constracts\PostLayoutChildren;
@@ -69,7 +70,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
 
         $carouselWrapperAttributes = [
             'class' => $this->generateCarouselOptions(),
-            'data-slider-nav-autoplay-interval'=> $this->getOption('autoplay_interval', 3000),
+            'data-slider-nav-autoplay-interval' => $this->getOption('autoplay_interval', 3000),
         ];
 
         echo sprintf('<div %s>', jankx_generate_html_attributes($carouselWrapperAttributes));

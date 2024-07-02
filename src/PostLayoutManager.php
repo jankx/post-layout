@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout;
 
 use Jankx\Asset\AssetManager;
@@ -17,7 +18,6 @@ use Jankx\PostLayout\Layout\Preset3;
 use Jankx\PostLayout\Layout\Preset4;
 use Jankx\PostLayout\Layout\Preset5;
 use Jankx\PostLayout\Layout\Preset6;
-
 use Jankx\PostLayout\TermLayout\Card as TermCardLayout;
 use Jankx\PostLayout\TermLayout\Carousel as TermCarouselLayout;
 

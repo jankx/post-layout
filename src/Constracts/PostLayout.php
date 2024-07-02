@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Constracts;
 
 interface PostLayout extends LayoutBase

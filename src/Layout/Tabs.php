@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\PostLayout\Layout;
 
 use Jankx\PostLayout\Constracts\PostLayoutParent;
