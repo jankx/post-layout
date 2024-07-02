@@ -28,6 +28,9 @@ return /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
 (() => {
+/*!***********************************!*\
+  !*** ./assets/src/post-layout.js ***!
+  \***********************************/
 /**
  *
  * @param {NodeList} link_elements
@@ -141,7 +144,6 @@ function jankxPostLayoutTabLinkClickEvent(e) {
         if (success_flag) {
           var data = response.data || {};
           var realContentWrap = jankx_post_wrap.dataset.contentWrapper ? jankx_post_wrap.find(jankx_post_wrap.dataset.contentWrapper) : jankx_post_wrap;
-          console.log(jankx_post_wrap.dataset.contentWrapper, realContentWrap);
           if (mode === 'replace') {
             realContentWrap.html(data.content);
           } else {
@@ -304,6 +306,9 @@ window.addEventListener("load", function () {
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+/*!**************************************!*\
+  !*** ./assets/scss/post-layout.scss ***!
+  \**************************************/
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
-    "build": "webpack --mode=production --node-env=production",
+    "build": "run-p build:*",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "serve": "webpack serve"
@@ -29,6 +29,7 @@
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.7.2",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
     "sass": "^1.61.0",
     "sass-loader": "^11.1.1",
@@ -39,6 +40,7 @@
     "workbox-webpack-plugin": "^6.5.4"
   },
   "dependencies": {
+    "@jankx/modular-slider": "file:modular-slider",
     "terser-webpack-plugin": "^5.3.7"
   }
 }
