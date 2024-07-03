@@ -229,9 +229,6 @@
 .tabs-carousel-wrap {
   position: relative;
 }
-.tabs-carousel-wrap .splide__list {
-  display: flex;
-}
 
 @media (max-width: 767px) {
   .jankx-tabs .the-tab a {

@@ -1,3 +1,5 @@
+import "modular-slider/style/modular-slider.css";
+
 /**
  *
  * @param {NodeList} link_elements

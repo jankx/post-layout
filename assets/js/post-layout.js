@@ -9,6 +9,7 @@
 	}
 })(self, () => {
 return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
@@ -28,9 +29,14 @@ return /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
 (() => {
+var __webpack_exports__ = {};
 /*!***********************************!*\
   !*** ./assets/src/post-layout.js ***!
   \***********************************/
+__webpack_require__.r(__webpack_exports__);
+Object(function webpackMissingModule() { var e = new Error("Cannot find module 'modular-slider/style/modular-slider.css'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+
+
 /**
  *
  * @param {NodeList} link_elements
@@ -303,9 +309,8 @@ window.addEventListener("load", function () {
 });
 })();
 
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
 (() => {
-"use strict";
 /*!**************************************!*\
   !*** ./assets/scss/post-layout.scss ***!
   \**************************************/
