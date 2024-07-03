@@ -40,7 +40,6 @@
     "workbox-webpack-plugin": "^6.5.4"
   },
   "dependencies": {
-    "@jankx/modular-slider": "file:modular-slider",
     "terser-webpack-plugin": "^5.3.7"
   }
 }
