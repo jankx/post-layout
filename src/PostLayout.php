@@ -120,7 +120,7 @@ abstract class PostLayout implements PostLayoutConstract
     public function setOptions($options)
     {
         // Parse post layout with default options
-        $options = apply_filters("jankx_post_layout_{$this::get_name()}_set_options", $options);
+        $options = apply_filters("jankx_post_layout_{$this->get_name()}_set_options", $options);
         foreach ($options as $optionName => $optionValue) {
             $this->addOption($optionName, $optionValue);
         }
