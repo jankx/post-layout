@@ -162,7 +162,7 @@ class PostsFetcher
     {
         $this->parseRequestParams();
         if (!$this->checkRequestIsValid()) {
-            wp_send_json_error(__('Please check your request parameters', 'jankx_ecommerce'));
+            wp_send_json_error(__('Please check your request parameters', 'jankx_woocommerce'));
         }
         $templateEngine = Template::getEngine($this->engine_id);
         $postLayoutManager = PostLayoutManager::getInstance($templateEngine->getId());
