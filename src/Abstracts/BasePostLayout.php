@@ -1,0 +1,24 @@
+<?php
+
+namespace Jankx\PostLayout\Abstracts;
+
+use Jankx\PostLayout\Constracts\LoopItemLayoutInterface;
+use Jankx\PostLayout\Constracts\PostLayout;
+
+abstract class BasePostLayout implements PostLayout
+{
+    protected $loopItemLayout;
+
+    public function setLoopItemLayout($loopItemLayout)
+    {
+        if (is_a($loopItemLayout, LoopItemLayoutInterface::class)) {
+            $this->loopItemLayout = $loopItemLayout;
+        }
+        return $this;
+    }
+
+    public function getLoopItemLayout()
+    {
+        return $this->loopItemLayout;
+    }
+}

@@ -1,18 +1,19 @@
 <?php
+
 namespace Jankx\PostLayout;
 
-use WP_Query;
 use WC_Product;
-use Jankx\TemplateEngine\Engine;
+use WP_Post;
+use WP_Query;
+use Jankx\PostLayout\Abstracts\BasePostLayout;
 use Jankx\PostLayout\Constracts\PostLayoutParent;
-use Jankx\PostLayout\Constracts\PostLayout as PostLayoutConstract;
 use Jankx\PostLayout\Exceptions\PropertyNotFoundException;
 use Jankx\PostLayout\PostLayoutManager;
-use WP_Post;
+use Jankx\TemplateEngine\Engine;
 
 use function wp_parse_args;
 
-abstract class PostLayout implements PostLayoutConstract
+abstract class PostLayout extends BasePostLayout
 {
     const MODE_APPEND = 'append';
     const MODE_REPLACE = 'replace';
@@ -30,6 +31,8 @@ abstract class PostLayout implements PostLayoutConstract
     protected $hasChildren;
     protected $isContentOnly;
 
+    protected $loopItemLayout;
+
     protected $options = array(
         'item_style' => 'defaut',
         'excerpt_length' => false,
@@ -42,7 +45,7 @@ abstract class PostLayout implements PostLayoutConstract
 
     protected $dataProcessors = array();
 
-    public function __construct($wp_query = null)
+    public function __construct($wp_query = null, $loopItemLayout = null)
     {
         if (is_null($wp_query)) {
             $this->wp_query = $GLOBALS['wp_query'];
@@ -57,6 +60,7 @@ abstract class PostLayout implements PostLayoutConstract
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
         $this->id = self::$instanceIndex;
         $this->instanceId = sprintf('post-%s-layout-%s', $this->get_name(), self::$instanceIndex);
+        $this->loopItemLayout = $loopItemLayout;
 
         if (is_a($this->wp_query, WP_Query::class) && $this->wp_query->is_main_query()) {
             $this->instanceId = 'jankx-main-layout';
@@ -285,6 +289,7 @@ abstract class PostLayout implements PostLayoutConstract
                 'thumbnail_size'     => array_get($this->options, 'thumbnail_size', 'thumbnail'),
                 'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
                 'post_title_tag'     => 'h3',
+                'loop_item_layout'   => null,
                 'post_classes'       => apply_filters(
                     'jankx/layout/post/item/classes',
                     $postClasses,
@@ -483,10 +488,16 @@ abstract class PostLayout implements PostLayoutConstract
             $post_type = array_shift($post_type);
         }
         do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
+        if (!is_null($this->loopItemLayout)) {
+            $this->loopItemLayout->loopStart();
+        }
     }
 
     protected function afterLoop()
     {
+        if (!is_null($this->loopItemLayout)) {
+            $this->loopItemLayout->loopEnd();
+        }
         $post_type = $this->wp_query->get('post_type');
         if (is_array($post_type)) {
             $post_type = array_shift($post_type);
@@ -527,6 +538,8 @@ abstract class PostLayout implements PostLayoutConstract
             <?php
             // Create post list
             $this->postLayoutStart();
+
+            $this->loopItemLayout = $this->getLoopItemLayout();
 
             $this->beforeLoop();
             while ($this->checkNextPost()) {

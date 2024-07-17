@@ -27,6 +27,8 @@ class PostLayoutManager
 
     protected static $instances;
     protected static $supportedLayouts;
+
+    protected static $supportedLoopItemLayouts;
     protected static $supportedTermLayouts;
 
     protected static $assetsDirUrl;
@@ -176,10 +178,41 @@ class PostLayoutManager
         return $ret;
     }
 
+
+
+    public function getSupportedLoopItemLayouts($refresh = false)
+    {
+        if (is_null(static::$supportedLoopItemLayouts) || $refresh) {
+            static::$supportedLoopItemLayouts = apply_filters(
+                'jankx/posts/loop/layouts',
+                [
+                ]
+            );
+        }
+        return static::$supportedLoopItemLayouts;
+    }
+
+    /**
+     * Summary of getLoopItemByType
+     * @param mixed $type
+     *
+     * @return \Jankx\PostLayout\Constracts\LoopItemLayoutInterface | null
+     */
+    public function getLoopItemByType($type)
+    {
+        $supportedLayouts = $this->getSupportedLoopItemLayouts();
+        if (!isset($supportedLayouts[$type]) || !class_exists($supportedLayouts[$type])) {
+            return null;
+        }
+
+        $layoutCls = $supportedLayouts[$type];
+        return new $layoutCls();
+    }
+
     /**
      * @return \Jankx\PostLayout\PostLayout
      */
-    public function createLayout($layoutName, $wp_query = null)
+    public function createLayout($layoutName, $wp_query = null, $loopItemLayout = null)
     {
         $supportedLayouts = static::getLayouts([
             'type' => 'all'
@@ -188,7 +221,7 @@ class PostLayoutManager
             return;
         }
         $layoutCls = $supportedLayouts[$layoutName];
-        $layout    = new $layoutCls($wp_query);
+        $layout    = new $layoutCls($wp_query, $loopItemLayout);
 
         $layout->setTemplateEngine($this->templateEngine);
 
