@@ -2,9 +2,9 @@
 
 namespace Jankx\PostLayout\Abstracts;
 
-use Jankx\PostLayout\Constracts\LoopItemLayoutInterface;
+use Jankx\PostLayout\Constracts\LoopItemContentInterface;
 
-abstract class LoopItemLayout implements LoopItemLayoutInterface
+abstract class LoopItemContent implements LoopItemContentInterface
 {
     public function getLoopItemCssClass()
     {

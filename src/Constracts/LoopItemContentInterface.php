@@ -2,12 +2,12 @@
 
 namespace Jankx\PostLayout\Constracts;
 
-interface LoopItemLayoutInterface
+interface LoopItemContentInterface
 {
     public static function getType();
 
-    public function loopStart();
-    public function loopEnd();
+    public function contentStart();
+    public function contentEnd();
 
     public function getLoopItemCssClass();
 }

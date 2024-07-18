@@ -31,7 +31,7 @@ abstract class PostLayout extends BasePostLayout
     protected $hasChildren;
     protected $isContentOnly;
 
-    protected $loopItemLayout;
+    protected $loopItemContent;
 
     protected $options = array(
         'item_style' => 'defaut',
@@ -45,7 +45,7 @@ abstract class PostLayout extends BasePostLayout
 
     protected $dataProcessors = array();
 
-    public function __construct($wp_query = null, $loopItemLayout = null)
+    public function __construct($wp_query = null, $loopItemContent = null)
     {
         if (is_null($wp_query)) {
             $this->wp_query = $GLOBALS['wp_query'];
@@ -60,7 +60,8 @@ abstract class PostLayout extends BasePostLayout
         static::$isElementor = ! empty($_REQUEST['action']) && 'elementor' === $_REQUEST['action'] && is_admin();
         $this->id = self::$instanceIndex;
         $this->instanceId = sprintf('post-%s-layout-%s', $this->get_name(), self::$instanceIndex);
-        $this->loopItemLayout = $loopItemLayout;
+
+        $this->loopItemContent = $loopItemContent;
 
         if (is_a($this->wp_query, WP_Query::class) && $this->wp_query->is_main_query()) {
             $this->instanceId = 'jankx-main-layout';
@@ -488,15 +489,15 @@ abstract class PostLayout extends BasePostLayout
             $post_type = array_shift($post_type);
         }
         do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
-        if (!is_null($this->loopItemLayout)) {
-            $this->loopItemLayout->loopStart();
+        if (!is_null($this->loopItemContent)) {
+            $this->loopItemContent->contentStart();
         }
     }
 
     protected function afterLoop()
     {
-        if (!is_null($this->loopItemLayout)) {
-            $this->loopItemLayout->loopEnd();
+        if (!is_null($this->loopItemContent)) {
+            $this->loopItemContent->contentEnd();
         }
         $post_type = $this->wp_query->get('post_type');
         if (is_array($post_type)) {
@@ -538,8 +539,6 @@ abstract class PostLayout extends BasePostLayout
             <?php
             // Create post list
             $this->postLayoutStart();
-
-            $this->loopItemLayout = $this->getLoopItemLayout();
 
             $this->beforeLoop();
             while ($this->checkNextPost()) {

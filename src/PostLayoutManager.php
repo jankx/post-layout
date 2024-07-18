@@ -180,7 +180,7 @@ class PostLayoutManager
 
 
 
-    public function getSupportedLoopItemLayouts($refresh = false)
+    public function getSupportedLoopItemContentLayouts($refresh = false)
     {
         if (is_null(static::$supportedLoopItemLayouts) || $refresh) {
             static::$supportedLoopItemLayouts = apply_filters(
@@ -193,14 +193,14 @@ class PostLayoutManager
     }
 
     /**
-     * Summary of getLoopItemByType
+     * Summary of getLoopItemContentByType
      * @param mixed $type
      *
-     * @return \Jankx\PostLayout\Constracts\LoopItemLayoutInterface | null
+     * @return \Jankx\PostLayout\Constracts\LoopItemContentInterface | null
      */
-    public function getLoopItemByType($type)
+    public function getLoopItemContentByType($type)
     {
-        $supportedLayouts = $this->getSupportedLoopItemLayouts();
+        $supportedLayouts = $this->getSupportedLoopItemContentLayouts();
         if (!isset($supportedLayouts[$type]) || !class_exists($supportedLayouts[$type])) {
             return null;
         }

@@ -2,7 +2,7 @@
 
 namespace Jankx\PostLayout\Abstracts;
 
-use Jankx\PostLayout\Constracts\LoopItemLayoutInterface;
+use Jankx\PostLayout\Constracts\LoopItemContentInterface;
 use Jankx\PostLayout\Constracts\PostLayout;
 
 abstract class BasePostLayout implements PostLayout
@@ -11,7 +11,7 @@ abstract class BasePostLayout implements PostLayout
 
     public function setLoopItemLayout($loopItemLayout)
     {
-        if (is_a($loopItemLayout, LoopItemLayoutInterface::class)) {
+        if (is_a($loopItemLayout, LoopItemContentInterface::class)) {
             $this->loopItemLayout = $loopItemLayout;
         }
         return $this;

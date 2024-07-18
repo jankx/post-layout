@@ -15,7 +15,7 @@ interface LayoutBase
     public function getOptions();
 
     /**
-     * @param \Jankx\PostLayout\Constracts\LoopItemLayoutInterface $loopItemLayout
+     * @param \Jankx\PostLayout\Constracts\LoopItemContentInterface $loopItemLayout
      *
      * @return self
      */
@@ -24,7 +24,7 @@ interface LayoutBase
     /**
      * Summary of getLoopItemLayout
      *
-     * @return \Jankx\PostLayout\Constracts\LoopItemLayoutInterface
+     * @return \Jankx\PostLayout\Constracts\LoopItemContentInterface
      */
     public function getLoopItemLayout();
 
