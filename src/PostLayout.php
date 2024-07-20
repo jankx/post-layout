@@ -31,6 +31,10 @@ abstract class PostLayout extends BasePostLayout
     protected $hasChildren;
     protected $isContentOnly;
 
+    /**
+     *
+     * @var \Jankx\PostLayout\Constracts\LoopItemContentInterface
+     */
     protected $loopItemContent;
 
     protected $options = array(
@@ -491,6 +495,13 @@ abstract class PostLayout extends BasePostLayout
         do_action("jankx/layout/{$post_type}/loop/before", $this->get_name(), $this);
         if (!is_null($this->loopItemContent)) {
             $this->loopItemContent->contentStart();
+            if ($this->loopItemContent->getPostClassHook()) {
+                add_filter(
+                    $this->loopItemContent->getPostClassHook(),
+                    [$this->loopItemContent, 'postLoopItemCssClass'],
+                    $this->loopItemContent->getPostClassPriority()
+                );
+            }
         }
     }
 
@@ -498,6 +509,13 @@ abstract class PostLayout extends BasePostLayout
     {
         if (!is_null($this->loopItemContent)) {
             $this->loopItemContent->contentEnd();
+            if ($this->loopItemContent->getPostClassHook()) {
+                remove_filter(
+                    $this->loopItemContent->getPostClassHook(),
+                    [$this->loopItemContent, 'postLoopItemCssClass'],
+                    $this->loopItemContent->getPostClassPriority()
+                );
+            }
         }
         $post_type = $this->wp_query->get('post_type');
         if (is_array($post_type)) {
