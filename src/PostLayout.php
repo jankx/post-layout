@@ -2,6 +2,7 @@
 
 namespace Jankx\PostLayout;
 
+use Jankx\GlobalConfigs;
 use WC_Product;
 use WP_Post;
 use WP_Query;
@@ -486,6 +487,13 @@ abstract class PostLayout extends BasePostLayout
         }
     }
 
+    public function excerpt_more($more) {
+        if (GlobalConfigs::get('customs.post.excerpt_more', false)) {
+            return GlobalConfigs::get('customs.post.excerpt_more', false);
+        }
+        return $more;
+    }
+
     protected function beforeLoop()
     {
         $post_type = $this->wp_query->get('post_type');
@@ -503,10 +511,12 @@ abstract class PostLayout extends BasePostLayout
                 );
             }
         }
+        add_filter( 'excerpt_more', [$this, 'excerpt_more'], 90 );
     }
 
     protected function afterLoop()
     {
+        remove_filter( 'excerpt_more', [$this, 'excerpt_more'], 90 );
         if (!is_null($this->loopItemContent)) {
             $this->loopItemContent->contentEnd();
             if ($this->loopItemContent->getPostClassHook()) {
