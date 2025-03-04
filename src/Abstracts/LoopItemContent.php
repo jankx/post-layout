@@ -8,7 +8,7 @@ abstract class LoopItemContent implements LoopItemContentInterface
 {
     public function getLoopItemCssClass()
     {
-        return 'item-' . strtolower(static::getType());
+        return strtolower(static::getType());
     }
 
     public function getPostClassPriority()
