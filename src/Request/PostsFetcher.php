@@ -99,6 +99,19 @@ class PostsFetcher
         return array_merge($args, $orderArgs);
     }
 
+    protected function createWpQueryFromRequest($args) {
+        do_action('jankx/posts/fetcher/query/start', $args, $this);
+
+        $wp_query = apply_filters('jankx/posts/fetcher/query', null, $args, $this);
+        if (is_null($wp_query)) {
+            $wp_query = new WP_Query($args);
+        }
+
+        do_action('jankx/posts/fetcher/query/end', $args, $this);
+
+        return $wp_query;
+    }
+
     public function createWordPressQuery()
     {
         $args = array(
@@ -153,7 +166,7 @@ class PostsFetcher
         if ($this->offset > 0) {
             $args['offset'] = intval($this->offset);
         }
-        return new WP_Query($args);
+        return $this->createWpQueryFromRequest($args);
     }
 
 
@@ -162,7 +175,7 @@ class PostsFetcher
     {
         $this->parseRequestParams();
         if (!$this->checkRequestIsValid()) {
-            wp_send_json_error(__('Please check your request parameters', 'jankx_woocommerce'));
+            wp_send_json_error(__('Please check your request parameters', 'jankx'));
         }
         $templateEngine = Template::getEngine($this->engine_id);
         $postLayoutManager = PostLayoutManager::getInstance($templateEngine->getId());
