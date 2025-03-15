@@ -99,7 +99,8 @@ class PostsFetcher
         return array_merge($args, $orderArgs);
     }
 
-    protected function createWpQueryFromRequest($args) {
+    protected function createWpQueryFromRequest($args)
+    {
         do_action('jankx/posts/fetcher/query/start', $args, $this);
 
         $wp_query = apply_filters('jankx/posts/fetcher/query', null, $args, $this);
@@ -180,9 +181,15 @@ class PostsFetcher
         $templateEngine = Template::getEngine($this->engine_id);
         $postLayoutManager = PostLayoutManager::getInstance($templateEngine->getId());
         $wp_query = $this->createWordPressQuery();
+
+        $loopItemLayoutType = apply_filters("jankx/posts/fetcher/{$this->post_type}/content_layout", null);
+        $loopItemLayout     = $postLayoutManager->getLoopItemContentByType($loopItemLayoutType);
+
+
         $postLayout = $postLayoutManager->createLayout(
             $this->layout,
-            $wp_query
+            $wp_query,
+            $loopItemLayout
         );
         $postLayout->setOptions([
             'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',

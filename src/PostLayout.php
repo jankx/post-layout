@@ -196,6 +196,7 @@ abstract class PostLayout extends BasePostLayout
         if ($this->isContentOnly) {
             if (!$this->hasChildren) {
                 // This hook use to start custom render post layout
+                global $wp_filters;
                 do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
             }
             return;
@@ -487,7 +488,8 @@ abstract class PostLayout extends BasePostLayout
         }
     }
 
-    public function excerpt_more($more) {
+    public function excerpt_more($more)
+    {
         if (GlobalConfigs::get('customs.post.excerpt_more', false)) {
             return GlobalConfigs::get('customs.post.excerpt_more', false);
         }
@@ -511,12 +513,12 @@ abstract class PostLayout extends BasePostLayout
                 );
             }
         }
-        add_filter( 'excerpt_more', [$this, 'excerpt_more'], 90 );
+        add_filter('excerpt_more', [$this, 'excerpt_more'], 90);
     }
 
     protected function afterLoop()
     {
-        remove_filter( 'excerpt_more', [$this, 'excerpt_more'], 90 );
+        remove_filter('excerpt_more', [$this, 'excerpt_more'], 90);
         if (!is_null($this->loopItemContent)) {
             $this->loopItemContent->contentEnd();
             if ($this->loopItemContent->getPostClassHook()) {

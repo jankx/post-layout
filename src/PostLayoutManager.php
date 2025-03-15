@@ -200,6 +200,9 @@ class PostLayoutManager
      */
     public function getLoopItemContentByType($type)
     {
+        if (is_null($type)) {
+            return null;
+        }
         $supportedLayouts = $this->getSupportedLoopItemContentLayouts();
         if (!isset($supportedLayouts[$type]) || !class_exists($supportedLayouts[$type])) {
             return null;
