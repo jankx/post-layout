@@ -148,13 +148,13 @@ class PostsFetcher
             );
         }
 
-        if ($this->data_preset) {
-            $args = apply_filters(
-                "jankx/layout/{$this->post_type}/{$this->data_preset}/args",
-                $args,
-                $this
-            );
-        }
+
+        $args = apply_filters(
+            "jankx/layout/{$this->post_type}/args",
+            $args,
+            $this->data_preset,
+            $this
+        );
 
         if (!empty($this->tax_query)) {
             if (isset($args['tax_query'])) {
