@@ -148,14 +148,6 @@ class PostsFetcher
             );
         }
 
-
-        $args = apply_filters(
-            "jankx/layout/{$this->post_type}/args",
-            $args,
-            $this->data_preset,
-            $this
-        );
-
         if (!empty($this->tax_query)) {
             if (isset($args['tax_query'])) {
                 $args['tax_query'] = array_merge($args['tax_query'], $this->tax_query);
@@ -167,6 +159,13 @@ class PostsFetcher
         if ($this->offset > 0) {
             $args['offset'] = intval($this->offset);
         }
+
+        $args = apply_filters(
+            "jankx/layout/{$this->post_type}/args",
+            $args,
+            $this->data_preset,
+            $this
+        );
         return $this->createWpQueryFromRequest($args);
     }
 
