@@ -33,6 +33,8 @@ class PostsFetcher
     // Support Woocommerce
     protected $order_product;
 
+    protected $originRequest = [];
+
     public function init()
     {
         add_action('wp_ajax_' . static::FETCH_POSTS_ACTION, array($this, 'fetch'));
@@ -60,6 +62,7 @@ class PostsFetcher
                 );
             }
         }
+        $this->originRequest = $_REQUEST;
     }
 
     protected function checkRequestIsValid()
@@ -163,6 +166,7 @@ class PostsFetcher
         $args = apply_filters(
             "jankx/layout/{$this->post_type}/args",
             $args,
+            $this->originRequest,
             $this->data_preset,
             $this
         );
