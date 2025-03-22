@@ -104,14 +104,14 @@ class PostsFetcher
 
     protected function createWpQueryFromRequest($args)
     {
-        do_action('jankx/posts/fetcher/query/start', $args, $this);
-
-        $wp_query = apply_filters('jankx/posts/fetcher/query', null, $args, $this);
+        $postType = array_get($args, 'post_type', 'post');
+        do_action("jankx/posts/fetcher/{$postType}/query/start", $args, $this);
+        $wp_query = apply_filters("jankx/posts/fetcher/{$postType}/query", null, $args, $this);
         if (is_null($wp_query)) {
             $wp_query = new WP_Query($args);
         }
 
-        do_action('jankx/posts/fetcher/query/end', $args, $this);
+        do_action("jankx/posts/fetcher/{$postType}/query/end", $args, $this);
 
         return $wp_query;
     }
