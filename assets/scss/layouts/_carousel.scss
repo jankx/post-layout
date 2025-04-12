@@ -1,2 +1,6 @@
-.splide__arrows {
+.carousel-wrapper {
+    .slider-container {
+        // Force disable scroll by height
+        overflow: hidden;
+    }
 }

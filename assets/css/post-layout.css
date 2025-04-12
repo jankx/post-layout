@@ -235,6 +235,10 @@
     text-align: center;
   }
 }
+.carousel-wrapper .slider-container {
+  overflow: hidden;
+}
+
 .preset-column {
   height: 100%;
 }
