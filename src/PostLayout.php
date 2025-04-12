@@ -208,11 +208,15 @@ abstract class PostLayout extends BasePostLayout
                 jankx_generate_html_attributes($this->createWrapAttributes())
             );
         }
-
         $post_types = (array)$this->wp_query->query_vars['post_type'];
         $postsListClasses = array_merge(
             array('jankx-posts', sprintf('%s-layout', $this->get_name())),
             array_map(function ($post_type) {
+                // When post type is empty. It's archive page such as taxonomy, tag
+                if (empty($post_type)) {
+                    $tmp = end($this->wp_query->posts);
+                    return 'post-type-' . $tmp->post_type;
+                }
                 return 'post-type-' . $post_type;
             }, $post_types)
         );
