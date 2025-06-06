@@ -1,6 +1,13 @@
 /*!***********************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./assets/scss/post-layout.scss ***!
   \***********************************************************************************************************************/
+.single article.post .post-metas {
+  display: flex;
+}
+.single article.post .post-metas li + li {
+  margin-left: 20px;
+}
+
 .jankx-posts[class*=columns-] {
   display: flex;
   flex-wrap: wrap;
@@ -95,6 +102,9 @@
   }
 }
 @media (max-width: 767px) {
+  .single article.post .post-metas li + li {
+    margin-left: 10px;
+  }
   .jankx-posts-layout.left-post .post-large-image {
     margin-bottom: 20px;
   }

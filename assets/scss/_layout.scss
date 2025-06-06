@@ -1,5 +1,18 @@
 @use "sass:math";
 
+.single {
+    article.post {
+        .post-metas {
+            display: flex;
+            li {
+                &+li {
+                    margin-left: 20px;
+                }
+            }
+        }
+    }
+}
+
 .jankx-posts {
     &[class*="columns-"] {
         display: flex;
@@ -163,6 +176,18 @@
 }
 
 @media(max-width: 767px) {
+    .single {
+        article.post {
+            .post-metas {
+                li {
+                    &+li {
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+    }
+
     .jankx-posts-layout {
         &.left-post {
             .post-large-image {
