@@ -4,10 +4,19 @@
     article.post {
         .post-metas {
             display: flex;
-            li {
+            align-items: center;
+            >li {
                 &+li {
                     margin-left: 20px;
                 }
+            }
+
+            .post-categories {
+                display: flex;
+            }
+
+            .meta-label {
+                margin-right: 4px;
             }
         }
     }

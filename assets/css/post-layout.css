@@ -3,9 +3,16 @@
   \***********************************************************************************************************************/
 .single article.post .post-metas {
   display: flex;
+  align-items: center;
 }
-.single article.post .post-metas li + li {
+.single article.post .post-metas > li + li {
   margin-left: 20px;
+}
+.single article.post .post-metas .post-categories {
+  display: flex;
+}
+.single article.post .post-metas .meta-label {
+  margin-right: 4px;
 }
 
 .jankx-posts[class*=columns-] {
