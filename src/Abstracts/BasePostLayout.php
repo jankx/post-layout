@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Abstracts;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\PostLayout\Constracts\LoopItemContentInterface;
 use Jankx\PostLayout\Constracts\PostLayout;
 

@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use WP_Term_Query;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\TermLayout as TermLayoutConstract;

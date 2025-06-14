@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Asset\AssetManager;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Constracts\PostLayoutParent;

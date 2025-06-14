@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Constracts;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 interface PostLayout extends LayoutBase
 {
     public function render($echo = true);

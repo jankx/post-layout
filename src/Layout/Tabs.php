@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Layout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\PostLayout\Constracts\PostLayoutParent;
 use Jankx\PostLayout\PostLayout;
 use Jankx\PostLayout\Layout\Tabs\Tab;

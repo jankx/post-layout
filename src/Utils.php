@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 class Utils
 {
     protected static function parse_internal_meta($feature, $default_value = false)

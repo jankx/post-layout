@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Layout\Tabs;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 class Tab
 {
     protected $title;

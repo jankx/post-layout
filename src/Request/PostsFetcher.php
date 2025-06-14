@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Request;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use WP_Query;
 use WC_Query;
 use Jankx\PostLayout\PostLayoutManager;

@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\TermLayout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\PostLayout\TermLayout;
 
 class Card extends TermLayout

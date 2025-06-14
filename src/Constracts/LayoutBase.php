@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Constracts;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 interface LayoutBase
 {
     public static function get_layout_label();

@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\GlobalConfigs;
 use WC_Product;
 use WP_Post;

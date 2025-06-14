@@ -2,6 +2,10 @@
 
 namespace Jankx\PostLayout\Layout;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\PostLayout\Layout\Carousel;
 
 class Preset5 extends Carousel
