@@ -3,7 +3,7 @@
 namespace Jankx\PostLayout\Layout;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Jankx\PostLayout\Constracts\PostLayoutParent;

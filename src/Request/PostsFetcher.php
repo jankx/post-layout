@@ -3,7 +3,7 @@
 namespace Jankx\PostLayout\Request;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use WP_Query;

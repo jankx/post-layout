@@ -3,7 +3,7 @@
 namespace Jankx\PostLayout;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Jankx\GlobalConfigs;

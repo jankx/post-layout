@@ -3,7 +3,7 @@
 namespace Jankx\PostLayout\Exceptions;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Exception;
