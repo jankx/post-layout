@@ -111,6 +111,10 @@ class Carousel extends PostLayout implements PostLayoutChildren
     {
         $classes = [sprintf('%s-list', $this->wp_query->get('post_type')), 'slider-container'];
 
+        if (($wrap_class = $this->getOption('wrap_classes', null))) {
+            $classes[] = $wrap_class;
+        }
+
         echo sprintf('<%s %s>', $this->getOption('wrap_tag_name', 'div'), jankx_generate_html_attributes([
             'class' =>  $classes
         ]));
