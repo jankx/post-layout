@@ -6,8 +6,8 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\PostLayout\Constracts\LoopItemContentInterface;
-use Jankx\PostLayout\Constracts\PostLayout;
+use Jankx\PostLayout\Contracts\LoopItemContentInterface;
+use Jankx\PostLayout\Contracts\PostLayout;
 
 abstract class BasePostLayout implements PostLayout
 {

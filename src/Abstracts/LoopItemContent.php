@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\PostLayout\Constracts\LoopItemContentInterface;
+use Jankx\PostLayout\Contracts\LoopItemContentInterface;
 
 abstract class LoopItemContent implements LoopItemContentInterface
 {

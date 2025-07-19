@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\PostLayout\Constracts\PostLayoutParent;
+use Jankx\PostLayout\Contracts\PostLayoutParent;
 use Jankx\PostLayout\PostLayout;
 use Jankx\PostLayout\Layout\Tabs\Tab;
 

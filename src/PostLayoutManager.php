@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) {
 
 use Jankx\Asset\AssetManager;
 use Jankx\TemplateEngine\Engine;
-use Jankx\PostLayout\Constracts\PostLayoutParent;
-use Jankx\PostLayout\Constracts\PostLayoutChildren;
+use Jankx\PostLayout\Contracts\PostLayoutParent;
+use Jankx\PostLayout\Contracts\PostLayoutChildren;
 use Jankx\PostLayout\Request\PostsFetcher;
 use Jankx\PostLayout\Layout\ListLayout;
 use Jankx\PostLayout\Layout\Card;
@@ -200,7 +200,7 @@ class PostLayoutManager
      * Summary of getLoopItemContentByType
      * @param mixed $type
      *
-     * @return \Jankx\PostLayout\Constracts\LoopItemContentInterface | null
+     * @return \Jankx\PostLayout\Contracts\LoopItemContentInterface | null
      */
     public function getLoopItemContentByType($type)
     {

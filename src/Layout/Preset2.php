@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 use Jankx\PostLayout\PostLayout;
-use Jankx\PostLayout\Constracts\PostLayoutChildren;
+use Jankx\PostLayout\Contracts\PostLayoutChildren;
 
 class Preset2 extends PostLayout implements PostLayoutChildren
 {

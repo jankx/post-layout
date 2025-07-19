@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\PostLayout\Constracts\PostLayoutChildren;
+use Jankx\PostLayout\Contracts\PostLayoutChildren;
 use Jankx\PostLayout\PostLayout;
 
 class Grid extends PostLayout implements PostLayoutChildren

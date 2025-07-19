@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use WP_Term_Query;
 use Jankx\TemplateEngine\Engine;
-use Jankx\PostLayout\Constracts\TermLayout as TermLayoutConstract;
+use Jankx\PostLayout\Contracts\TermLayout as TermLayoutConstract;
 use Jankx\TemplateEngine\Data\Term;
 
 abstract class TermLayout implements TermLayoutConstract

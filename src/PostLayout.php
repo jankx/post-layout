@@ -11,7 +11,7 @@ use WC_Product;
 use WP_Post;
 use WP_Query;
 use Jankx\PostLayout\Abstracts\BasePostLayout;
-use Jankx\PostLayout\Constracts\PostLayoutParent;
+use Jankx\PostLayout\Contracts\PostLayoutParent;
 use Jankx\PostLayout\Exceptions\PropertyNotFoundException;
 use Jankx\PostLayout\PostLayoutManager;
 use Jankx\TemplateEngine\Engine;
@@ -38,7 +38,7 @@ abstract class PostLayout extends BasePostLayout
 
     /**
      *
-     * @var \Jankx\PostLayout\Constracts\LoopItemContentInterface
+     * @var \Jankx\PostLayout\Contracts\LoopItemContentInterface
      */
     protected $loopItemContent;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jankx\PostLayout\Constracts;
+namespace Jankx\PostLayout\Contracts;
 
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');

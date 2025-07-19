@@ -1,6 +1,6 @@
 <?php
 
-namespace Jankx\PostLayout\Constracts;
+namespace Jankx\PostLayout\Contracts;
 
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
@@ -19,7 +19,7 @@ interface LayoutBase
     public function getOptions();
 
     /**
-     * @param \Jankx\PostLayout\Constracts\LoopItemContentInterface $loopItemLayout
+     * @param \Jankx\PostLayout\Contracts\LoopItemContentInterface $loopItemLayout
      *
      * @return self
      */
@@ -28,7 +28,7 @@ interface LayoutBase
     /**
      * Summary of getLoopItemLayout
      *
-     * @return \Jankx\PostLayout\Constracts\LoopItemContentInterface
+     * @return \Jankx\PostLayout\Contracts\LoopItemContentInterface
      */
     public function getLoopItemLayout();
 
