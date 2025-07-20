@@ -6,7 +6,6 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\Asset\AssetManager;
 use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Contracts\PostLayoutParent;
 use Jankx\PostLayout\Contracts\PostLayoutChildren;
@@ -90,7 +89,6 @@ class PostLayoutManager
         }
 
         if (!self::$isBootstrap) {
-            AssetManager::instance();
             self::$isBootstrap = true;
         }
     }
@@ -271,72 +269,73 @@ class PostLayoutManager
         $fslightbox    = $assetsDir . 'libs/fslightbox-basic/fslightbox.js';
         $fslightboxVer = substr(md5(fileatime($fslightbox)), 0, 5);
 
-        css('swiffy-slider', [
-            'url' => $this->asset_url('libs/swiffy-slider/css/swiffy-slider.css'),
-            'url.min' => $this->asset_url('libs/swiffy-slider/css/swiffy-slider.min.css')
-        ], [], '1.6.0');
-
-        css(
-            'jankx-post-layout',
-            [
-                'url' => $this->asset_url('css/post-layout.css'),
-                'url.min' => $this->asset_url('css/post-layout.min.css')
-            ],
-            array('swiffy-slider'),
-            static::VERSION
+        // Đăng ký và enqueue CSS trực tiếp bằng WordPress
+        wp_register_style(
+            'swiffy-slider',
+            $this->asset_url('libs/swiffy-slider/css/swiffy-slider.min.css'),
+            [],
+            '1.6.0',
+            'all'
         );
+        wp_enqueue_style('swiffy-slider');
 
-        js(
+        wp_register_style(
+            'jankx-post-layout',
+            $this->asset_url('css/post-layout.min.css'),
+            array('swiffy-slider'),
+            static::VERSION,
+            'all'
+        );
+        wp_enqueue_style('jankx-post-layout');
+
+        // Đăng ký và enqueue JS trực tiếp bằng WordPress
+        wp_register_script(
             'fslightbox',
             $this->asset_url('libs/fslightbox-basic/fslightbox.js'),
             array(),
             '3.3-' . $fslightboxVer,
             true
         );
+        wp_enqueue_script('fslightbox');
 
-        js('swiffy-slider', [
-            'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.js'),
-            'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider.min.js')
-        ], [], '1.6.0');
+        wp_register_script(
+            'swiffy-slider',
+            $this->asset_url('libs/swiffy-slider/js/swiffy-slider.min.js'),
+            array(),
+            '1.6.0',
+            true
+        );
+        wp_enqueue_script('swiffy-slider');
 
         $jsDeps = ['jankx-common', 'swiffy-slider', 'fslightbox'];
         if (Carousel::getDragEnable()) {
-            js('swiffy-slider-drag', [
-                'url' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.js'),
-                'url.min' => $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.min.js')
-            ], ['swiffy-slider'], '1.6.0');
+            wp_register_script(
+                'swiffy-slider-drag',
+                $this->asset_url('libs/swiffy-slider/js/swiffy-slider-extensions.min.js'),
+                array('swiffy-slider'),
+                '1.6.0',
+                true
+            );
+            wp_enqueue_script('swiffy-slider-drag');
             $jsDeps[] = 'swiffy-slider-drag';
         }
 
-        js(
+        wp_register_script(
             'jankx-post-layout',
-            [
-                'url' => $this->asset_url('js/post-layout.js'),
-                'url.min' => $this->asset_url('js/post-layout.min.js'),
-            ],
+            $this->asset_url('js/post-layout.min.js'),
             $jsDeps,
             static::VERSION,
             true
-        )
-            ->localize('jkx_post_layout', array(
+        );
+        wp_localize_script(
+            'jankx-post-layout',
+            'jkx_post_layout',
+            array(
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'action' => PostsFetcher::FETCH_POSTS_ACTION,
-            ));
-
-        if (defined('JANKX_FRAMEWORK_FILE_LOADER')) {
-            add_filter('jankx_asset_css_dependences', function ($deps) {
-                array_push($deps, 'jankx-post-layout');
-                return $deps;
-            });
-
-            add_filter('jankx_asset_js_dependences', function ($deps) {
-                array_push($deps, 'jankx-post-layout');
-                return $deps;
-            });
-        } else {
-            css('jankx-post-layout');
-            js('jankx-post-layout');
-        }
+            )
+        );
+        wp_enqueue_script('jankx-post-layout');
     }
 
     public function postLayoutClasses($classes, $post, $layoutOptions = array())
