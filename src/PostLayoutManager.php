@@ -108,6 +108,25 @@ class PostLayoutManager
             error_log("[PostLayoutManager Debug] Template functions registered");
         }
 
+        // Register template directories
+        if ($this->templateEngine) {
+            error_log("[PostLayoutManager Debug] Registering template directories");
+
+            // Get theme directory
+            $themeDir = get_template_directory();
+            $viewsDir = $themeDir . '/views/post-layouts';
+
+            error_log("[PostLayoutManager Debug] Theme directory: " . $themeDir);
+            error_log("[PostLayoutManager Debug] Views directory: " . $viewsDir);
+
+            if (is_dir($viewsDir)) {
+                $this->templateEngine->addTemplateDirectory($viewsDir, 'post-layouts');
+                error_log("[PostLayoutManager Debug] Template directory registered: " . $viewsDir);
+            } else {
+                error_log("[PostLayoutManager Debug] Template directory not found: " . $viewsDir);
+            }
+        }
+
         if (!self::$isBootstrap) {
             self::$isBootstrap = true;
             error_log("[PostLayoutManager Debug] Bootstrap flag set");
@@ -213,6 +232,9 @@ class PostLayoutManager
                 [
                 ]
             );
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Supported loop item layouts: " . print_r(static::$supportedLoopItemLayouts, true));
+            }
         }
         return static::$supportedLoopItemLayouts;
     }
