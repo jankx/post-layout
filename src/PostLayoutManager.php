@@ -2,11 +2,12 @@
 
 namespace Jankx\PostLayout;
 
+use Jankx\Contracts\TemplateEngine\EngineInterface;
+
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\TemplateEngine\Engine;
 use Jankx\PostLayout\Contracts\PostLayoutParent;
 use Jankx\PostLayout\Contracts\PostLayoutChildren;
 use Jankx\PostLayout\Request\PostsFetcher;
@@ -42,18 +43,19 @@ class PostLayoutManager
     protected static $isBootstrap = false;
 
     /**
-     * @param null|Jankx\TemplateEngine\Engine|string $engineId
+     * @param null|EngineInterface|string $engineId
      *
      * @return static|null
      */
-    public static function getInstance($engineId = null)
+    public static function getInstance($engineId = null) : ? self
     {
-        if (is_a($engineId, Engine::class)) {
+        if (is_a($engineId, EngineInterface::class)) {
             $engineId = $engineId->getId();
         }
         if (isset(static::$instances[$engineId])) {
             return static::$instances[$engineId];
         }
+        return null;
     }
 
     /**
