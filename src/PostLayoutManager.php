@@ -64,35 +64,56 @@ class PostLayoutManager
     public static function createInstance($templateEngine)
     {
         $id = $templateEngine->getId();
-        if (!isset($instances[$id])) {
+        error_log("[PostLayoutManager Debug] Creating instance for engine ID: " . $id);
+        error_log("[PostLayoutManager Debug] Engine class: " . get_class($templateEngine));
+
+        if (!isset(static::$instances[$id])) {
+            error_log("[PostLayoutManager Debug] Creating new PostLayoutManager instance");
             static::$instances[$id] = new static($templateEngine);
+            error_log("[PostLayoutManager Debug] PostLayoutManager instance created successfully");
+        } else {
+            error_log("[PostLayoutManager Debug] Using existing PostLayoutManager instance");
         }
+
         return static::$instances[$id];
     }
 
     private function __construct($templateEngine)
     {
+        error_log("[PostLayoutManager Debug] Constructor called");
+        error_log("[PostLayoutManager Debug] Template engine class: " . get_class($templateEngine));
+        error_log("[PostLayoutManager Debug] Template engine ID: " . $templateEngine->getId());
+
         if (empty(static::$instances)) {
+            error_log("[PostLayoutManager Debug] First instance - initializing hooks");
             $this->initHooks();
 
             $fetcher = new PostsFetcher();
             did_action('init')
                 ? $fetcher->init()
                 : add_action('init', array($fetcher, 'init'));
+            error_log("[PostLayoutManager Debug] PostsFetcher initialized");
         }
+
         $this->templateEngine = &$templateEngine;
+        error_log("[PostLayoutManager Debug] Template engine assigned to instance");
 
         if ($this->templateEngine && !$this->registeredFunctions) {
+            error_log("[PostLayoutManager Debug] Registering template functions");
             $this->templateEngine->registerFunction(
                 'get_meta_value',
                 array(Utils::class, 'get_meta_value')
             );
             $this->registeredFunctions = true;
+            error_log("[PostLayoutManager Debug] Template functions registered");
         }
 
         if (!self::$isBootstrap) {
             self::$isBootstrap = true;
+            error_log("[PostLayoutManager Debug] Bootstrap flag set");
         }
+
+        error_log("[PostLayoutManager Debug] Constructor completed successfully");
     }
 
 

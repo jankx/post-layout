@@ -2,6 +2,9 @@
 
 namespace Jankx\PostLayout\Request;
 
+use Exception;
+use Jankx\Facades\App;
+
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
@@ -39,10 +42,23 @@ class PostsFetcher
 
     protected $originRequest = [];
 
+    // Additional properties for frontend integration
+    protected $include = array();
+    protected $exclude = array();
+    protected $meta_filters = array();
+
     public function init()
     {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Initializing PostsFetcher with AJAX action: " . static::FETCH_POSTS_ACTION);
+        }
+
         add_action('wp_ajax_' . static::FETCH_POSTS_ACTION, array($this, 'fetch'));
         add_action('wp_ajax_nopriv_' . static::FETCH_POSTS_ACTION, array($this, 'fetch'));
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] PostsFetcher AJAX actions registered successfully");
+        }
     }
 
     protected function parseRequestParams()
@@ -57,6 +73,50 @@ class PostsFetcher
 
                 // Decode JSON string
                 $this->tax_query = json_decode($value, true);
+                continue;
+            }
+            if ($key === "taxonomy_filters") {
+                // Handle taxonomy filters from frontend
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $taxonomyFilters = json_decode($value, true);
+                if (is_array($taxonomyFilters)) {
+                    $this->taxonomy = $taxonomyFilters;
+                }
+                continue;
+            }
+            if ($key === "meta_filters") {
+                // Handle meta filters from frontend
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $metaFilters = json_decode($value, true);
+                if (is_array($metaFilters)) {
+                    $this->meta_filters = $metaFilters;
+                }
+                continue;
+            }
+            if ($key === "include") {
+                // Handle include posts
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $include = json_decode($value, true);
+                if (is_array($include)) {
+                    $this->include = $include;
+                }
+                continue;
+            }
+            if ($key === "exclude") {
+                // Handle exclude posts
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $exclude = json_decode($value, true);
+                if (is_array($exclude)) {
+                    $this->exclude = $exclude;
+                }
                 continue;
             }
             if (property_exists($this, $key)) {
@@ -167,6 +227,27 @@ class PostsFetcher
             $args['offset'] = intval($this->offset);
         }
 
+        // Handle include posts
+        if (!empty($this->include)) {
+            $args['post__in'] = array_map('intval', $this->include);
+        }
+
+        // Handle exclude posts
+        if (!empty($this->exclude)) {
+            $args['post__not_in'] = array_map('intval', $this->exclude);
+        }
+
+        // Handle meta filters
+        if (!empty($this->meta_filters)) {
+            foreach ($this->meta_filters as $meta_key => $meta_value) {
+                $args['meta_query'][] = array(
+                    'key' => $meta_key,
+                    'value' => $meta_value,
+                    'compare' => 'LIKE'
+                );
+            }
+        }
+
         $args = apply_filters(
             "jankx/layout/{$this->post_type}/args",
             $args,
@@ -181,12 +262,64 @@ class PostsFetcher
 
     public function fetch()
     {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Fetch method called");
+            error_log("[PostsFetcher Debug] GET parameters: " . print_r($_GET, true));
+        }
+
         $this->parseRequestParams();
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Engine ID from request: " . $this->engine_id);
+            error_log("[PostsFetcher Debug] Post type: " . $this->post_type);
+        }
+
         if (!$this->checkRequestIsValid()) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostsFetcher Debug] Request validation failed");
+            }
             wp_send_json_error(__('Please check your request parameters', 'jankx'));
         }
-        $templateEngine = Template::getEngine($this->engine_id);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Request validation passed");
+            error_log("[PostsFetcher Debug] Attempting to resolve template engine");
+        }
+
+        $jankxApp = App::getInstance();
+        if (!$jankxApp) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostsFetcher Debug] Jankx application not available");
+            }
+            wp_send_json_error(__('Jankx application not available', 'jankx'));
+        }
+
+        // Resolve engine based on engine_id parameter
+        $engineAlias = 'template.engine.' . $this->engine_id;
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Jankx application found, resolving: " . $engineAlias);
+        }
+
+        try {
+            $templateEngine = App::make($engineAlias);
+
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostsFetcher Debug] Template engine resolved: " . get_class($templateEngine));
+                error_log("[PostsFetcher Debug] Engine ID: " . $templateEngine->getId());
+            }
+        } catch (Exception $e) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostsFetcher Debug] Error resolving template engine: " . $e->getMessage());
+            }
+            wp_send_json_error(__('Template engine not available: ' . $e->getMessage(), 'jankx'));
+        }
+
+        // Create or get PostLayoutManager instance
         $postLayoutManager = PostLayoutManager::getInstance($templateEngine->getId());
+        if (!$postLayoutManager) {
+            $postLayoutManager = PostLayoutManager::createInstance($templateEngine);
+        }
         $wp_query = $this->createWordPressQuery();
 
         $loopItemLayoutType = apply_filters("jankx/posts/fetcher/{$this->post_type}/content_layout", null);
@@ -208,6 +341,16 @@ class PostsFetcher
         $response = array(
             'content' => $postLayout->render(false),
             'more_posts' => $this->checkHasMorePost(),
+            'query_info' => array(
+                'total_posts' => $wp_query->found_posts,
+                'found_posts' => $wp_query->post_count,
+                'max_pages' => $wp_query->max_num_pages,
+                'current_page' => $wp_query->get('paged') ?: 1,
+                'posts_per_page' => $wp_query->get('posts_per_page'),
+                'post_type' => $this->post_type,
+                'layout' => $this->layout,
+                'engine_id' => $this->engine_id
+            )
         );
 
         if ($this->offset > 0) {

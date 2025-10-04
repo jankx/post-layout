@@ -71,7 +71,7 @@ class Tabs extends PostLayout implements PostLayoutParent
         <div <?php echo jankx_generate_html_attributes($attributes); ?>>
         <?php
             $this->templateEngine->render(
-                'post-layout/tabs/tabs',
+                'post-layouts/tabs/tabs',
                 array(
                     'tabs' => $this->tabs,
                     'first_tab' => array_get($this->tabs, 0, []),

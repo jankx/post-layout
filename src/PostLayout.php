@@ -377,18 +377,18 @@ abstract class PostLayout extends BasePostLayout
     {
         if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
-                "post-layout/{$this->get_name()}/$post->post_type-{$item_style}-large-item",
-                "post-layout/{$this->get_name()}/{$item_style}-large-item",
-                "post-layout/$post->post_type-{$item_style}-large-item",
-                "post-layout/{$item_style}-large-item",
-                'post-layout/large-item',
+                "post-layouts/{$this->get_name()}/$post->post_type-{$item_style}-large-item",
+                "post-layouts/{$this->get_name()}/{$item_style}-large-item",
+                "post-layouts/$post->post_type-{$item_style}-large-item",
+                "post-layouts/{$item_style}-large-item",
+                'post-layouts/large-item',
             );
         }
 
         return array(
-            "post-layout/{$this->get_name()}/$post->post_type-large-item",
-            "post-layout/{$this->get_name()}/large-item",
-            'post-layout/large-item'
+            "post-layouts/{$this->get_name()}/$post->post_type-large-item",
+            "post-layouts/{$this->get_name()}/large-item",
+            'post-layouts/large-item'
         );
     }
 
@@ -396,19 +396,19 @@ abstract class PostLayout extends BasePostLayout
     {
         if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
-                "post-layout/{$this->get_name()}/$post->post_type-{$item_style}-item",
-                "post-layout/{$this->get_name()}/{$item_style}-loop-item",
-                "post-layout/$post->post_type-{$item_style}-item",
-                "post-layout/{$item_style}-loop-item",
-                'post-layout/loop-item',
+                "post-layouts/{$this->get_name()}/$post->post_type-{$item_style}-item",
+                "post-layouts/{$this->get_name()}/{$item_style}-loop-item",
+                "post-layouts/$post->post_type-{$item_style}-item",
+                "post-layouts/{$item_style}-loop-item",
+                'post-layouts/loop-item',
             );
         }
 
         return array(
-            "post-layout/{$this->get_name()}/$post->post_type-item",
-            "post-layout/{$this->get_name()}/loop-item",
-            "post-layout/{$post->post_type}-loop-item",
-            'post-layout/loop-item'
+            "post-layouts/{$this->get_name()}/$post->post_type-item",
+            "post-layouts/{$this->get_name()}/loop-item",
+            "post-layouts/{$post->post_type}-loop-item",
+            'post-layouts/loop-item'
         );
     }
 

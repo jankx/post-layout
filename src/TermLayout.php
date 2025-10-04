@@ -133,8 +133,8 @@ abstract class TermLayout implements TermLayoutConstract
     {
         return array(
             $term->taxonomy . '-layout/' . $this->get_name() . '/term-item',
-            "post-layout/{$this->get_name()}/term-item",
-            'post-layout/term-item'
+            "post-layouts/{$this->get_name()}/term-item",
+            'post-layouts/term-item'
         );
     }
 

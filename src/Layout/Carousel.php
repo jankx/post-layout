@@ -103,7 +103,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
     protected function createControls()
     {
         if (array_get($this->options, 'show_nav')) {
-            $this->templateEngine->render('post-layout/carousel/nav');
+            $this->templateEngine->render('post-layouts/carousel/nav');
         }
     }
 
@@ -134,7 +134,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
     {
         if (array_get($this->options, 'show_dot')) {
             $this->templateEngine->render(
-                'post-layout/carousel/indicators',
+                'post-layouts/carousel/indicators',
                 [
                     'layout' => $this,
                     'total_items' => $this->wp_query->found_posts,
