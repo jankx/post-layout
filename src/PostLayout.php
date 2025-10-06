@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
-use Jankx\GlobalConfigs;
+use Jankx\Facades\Config;
 use WC_Product;
 use WP_Post;
 use WP_Query;
@@ -315,6 +315,10 @@ abstract class PostLayout extends BasePostLayout
                 'show_title'         => Utils::array_get($this->options, 'show_title', true),
                 'show_excerpt'       => Utils::array_get($this->options, 'show_excerpt', false),
                 'show_thumbnail'     => Utils::array_get($this->options, 'show_thumbnail', true),
+                'show_meta'          => Utils::array_get($this->options, 'show_meta', true),
+                'show_read_more'     => Utils::array_get($this->options, 'show_read_more', true),
+                'excerpt_length'     => Utils::array_get($this->options, 'excerpt_length', 20),
+                'meta_fields'        => Utils::array_get($this->options, 'meta_fields', ['date', 'author', 'categories']),
                 'thumbnail_size'     => Utils::array_get($this->options, 'thumbnail_size', 'thumbnail'),
                 'post_meta_features' => Utils::array_get($this->options, 'post_meta_features', array()),
                 'post_title_tag'     => 'h3',
@@ -541,8 +545,8 @@ abstract class PostLayout extends BasePostLayout
 
     public function excerpt_more($more)
     {
-        if (GlobalConfigs::get('customs.post.excerpt_more', false)) {
-            return GlobalConfigs::get('customs.post.excerpt_more', false);
+        if (Config::get('customs.post.excerpt_more', false)) {
+            return Config::get('customs.post.excerpt_more', false);
         }
         return $more;
     }
