@@ -3,17 +3,16 @@
 namespace Jankx\PostLayout\Request;
 
 use Exception;
+use WC_Query;
+use WP_Query;
 use Jankx\Facades\App;
 use Jankx\Foundation\Application;
+use Jankx\PostLayout\Utils;
+
 
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
-
-use WP_Query;
-use WC_Query;
-use Jankx\PostLayout\PostLayoutManager;
-use Jankx\Template\Template;
 
 class PostsFetcher
 {

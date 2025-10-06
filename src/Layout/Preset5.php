@@ -77,7 +77,7 @@ class Preset5 extends Carousel
         $this->isCarouselItem = false;
     }
 
-    public function renderLoopItem($post)
+    public function renderLoopItem($post, $loopItemIndex = null)
     {
         if (is_null($this->contentGenerator)) {
             if ($this->isCarouselItem) {

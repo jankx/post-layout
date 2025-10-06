@@ -29,7 +29,7 @@ class Preset4 extends PostLayout
         return false;
     }
 
-    public function renderLoopItem($post)
+    public function renderLoopItem($post, $loopItemIndex = null)
     {
         if (is_null($this->contentGenerator)) {
             if ($this->wp_query->current_post === 0) {

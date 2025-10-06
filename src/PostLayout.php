@@ -406,7 +406,7 @@ abstract class PostLayout extends BasePostLayout
         );
     }
 
-    protected function generateSearchingTemplates(&$post)
+    protected function generateSearchingTemplates(&$post, $loopItemIndex = null)
     {
         if (($item_style = Utils::array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
@@ -426,10 +426,10 @@ abstract class PostLayout extends BasePostLayout
         );
     }
 
-    public function renderLoopItem($post)
+    public function renderLoopItem($post, $loopItemIndex = null)
     {
         if (is_null($this->contentGenerator)) {
-            $templates = $this->generateSearchingTemplates($post);
+            $templates = $this->generateSearchingTemplates($post, $loopItemIndex);
             $templateData = $this->prepareTemplateData();
 
             // Add post object to template data
@@ -521,7 +521,8 @@ abstract class PostLayout extends BasePostLayout
                 );
                 break;
             default:
-                echo jankx_paginate($this->wp_query);
+                // Sử dụng WordPress pagination function
+                $this->renderWordPressPagination();
                 break;
         }
     }
@@ -621,6 +622,7 @@ abstract class PostLayout extends BasePostLayout
             $this->postLayoutStart();
 
             $this->beforeLoop();
+            $loopItemIndex = 0;
             while ($this->checkNextPost()) {
                 $this->the_post();
                 $post = $this->getCurrentPostItem();
@@ -635,7 +637,7 @@ abstract class PostLayout extends BasePostLayout
                     error_log("[PostLayout Debug] About to render loop item for post: " . $post->ID);
                 }
 
-                $loopItemContent = $this->renderLoopItem($post);
+                $loopItemContent = $this->renderLoopItem($post, $loopItemIndex);
 
                 if (defined('WP_DEBUG') && WP_DEBUG) {
                     error_log("[PostLayout Debug] Loop item rendered, content length: " . strlen($loopItemContent));
@@ -648,6 +650,8 @@ abstract class PostLayout extends BasePostLayout
                 if ($isFakePost) {
                     $this->removeFakePostFilters();
                 }
+
+                $loopItemIndex++;
             }
             $this->afterLoop();
 
@@ -763,6 +767,50 @@ abstract class PostLayout extends BasePostLayout
     {
         if (is_callable($callback)) {
             array_push($this->dataProcessors, $callback);
+        }
+    }
+
+    /**
+     * Render WordPress pagination using paginate_links()
+     *
+     * @return void
+     */
+    protected function renderWordPressPagination()
+    {
+        $current_page = max(1, get_query_var('paged'));
+        $total_pages = $this->wp_query->max_num_pages;
+
+        if ($total_pages <= 1) {
+            return;
+        }
+
+        $args = [
+            'base' => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
+            'format' => '?paged=%#%',
+            'current' => $current_page,
+            'total' => $total_pages,
+            'prev_text' => Utils::array_get($this->options, 'prev_text', '&laquo; Previous'),
+            'next_text' => Utils::array_get($this->options, 'next_text', 'Next &raquo;'),
+            'type' => 'list',
+            'end_size' => 2,
+            'mid_size' => 1,
+            'show_all' => false,
+            'before_page_number' => '',
+            'after_page_number' => ''
+        ];
+
+        // Tùy chỉnh số trang hiển thị nếu có
+        $max_numbers = Utils::array_get($this->options, 'max_numbers', 10);
+        if ($max_numbers && $max_numbers < $total_pages) {
+            $args['mid_size'] = min($max_numbers / 2, $total_pages / 2);
+        }
+
+        $pagination_links = paginate_links($args);
+
+        if ($pagination_links) {
+            echo '<nav class="jankx-pagination" aria-label="' . esc_attr__('Posts navigation', 'jankx') . '">';
+            echo $pagination_links;
+            echo '</nav>';
         }
     }
 }

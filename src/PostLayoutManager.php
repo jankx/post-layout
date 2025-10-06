@@ -162,7 +162,7 @@ class PostLayoutManager
         ));
 
         if ((is_null(static::$supportedLayouts) && $args['data'] !== 'term') || $refresh) {
-            static::$supportedLayouts = apply_filters('jankx_post_layout_layouts', array(
+            static::$supportedLayouts = apply_filters('jankx/post/layouts', array(
                 ListLayout::LAYOUT_NAME => ListLayout::class,
                 Card::LAYOUT_NAME => Card::class,
                 Carousel::LAYOUT_NAME => Carousel::class,

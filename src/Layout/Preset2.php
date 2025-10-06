@@ -83,7 +83,7 @@ class Preset2 extends PostLayout implements PostLayoutChildren
         }
     }
 
-    public function renderLoopItem($post)
+    public function renderLoopItem($post, $loopItemIndex = null)
     {
         if (is_null($this->contentGenerator)) {
             $break_point = $this->getBreakpoint();
