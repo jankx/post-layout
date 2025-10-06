@@ -36,7 +36,7 @@ class Preset6 extends PostLayout
                 'class' => 'sub-list',
             );
 
-            echo sprintf('<div %s>', jankx_generate_html_attributes($subListWrapAttributes));
+            echo sprintf('<div %s>', Utils::jankx_generate_html_attributes($subListWrapAttributes));
         }
         return parent::beforeLoopItemActions($post);
     }

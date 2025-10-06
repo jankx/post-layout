@@ -36,7 +36,7 @@ class Preset5 extends Carousel
         if (is_null($this->numOfLastItems)) {
             $this->numOfLastItems = apply_filters(
                 'jankx/layout/post/preset5/last_items',
-                array_get($this->options, 'last_columns_items', 3),
+                Utils::array_get($this->options, 'last_columns_items', 3),
                 $this
             );
 
@@ -52,7 +52,7 @@ class Preset5 extends Carousel
     {
         $this->openCarouselWrapper();
 
-        if (array_get($this->options, 'show_nav')) {
+        if (Utils::array_get($this->options, 'show_nav')) {
             $this->createControls();
         }
 
@@ -110,7 +110,7 @@ class Preset5 extends Carousel
             $newListTagWrapAttrs = array(
                 'class' => array('sub-list'),
             );
-            printf('<div %s>', jankx_generate_html_attributes($newListTagWrapAttrs));
+            printf('<div %s>', Utils::jankx_generate_html_attributes($newListTagWrapAttrs));
         }
         if ($currentIndex < $newListIndex) {
             parent::beforeLoopItemActions($post);

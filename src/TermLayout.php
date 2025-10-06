@@ -87,7 +87,7 @@ abstract class TermLayout implements TermLayoutConstract
     public function postLayoutStart($disableWTopWrapper = false)
     {
         if (!$disableWTopWrapper) {
-            echo '<div ' . jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
+            echo '<div ' . Utils::jankx_generate_html_attributes($this->createWrapAttributes()) . '>';
         }
 
         $taxonomies = (array)$this->wp_term_query->query_vars['taxonomy'];
@@ -107,7 +107,7 @@ abstract class TermLayout implements TermLayoutConstract
             'data-mode' => $this->mode,
         );
 
-        echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
+        echo '<div ' . Utils::jankx_generate_html_attributes($attributes) . '>';
     }
 
     public function postLayoutEnd($disableWTopWrapper = false)

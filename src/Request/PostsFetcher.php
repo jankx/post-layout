@@ -183,7 +183,7 @@ class PostsFetcher
 
     protected function createWpQueryFromRequest($args)
     {
-        $postType = array_get($args, 'post_type', 'post');
+        $postType = Utils::array_get($args, 'post_type', 'post');
         do_action("jankx/posts/fetcher/{$postType}/query/start", $args, $this);
         $wp_query = apply_filters("jankx/posts/fetcher/{$postType}/query", null, $args, $this);
         if (is_null($wp_query)) {
@@ -225,8 +225,8 @@ class PostsFetcher
             $sort_order = explode('-', $this->order_product);
             $this->createWooCommerceProductOrders(
                 $args,
-                array_get($sort_order, 0),
-                array_get($sort_order, 1, 'asc')
+                Utils::array_get($sort_order, 0),
+                Utils::array_get($sort_order, 1, 'asc')
             );
         }
 

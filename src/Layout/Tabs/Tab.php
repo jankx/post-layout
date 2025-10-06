@@ -20,9 +20,9 @@ class Tab
         $this->url = $url;
 
         if (is_array($object)) {
-            $this->type = array_get($object, 'type');
-            $this->type_name = array_get($object, 'type_name');
-            $this->object_id = array_get($object, 'id');
+            $this->type = Utils::array_get($object, 'type');
+            $this->type_name = Utils::array_get($object, 'type_name');
+            $this->object_id = Utils::array_get($object, 'id');
         }
     }
 

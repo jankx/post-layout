@@ -68,13 +68,13 @@ class Tabs extends PostLayout implements PostLayoutParent
             $attributes['data-columns'] = $this->mobileCarouselTabs;
         }
         ?>
-        <div <?php echo jankx_generate_html_attributes($attributes); ?>>
+        <div <?php echo Utils::jankx_generate_html_attributes($attributes); ?>>
         <?php
             $this->templateEngine->render(
                 'post-layouts/tabs/tabs',
                 array(
                     'tabs' => $this->tabs,
-                    'first_tab' => array_get($this->tabs, 0, []),
+                    'first_tab' => Utils::array_get($this->tabs, 0, []),
                     'tab_content' => $this->childLayout->render(false)
                 )
             );
@@ -108,7 +108,7 @@ class Tabs extends PostLayout implements PostLayoutParent
             if (is_a($tab, Tab::class)) {
                 array_push($this->tabs, $tab);
             } elseif (is_array($tab)) {
-                $this->addTab($tab['title'], $tab['object'], array_get($tab, 'url'));
+                $this->addTab($tab['title'], $tab['object'], Utils::array_get($tab, 'url'));
             }
         }
     }

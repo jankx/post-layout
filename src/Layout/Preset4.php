@@ -59,7 +59,7 @@ class Preset4 extends PostLayout
             $listPostsTagWrapAttributes = array(
                 'class' => array('sub-layout'),
             );
-            printf('<div %s>', jankx_generate_html_attributes($listPostsTagWrapAttributes));
+            printf('<div %s>', Utils::jankx_generate_html_attributes($listPostsTagWrapAttributes));
         }
 
         if ($totalPosts > 2) {
@@ -67,7 +67,7 @@ class Preset4 extends PostLayout
                 $bottomListTagWrapAttrs = array(
                     'class' => array('bottom-list')
                 );
-                printf('<div %s>', jankx_generate_html_attributes($bottomListTagWrapAttrs));
+                printf('<div %s>', Utils::jankx_generate_html_attributes($bottomListTagWrapAttrs));
             }
         }
     }

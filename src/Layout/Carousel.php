@@ -77,7 +77,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             'data-slider-nav-autoplay-interval' => $this->getOption('autoplay_interval', 3000),
         ];
 
-        echo sprintf('<div %s>', jankx_generate_html_attributes($carouselWrapperAttributes));
+        echo sprintf('<div %s>', Utils::jankx_generate_html_attributes($carouselWrapperAttributes));
     }
 
     protected function closeCarouselWrap()
@@ -115,7 +115,7 @@ class Carousel extends PostLayout implements PostLayoutChildren
             $classes[] = $wrap_class;
         }
 
-        echo sprintf('<%s %s>', $this->getOption('wrap_tag_name', 'div'), jankx_generate_html_attributes([
+        echo sprintf('<%s %s>', $this->getOption('wrap_tag_name', 'div'), Utils::jankx_generate_html_attributes([
             'class' =>  $classes
         ]));
     }

@@ -184,7 +184,7 @@ abstract class PostLayout extends BasePostLayout
 
     protected function checkNextPost()
     {
-        $max_loop_items = array_get($this->options, 'max_loop_items');
+        $max_loop_items = Utils::array_get($this->options, 'max_loop_items');
         if ($max_loop_items > 0) {
             if ($this->wp_query->post_count < $max_loop_items) {
                 $max_loop_items = $this->wp_query->post_count;
@@ -223,7 +223,7 @@ abstract class PostLayout extends BasePostLayout
             echo sprintf(
                 '<%s %s>',
                 $this->getOption('wrap_tag_name', 'div'),
-                jankx_generate_html_attributes($this->createWrapAttributes())
+                Utils::jankx_generate_html_attributes($this->createWrapAttributes())
             );
         }
         $post_types = (array)$this->wp_query->query_vars['post_type'];
@@ -241,11 +241,11 @@ abstract class PostLayout extends BasePostLayout
 
         if ($this->supportColumns && !empty($this->options['columns'])) {
             $postsListClasses[] = 'columns-' . $this->options['columns'];
-            $tabletColumns = array_get($this->options, 'columns_mobile');
+            $tabletColumns = Utils::array_get($this->options, 'columns_mobile');
             if ($tabletColumns > 0) {
                 $postsListClasses[] = "tablet-columns-{$tabletColumns}";
             }
-            $mobileColumns = array_get($this->options, 'columns_mobile');
+            $mobileColumns = Utils::array_get($this->options, 'columns_mobile');
             if ($mobileColumns > 0) {
                 $postsListClasses[] = "mobile-columns-{$mobileColumns}";
             }
@@ -253,11 +253,11 @@ abstract class PostLayout extends BasePostLayout
 
         $attributes = array(
             'class' => $postsListClasses,
-            'data-mode' => array_get($this->options, 'pagination_type') == 'load_more' ? static::MODE_APPEND : $this->mode,
+            'data-mode' => Utils::array_get($this->options, 'pagination_type') == 'load_more' ? static::MODE_APPEND : $this->mode,
         );
 
-        $paginationType = array_get($this->options, 'pagination_type');
-        if (array_get($this->options, 'show_paginate') &&  in_array($paginationType, array('load_more'))) {
+        $paginationType = Utils::array_get($this->options, 'pagination_type');
+        if (Utils::array_get($this->options, 'show_paginate') &&  in_array($paginationType, array('load_more'))) {
             $attributes['data-tax_query'] = json_encode($this->createDataTaxonomiesAttributes());
         }
 
@@ -265,7 +265,7 @@ abstract class PostLayout extends BasePostLayout
             $attributes['data-content-wrapper'] = $this->contentWrapperTag;
         }
 
-        echo '<div ' . jankx_generate_html_attributes($attributes) . '>';
+        echo '<div ' . Utils::jankx_generate_html_attributes($attributes) . '>';
 
         if (!$this->hasChildren) {
             do_action("jankx/layout/{$post_type}/loop/start", $this->get_name(), $this);
@@ -303,20 +303,20 @@ abstract class PostLayout extends BasePostLayout
     protected function prepareTemplateData($data = array())
     {
         $postClasses = array('loop-item');
-        if (($itemStyle = array_get($this->options, 'item_style', 'default')) != 'default') {
+        if (($itemStyle = Utils::array_get($this->options, 'item_style', 'default')) != 'default') {
             array_push($postClasses, sprintf('style-%s', $itemStyle));
         }
 
         $templateData = wp_parse_args(
             $data,
             array(
-                'attributes'         => jankx_generate_html_attributes(array()),
+                'attributes'         => Utils::jankx_generate_html_attributes(array()),
                 'data_index'         => $this->wp_query->current_post,
-                'show_title'         => array_get($this->options, 'show_title', true),
-                'show_excerpt'       => array_get($this->options, 'show_excerpt', false),
-                'show_thumbnail'     => array_get($this->options, 'show_thumbnail', true),
-                'thumbnail_size'     => array_get($this->options, 'thumbnail_size', 'thumbnail'),
-                'post_meta_features' => array_get($this->options, 'post_meta_features', array()),
+                'show_title'         => Utils::array_get($this->options, 'show_title', true),
+                'show_excerpt'       => Utils::array_get($this->options, 'show_excerpt', false),
+                'show_thumbnail'     => Utils::array_get($this->options, 'show_thumbnail', true),
+                'thumbnail_size'     => Utils::array_get($this->options, 'thumbnail_size', 'thumbnail'),
+                'post_meta_features' => Utils::array_get($this->options, 'post_meta_features', array()),
                 'post_title_tag'     => 'h3',
                 'loop_item_layout'   => null,
                 'post_classes'       => apply_filters(
@@ -346,7 +346,7 @@ abstract class PostLayout extends BasePostLayout
             }
         }
 
-        if (($data_preset = array_get($this->options, 'data_preset'))) {
+        if (($data_preset = Utils::array_get($this->options, 'data_preset'))) {
             $templateData['data_preset'] = $data_preset;
         }
 
@@ -389,7 +389,7 @@ abstract class PostLayout extends BasePostLayout
 
     protected function generateSearchingLargeItemTemplates($post)
     {
-        if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
+        if (($item_style = Utils::array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
                 "post-layouts/{$this->get_name()}/$post->post_type-{$item_style}-large-item",
                 "post-layouts/{$this->get_name()}/{$item_style}-large-item",
@@ -408,7 +408,7 @@ abstract class PostLayout extends BasePostLayout
 
     protected function generateSearchingTemplates(&$post)
     {
-        if (($item_style = array_get($this->options, 'item_style', 'default')) !== 'default') {
+        if (($item_style = Utils::array_get($this->options, 'item_style', 'default')) !== 'default') {
             return array(
                 "post-layouts/{$this->get_name()}/$post->post_type-{$item_style}-item",
                 "post-layouts/{$this->get_name()}/{$item_style}-loop-item",
@@ -483,11 +483,11 @@ abstract class PostLayout extends BasePostLayout
             $attributes['data-posts-per-page'] = $this->wp_query->get('posts_per_page');
             $attributes['data-layout'] = $this->get_name();
             $attributes['data-engine-id'] = $this->templateEngine->getId();
-            $attributes['data-thumbnail-position'] = array_get($this->options, 'thumbnail_position', 'top');
-            $attributes['data-thumbnail-size'] = array_get($this->options, 'thumbnail_size');
+            $attributes['data-thumbnail-position'] = Utils::array_get($this->options, 'thumbnail_position', 'top');
+            $attributes['data-thumbnail-size'] = Utils::array_get($this->options, 'thumbnail_size');
         }
 
-        if (($data_preset = array_get($this->options, 'data_preset'))) {
+        if (($data_preset = Utils::array_get($this->options, 'data_preset'))) {
             $attributes['data-preset'] = $data_preset;
         }
 
@@ -511,7 +511,7 @@ abstract class PostLayout extends BasePostLayout
                 $this->templateEngine->render(
                     'common/paginate/load-more',
                     array(
-                        'items' => array_get(
+                        'items' => Utils::array_get(
                             $this->options,
                             'load_more_items',
                             apply_filters('jankx/commom/load_more/items', 6)
@@ -528,8 +528,8 @@ abstract class PostLayout extends BasePostLayout
 
     protected function afterRenderLayout()
     {
-        if (array_get($this->options, 'show_paginate', false)) {
-            $paginationType = array_get($this->options, 'pagination_type');
+        if (Utils::array_get($this->options, 'show_paginate', false)) {
+            $paginationType = Utils::array_get($this->options, 'pagination_type');
             $customPagination = "paginate_{$paginationType}_actions";
             if (has_action($customPagination)) {
                 return do_action($customPagination);
@@ -588,7 +588,7 @@ abstract class PostLayout extends BasePostLayout
 
     public function excerptLenght($length)
     {
-        if (array_get($this->options, 'excerpt_length')) {
+        if (Utils::array_get($this->options, 'excerpt_length')) {
             return $this->options['excerpt_length'];
         }
         return $length;
