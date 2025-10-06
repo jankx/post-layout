@@ -4,6 +4,7 @@ namespace Jankx\PostLayout\Request;
 
 use Exception;
 use Jankx\Facades\App;
+use Jankx\Foundation\Application;
 
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
@@ -46,6 +47,7 @@ class PostsFetcher
     protected $include = array();
     protected $exclude = array();
     protected $meta_filters = array();
+    protected $post_templates = array();
 
     public function init()
     {
@@ -116,6 +118,17 @@ class PostsFetcher
                 $exclude = json_decode($value, true);
                 if (is_array($exclude)) {
                     $this->exclude = $exclude;
+                }
+                continue;
+            }
+            if ($key === "post_templates") {
+                // Handle post templates
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $postTemplates = json_decode($value, true);
+                if (is_array($postTemplates)) {
+                    $this->post_templates = $postTemplates;
                 }
                 continue;
             }
@@ -264,23 +277,22 @@ class PostsFetcher
 
     public function fetch()
     {
-        try {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("[PostsFetcher Debug] Fetch method called");
-                error_log("[PostsFetcher Debug] GET parameters: " . print_r($_GET, true));
-            }
-
-            $this->parseRequestParams();
-        } catch (Exception $e) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("[PostsFetcher Debug] Error parsing request params: " . $e->getMessage());
-            }
-            wp_send_json_error(__('Error parsing request parameters: ' . $e->getMessage(), 'jankx'));
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Fetch method called");
+            error_log("[PostsFetcher Debug] GET parameters: " . print_r($_GET, true));
+            error_log("[PostsFetcher Debug] REQUEST parameters: " . print_r($_REQUEST, true));
         }
+
+        try {
+
+        $this->parseRequestParams();
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log("[PostsFetcher Debug] Engine ID from request: " . $this->engine_id);
             error_log("[PostsFetcher Debug] Post type: " . $this->post_type);
+            if (!empty($this->post_templates)) {
+                error_log("[PostsFetcher Debug] Post templates: " . print_r($this->post_templates, true));
+            }
         }
 
         if (!$this->checkRequestIsValid()) {
@@ -290,14 +302,13 @@ class PostsFetcher
             wp_send_json_error(__('Please check your request parameters', 'jankx'));
         }
 
-        try {
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log("[PostsFetcher Debug] Request validation passed");
             error_log("[PostsFetcher Debug] Attempting to resolve template engine");
         }
 
-        $jankxApp = App::getInstance();
+        $jankxApp = Application::getInstance();
         if (!$jankxApp) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log("[PostsFetcher Debug] Jankx application not available");
@@ -326,22 +337,21 @@ class PostsFetcher
             wp_send_json_error(__('Template engine not available: ' . $e->getMessage(), 'jankx'));
         }
 
-        // Create or get PostLayoutManager instance
-        $postLayoutManager = PostLayoutManager::getInstance($this->engine_id);
-        if (!$postLayoutManager) {
-            $postLayoutManager = PostLayoutManager::createInstance($templateEngine);
-        }
+        /**
+         * @var \Jankx\PostLayout\PostLayoutManager
+         */
+        $postLayoutManager = App::make('postlayout.manager');
         $wp_query = $this->createWordPressQuery();
 
-        $loopItemLayoutType = apply_filters("jankx/posts/fetcher/{$this->post_type}/content_layout", null);
+        $loopItemLayoutType = apply_filters("jankx/posts/fetcher/{$this->post_type}/content_layout", 'default');
         $loopItemLayout     = $postLayoutManager->getLoopItemContentByType($loopItemLayoutType);
-
 
         $postLayout = $postLayoutManager->createLayout(
             $this->layout,
             $wp_query,
             $loopItemLayout
         );
+
         $postLayout->setOptions([
             'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',
             'thumbnail_size' => $this->thumb_size ? $this->thumb_size : 'medium',
@@ -351,8 +361,7 @@ class PostsFetcher
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log("[PostsFetcher Debug] About to render post layout");
-            error_log("[PostsFetcher Debug] Layout: " . $this->layout);
-            error_log("[PostsFetcher Debug] Post type: " . $this->post_type);
+            error_log("[PostsFetcher Debug] Post layout class: " . get_class($postLayout));
         }
 
         $content = $postLayout->render(false);
@@ -364,8 +373,33 @@ class PostsFetcher
             }
         }
 
+        // Convert posts to array format expected by frontend
+        $posts = array();
+        if ($wp_query->have_posts()) {
+            while ($wp_query->have_posts()) {
+                $wp_query->the_post();
+                $post = get_post();
+
+                $posts[] = array(
+                    'ID' => $post->ID,
+                    'title' => get_the_title($post->ID),
+                    'permalink' => get_permalink($post->ID),
+                    'excerpt' => get_the_excerpt($post->ID),
+                    'thumbnail' => get_the_post_thumbnail_url($post->ID, 'medium'),
+                    'date' => get_the_date('', $post->ID),
+                    'post_type' => $post->post_type,
+                    'meta' => array(
+                        'date' => get_the_date('', $post->ID),
+                        'author' => get_the_author_meta('display_name', $post->post_author)
+                    )
+                );
+            }
+            wp_reset_postdata();
+        }
+
         $response = array(
-            'content' => $content,
+            'content' => $content, // Keep for backward compatibility
+            'posts' => $posts,     // New format for frontend
             'more_posts' => $this->checkHasMorePost(),
             'query_info' => array(
                 'total_posts' => $wp_query->found_posts,
@@ -376,22 +410,27 @@ class PostsFetcher
                 'post_type' => $this->post_type,
                 'layout' => $this->layout,
                 'engine_id' => $this->engine_id
-            )
+            ),
+            'post_templates' => $this->post_templates
         );
 
         if ($this->offset > 0) {
             $response['next_offset'] = $wp_query->get('posts_per_page') + $wp_query->get('offset');
         }
-
         wp_send_json_success($response);
 
         } catch (Exception $e) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("[PostsFetcher Debug] Fatal error in fetch method: " . $e->getMessage());
-                error_log("[PostsFetcher Debug] Stack trace: " . $e->getTraceAsString());
+                error_log("[PostsFetcher Debug] Exception caught: " . $e->getMessage());
+                error_log("[PostsFetcher Debug] Exception trace: " . $e->getTraceAsString());
             }
             wp_send_json_error(__('An error occurred while fetching posts: ' . $e->getMessage(), 'jankx'));
+        } catch (Error $e) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostsFetcher Debug] Fatal error caught: " . $e->getMessage());
+                error_log("[PostsFetcher Debug] Error trace: " . $e->getTraceAsString());
+            }
+            wp_send_json_error(__('A fatal error occurred: ' . $e->getMessage(), 'jankx'));
         }
     }
-
 }

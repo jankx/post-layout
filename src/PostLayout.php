@@ -14,7 +14,7 @@ use Jankx\PostLayout\Abstracts\BasePostLayout;
 use Jankx\PostLayout\Contracts\PostLayoutParent;
 use Jankx\PostLayout\Exceptions\PropertyNotFoundException;
 use Jankx\PostLayout\PostLayoutManager;
-use Jankx\TemplateEngine\Engine;
+use Jankx\Support\TemplateEngine\Engine;
 
 use function wp_parse_args;
 
@@ -97,8 +97,22 @@ abstract class PostLayout extends BasePostLayout
 
     public function setTemplateEngine($engine)
     {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayout Debug] setTemplateEngine called");
+            error_log("[PostLayout Debug] Engine class: " . get_class($engine));
+            error_log("[PostLayout Debug] Engine class: " . Engine::class);
+            error_log("[PostLayout Debug] is_a check: " . (is_a($engine, Engine::class) ? 'true' : 'false'));
+        }
+
         if (is_a($engine, Engine::class)) {
             $this->templateEngine = $engine;
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayout Debug] Template engine set successfully");
+            }
+        } else {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayout Debug] Template engine not set - type mismatch");
+            }
         }
     }
 
@@ -415,10 +429,38 @@ abstract class PostLayout extends BasePostLayout
     public function renderLoopItem($post)
     {
         if (is_null($this->contentGenerator)) {
-            return $this->templateEngine->render(
-                $this->generateSearchingTemplates($post),
-                $this->prepareTemplateData()
-            );
+            $templates = $this->generateSearchingTemplates($post);
+            $templateData = $this->prepareTemplateData();
+
+            // Add post object to template data
+            $templateData['post'] = $post;
+
+            // If templates is array, try each template until one exists
+            if (is_array($templates)) {
+                foreach ($templates as $template) {
+                    if (defined('WP_DEBUG') && WP_DEBUG) {
+                        error_log("[PostLayout Debug] Checking template: " . $template . " - exists: " . ($this->templateEngine->exists($template) ? 'yes' : 'no'));
+                    }
+                    if ($this->templateEngine->exists($template)) {
+                        if (defined('WP_DEBUG') && WP_DEBUG) {
+                            error_log("[PostLayout Debug] Rendering template: " . $template);
+                        }
+                        return $this->templateEngine->render($template, $templateData);
+                    }
+                }
+                // If no template found, use the first one
+                $template = $templates[0];
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("[PostLayout Debug] No template found, using first: " . $template);
+                }
+            } else {
+                $template = $templates;
+            }
+
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayout Debug] Final render with template: " . $template);
+            }
+            return $this->templateEngine->render($template, $templateData);
         }
 
         $args = $this->contentGeneratorArgs;
@@ -588,7 +630,20 @@ abstract class PostLayout extends BasePostLayout
                 }
 
                 $this->beforeLoopItemActions($post);
-                $this->renderLoopItem($post);
+
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("[PostLayout Debug] About to render loop item for post: " . $post->ID);
+                }
+
+                $loopItemContent = $this->renderLoopItem($post);
+
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("[PostLayout Debug] Loop item rendered, content length: " . strlen($loopItemContent));
+                    error_log("[PostLayout Debug] Loop item preview: " . substr($loopItemContent, 0, 200));
+                }
+
+                echo $loopItemContent;
+
                 $this->afterLoopItemActions($post);
                 if ($isFakePost) {
                     $this->removeFakePostFilters();
@@ -602,7 +657,12 @@ abstract class PostLayout extends BasePostLayout
             wp_reset_postdata();
             remove_filter('excerpt_length', array($this, 'excerptLenght'));
             if (!$echo) {
-                return ob_get_clean();
+                $content = ob_get_clean();
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("[PostLayout Debug] Output buffer content length: " . strlen($content));
+                    error_log("[PostLayout Debug] Output buffer preview: " . substr($content, 0, 200));
+                }
+                return $content;
             }
     }
 

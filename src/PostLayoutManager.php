@@ -63,7 +63,15 @@ class PostLayoutManager
      */
     public static function createInstance($templateEngine)
     {
+        if (is_null($templateEngine)) {
+            throw new \InvalidArgumentException('Template engine cannot be null');
+        }
+
         $id = $templateEngine->getId();
+        if (is_null($id)) {
+            throw new \InvalidArgumentException('Template engine ID cannot be null');
+        }
+
         error_log("[PostLayoutManager Debug] Creating instance for engine ID: " . $id);
         error_log("[PostLayoutManager Debug] Engine class: " . get_class($templateEngine));
 
@@ -80,9 +88,18 @@ class PostLayoutManager
 
     private function __construct($templateEngine)
     {
+        if (is_null($templateEngine)) {
+            throw new \InvalidArgumentException('Template engine cannot be null in constructor');
+        }
+
         error_log("[PostLayoutManager Debug] Constructor called");
         error_log("[PostLayoutManager Debug] Template engine class: " . get_class($templateEngine));
-        error_log("[PostLayoutManager Debug] Template engine ID: " . $templateEngine->getId());
+
+        $engineId = $templateEngine->getId();
+        if (is_null($engineId)) {
+            throw new \InvalidArgumentException('Template engine ID cannot be null in constructor');
+        }
+        error_log("[PostLayoutManager Debug] Template engine ID: " . $engineId);
 
         if (empty(static::$instances)) {
             error_log("[PostLayoutManager Debug] First instance - initializing hooks");
@@ -248,11 +265,12 @@ class PostLayoutManager
     public function getLoopItemContentByType($type)
     {
         if (is_null($type)) {
-            return null;
+            throw new \InvalidArgumentException('Loop item content type cannot be null');
         }
+
         $supportedLayouts = $this->getSupportedLoopItemContentLayouts();
         if (!isset($supportedLayouts[$type]) || !class_exists($supportedLayouts[$type])) {
-            return null;
+            throw new \InvalidArgumentException("Loop item content type '{$type}' is not supported or class does not exist");
         }
 
         $layoutCls = $supportedLayouts[$type];
@@ -264,11 +282,19 @@ class PostLayoutManager
      */
     public function createLayout($layoutName, $wp_query = null, $loopItemLayout = null)
     {
+        if (is_null($layoutName)) {
+            throw new \InvalidArgumentException('Layout name cannot be null');
+        }
+
+        if (is_null($this->templateEngine)) {
+            throw new \InvalidArgumentException('Template engine is null - cannot create layout');
+        }
+
         $supportedLayouts = static::getLayouts([
             'type' => 'all'
         ]);
         if (empty($supportedLayouts[$layoutName])) {
-            return;
+            throw new \InvalidArgumentException("Layout '{$layoutName}' is not supported");
         }
         $layoutCls = $supportedLayouts[$layoutName];
         $layout    = new $layoutCls($wp_query, $loopItemLayout);
@@ -280,11 +306,19 @@ class PostLayoutManager
 
     public function createTermLayout($layoutName, $wp_term_query = null)
     {
+        if (is_null($layoutName)) {
+            throw new \InvalidArgumentException('Layout name cannot be null');
+        }
+
+        if (is_null($this->templateEngine)) {
+            throw new \InvalidArgumentException('Template engine is null - cannot create term layout');
+        }
+
         $supportedLayouts = static::getLayouts(array(
             'data' => 'term'
         ));
         if (empty($supportedLayouts[$layoutName])) {
-            return;
+            throw new \InvalidArgumentException("Term layout '{$layoutName}' is not supported");
         }
         $layoutCls = $supportedLayouts[$layoutName];
         $layout    = new $layoutCls($wp_term_query);
