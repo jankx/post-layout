@@ -251,6 +251,11 @@ abstract class PostLayout extends BasePostLayout
             }
         }
 
+        // Add hover effect class
+        if (($hover_effect = Utils::array_get($this->options, 'hover_effect')) && $hover_effect !== 'none') {
+            $postsListClasses[] = "hover-{$hover_effect}";
+        }
+
         $attributes = array(
             'class' => $postsListClasses,
             'data-mode' => Utils::array_get($this->options, 'pagination_type') == 'load_more' ? static::MODE_APPEND : $this->mode,
@@ -493,6 +498,10 @@ abstract class PostLayout extends BasePostLayout
 
         if (($data_preset = Utils::array_get($this->options, 'data_preset'))) {
             $attributes['data-preset'] = $data_preset;
+        }
+
+        if (($hover_effect = Utils::array_get($this->options, 'hover_effect'))) {
+            $attributes['data-hover-effect'] = $hover_effect;
         }
 
         return $attributes;

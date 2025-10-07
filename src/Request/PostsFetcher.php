@@ -34,6 +34,10 @@ class PostsFetcher
     protected $layout = 'card';
     protected $offset;
 
+    // Ordering parameters
+    protected $order_by = 'date';
+    protected $order = 'DESC';
+
     // Jankx Global filters supports
     protected $taxonomy = array();
 
@@ -199,10 +203,19 @@ class PostsFetcher
         $args = array(
             'post_type' => $this->post_type,
             'posts_per_page' => $this->posts_per_page,
+            'post_status' => 'publish',
         );
 
         if ($this->current_page > 1) {
             $args['paged'] = $this->current_page;
+        }
+
+        // Add ordering
+        if ($this->order_by) {
+            $args['orderby'] = $this->order_by;
+        }
+        if ($this->order) {
+            $args['order'] = $this->order;
         }
 
         if ($this->data_type && $this->type_name && $this->object_id) {
@@ -262,6 +275,10 @@ class PostsFetcher
             }
         }
 
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Query args before filter: " . print_r($args, true));
+        }
+
         $args = apply_filters(
             "jankx/layout/{$this->post_type}/args",
             $args,
@@ -269,7 +286,18 @@ class PostsFetcher
             $this->data_preset,
             $this
         );
-        return $this->createWpQueryFromRequest($args);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Query args after filter: " . print_r($args, true));
+        }
+
+        $wp_query = $this->createWpQueryFromRequest($args);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostsFetcher Debug] Post IDs: " . implode(', ', wp_list_pluck($wp_query->posts, 'ID')));
+        }
+
+        return $wp_query;
     }
 
 
@@ -356,11 +384,23 @@ class PostsFetcher
             'thumbnail_size' => $this->thumb_size ? $this->thumb_size : 'medium',
         ]);
 
-        $postLayout->disableLoopStartLoopEnd();
+        // Only disable loop start/end if NOT a block preview request
+        // Check both header and query parameter
+        $isBlockPreview = (
+            (isset($_SERVER['HTTP_X_JANKX_BLOCK_PREVIEW']) && $_SERVER['HTTP_X_JANKX_BLOCK_PREVIEW'] === '1') ||
+            (isset($_GET['block_preview']) && $_GET['block_preview'] === '1') ||
+            (isset($_REQUEST['block_preview']) && $_REQUEST['block_preview'] === '1')
+        );
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
             error_log("[PostsFetcher Debug] About to render post layout");
             error_log("[PostsFetcher Debug] Post layout class: " . get_class($postLayout));
+            error_log("[PostsFetcher Debug] Is block preview: " . ($isBlockPreview ? 'YES' : 'NO'));
+            error_log("[PostsFetcher Debug] block_preview param: " . (isset($_REQUEST['block_preview']) ? $_REQUEST['block_preview'] : 'NOT SET'));
+        }
+
+        if (!$isBlockPreview) {
+            $postLayout->disableLoopStartLoopEnd();
         }
 
         $content = $postLayout->render(false);
