@@ -521,7 +521,7 @@ abstract class PostLayout extends BasePostLayout
     {
         switch ($paginationType) {
             case 'load_more';
-                $this->templateEngine->render(
+                return $this->templateEngine->render(
                     'common/paginate/load-more',
                     array(
                         'items' => Utils::array_get(
@@ -532,11 +532,9 @@ abstract class PostLayout extends BasePostLayout
                         'wrap_id' => $this->getInstanceId(),
                     )
                 );
-                break;
             default:
                 // Sử dụng WordPress pagination function
-                $this->renderWordPressPagination();
-                break;
+                return $this->renderWordPressPagination();
         }
     }
 
@@ -548,7 +546,7 @@ abstract class PostLayout extends BasePostLayout
             if (has_action($customPagination)) {
                 return do_action($customPagination);
             }
-            $this->renderDefaultPagination($paginationType);
+            echo $this->renderDefaultPagination($paginationType);
         }
     }
 
@@ -786,7 +784,7 @@ abstract class PostLayout extends BasePostLayout
     /**
      * Render WordPress pagination using paginate_links()
      *
-     * @return void
+     * @return string
      */
     protected function renderWordPressPagination()
     {
@@ -802,8 +800,6 @@ abstract class PostLayout extends BasePostLayout
             'format' => '?paged=%#%',
             'current' => $current_page,
             'total' => $total_pages,
-            'prev_text' => Utils::array_get($this->options, 'prev_text', '&laquo; Previous'),
-            'next_text' => Utils::array_get($this->options, 'next_text', 'Next &raquo;'),
             'type' => 'list',
             'end_size' => 2,
             'mid_size' => 1,
@@ -818,12 +814,14 @@ abstract class PostLayout extends BasePostLayout
             $args['mid_size'] = min($max_numbers / 2, $total_pages / 2);
         }
 
-        $pagination_links = paginate_links($args);
-
-        if ($pagination_links) {
-            echo '<nav class="jankx-pagination" aria-label="' . esc_attr__('Posts navigation', 'jankx') . '">';
-            echo $pagination_links;
-            echo '</nav>';
+        if (Utils::array_get($this->options, 'prev_text')) {
+            $args['prev_text'] = Utils::array_get($this->options, 'prev_text');
         }
+        if (Utils::array_get($this->options, 'next_text')) {
+            $args['next_text'] = Utils::array_get($this->options, 'next_text');
+        }
+        return $this->templateEngine->render('post-layouts/common/pagination', [
+            'args' => $args,
+        ]);
     }
 }
