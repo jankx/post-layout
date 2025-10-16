@@ -52,6 +52,13 @@ class PostsFetcher
     protected $meta_filters = array();
     protected $post_templates = array();
 
+    // Block options for complete mapping
+    protected $display_options = array();
+    protected $styling = array();
+    protected $layout_options = array();
+    protected $pagination = array();
+    protected $responsive = array();
+
     public function init()
     {
         if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -135,6 +142,61 @@ class PostsFetcher
                 }
                 continue;
             }
+            if ($key === "display_options") {
+                // Handle display options from block
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $displayOptions = json_decode($value, true);
+                if (is_array($displayOptions)) {
+                    $this->display_options = $displayOptions;
+                }
+                continue;
+            }
+            if ($key === "styling") {
+                // Handle styling options from block
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $styling = json_decode($value, true);
+                if (is_array($styling)) {
+                    $this->styling = $styling;
+                }
+                continue;
+            }
+            if ($key === "layout_options") {
+                // Handle layout options from block
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $layoutOptions = json_decode($value, true);
+                if (is_array($layoutOptions)) {
+                    $this->layout_options = $layoutOptions;
+                }
+                continue;
+            }
+            if ($key === "pagination") {
+                // Handle pagination options from block
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $pagination = json_decode($value, true);
+                if (is_array($pagination)) {
+                    $this->pagination = $pagination;
+                }
+                continue;
+            }
+            if ($key === "responsive") {
+                // Handle responsive options from block
+                $value = trim($value, '\\"');
+                $value = html_entity_decode(stripslashes($value));
+                $value = str_replace('\\"', '"', $value);
+                $responsive = json_decode($value, true);
+                if (is_array($responsive)) {
+                    $this->responsive = $responsive;
+                }
+                continue;
+            }
             if (property_exists($this, $key)) {
                 $this->$key = apply_filters(
                     "jankx_post_layout_ajax_{$key}_args",
@@ -158,6 +220,123 @@ class PostsFetcher
     {
         // Check if there are more posts available
         return false; // Default implementation - can be overridden by filters
+    }
+
+    /**
+     * Build complete PostLayout options from block attributes
+     * Maps all block options to PostLayout expected format
+     *
+     * @return array Complete options array for PostLayout
+     */
+    protected function buildPostLayoutOptions()
+    {
+        $options = [];
+
+        // Layout options - columns and gap
+        $options['columns'] = Utils::array_get($this->layout_options, 'columns', 3);
+        $options['columns_tablet'] = Utils::array_get($this->layout_options, 'columnsTablet', 2);
+        $options['columns_mobile'] = Utils::array_get($this->layout_options, 'columnsMobile', 1);
+        $options['gap'] = Utils::array_get($this->layout_options, 'gap', 20);
+        $options['gap_tablet'] = Utils::array_get($this->layout_options, 'gapTablet', 15);
+        $options['gap_mobile'] = Utils::array_get($this->layout_options, 'gapMobile', 10);
+
+        // Display options - what to show/hide
+        $options['show_title'] = Utils::array_get($this->display_options, 'showTitle', true);
+        $options['show_excerpt'] = Utils::array_get($this->display_options, 'showExcerpt', true);
+        $options['show_meta'] = Utils::array_get($this->display_options, 'showMeta', true);
+        $options['show_thumbnail'] = Utils::array_get($this->display_options, 'showThumbnail', true);
+        $options['show_read_more'] = Utils::array_get($this->display_options, 'showReadMore', true);
+        $options['excerpt_length'] = Utils::array_get($this->display_options, 'excerptLength', 20);
+        $options['meta_fields'] = Utils::array_get($this->display_options, 'metaFields', ['date', 'author', 'categories']);
+
+        // Thumbnail options (from display_options or fallback to old properties)
+        $options['thumbnail_position'] = Utils::array_get($this->display_options, 'thumbnailPosition', $this->thumb_pos ?: 'top');
+        $options['thumbnail_size'] = Utils::array_get($this->display_options, 'thumbnailSize', $this->thumb_size ?: 'medium');
+
+        // Styling options - visual effects
+        $options['hover_effect'] = Utils::array_get($this->styling, 'hoverEffect', 'lift');
+        $options['border_radius'] = Utils::array_get($this->styling, 'borderRadius', 8);
+        $options['shadow'] = Utils::array_get($this->styling, 'shadow', 'medium');
+
+        // Animation options
+        if (isset($this->styling['enableAnimations'])) {
+            $options['enable_animations'] = $this->styling['enableAnimations'];
+            $options['animation_duration'] = Utils::array_get($this->styling, 'animationDuration', 300);
+        }
+
+        // Performance options
+        if (isset($this->styling['lazyLoading'])) {
+            $options['lazy_loading'] = $this->styling['lazyLoading'];
+        }
+        if (isset($this->styling['cssContainment'])) {
+            $options['css_containment'] = $this->styling['cssContainment'];
+        }
+
+        // Responsive styling overrides
+        if (!empty($this->responsive['enabled'])) {
+            if (isset($this->styling['borderRadiusTablet'])) {
+                $options['border_radius_tablet'] = $this->styling['borderRadiusTablet'];
+            }
+            if (isset($this->styling['borderRadiusMobile'])) {
+                $options['border_radius_mobile'] = $this->styling['borderRadiusMobile'];
+            }
+            if (isset($this->styling['shadowTablet'])) {
+                $options['shadow_tablet'] = $this->styling['shadowTablet'];
+            }
+            if (isset($this->styling['shadowMobile'])) {
+                $options['shadow_mobile'] = $this->styling['shadowMobile'];
+            }
+        }
+
+        // Pagination options
+        if (!empty($this->pagination['enabled'])) {
+            $options['show_paginate'] = true;
+            $options['pagination_type'] = Utils::array_get($this->pagination, 'type', 'numbers');
+            $options['max_numbers'] = Utils::array_get($this->pagination, 'maxNumbers', 10);
+            $options['show_first_last'] = Utils::array_get($this->pagination, 'showFirstLast', false);
+            $options['show_ellipsis'] = Utils::array_get($this->pagination, 'showEllipsis', true);
+            $options['show_current_page'] = Utils::array_get($this->pagination, 'showCurrentPage', true);
+            $options['ellipsis_position'] = Utils::array_get($this->pagination, 'ellipsisPosition', 'both');
+            $options['prev_text'] = Utils::array_get($this->pagination, 'prevText', __('Previous', 'jankx'));
+            $options['next_text'] = Utils::array_get($this->pagination, 'nextText', __('Next', 'jankx'));
+            $options['show_icons'] = Utils::array_get($this->pagination, 'showIcons', true);
+            $options['show_page_info'] = Utils::array_get($this->pagination, 'showPageInfo', false);
+
+            // Load more specific options
+            $paginationType = Utils::array_get($this->pagination, 'type', 'numbers');
+            if ($paginationType === 'load_more' || $paginationType === 'infinite_scroll') {
+                $options['load_more_text'] = Utils::array_get($this->pagination, 'loadMoreText', __('Load More', 'jankx'));
+                $options['loading_text'] = Utils::array_get($this->pagination, 'loadingText', __('Loading...', 'jankx'));
+                $options['no_more_text'] = Utils::array_get($this->pagination, 'noMoreText', __('No More Posts', 'jankx'));
+                $options['posts_per_load'] = Utils::array_get($this->pagination, 'postsPerLoad', 6);
+                $options['show_spinner'] = Utils::array_get($this->pagination, 'showSpinner', true);
+                $options['hide_when_complete'] = Utils::array_get($this->pagination, 'hideWhenComplete', true);
+
+                if ($paginationType === 'infinite_scroll') {
+                    $options['trigger_distance'] = Utils::array_get($this->pagination, 'triggerDistance', 100);
+                    $options['show_loading_indicator'] = Utils::array_get($this->pagination, 'showLoadingIndicator', true);
+                    $options['show_back_to_top'] = Utils::array_get($this->pagination, 'showBackToTop', false);
+                }
+            }
+
+            // AJAX options
+            $options['ajax'] = Utils::array_get($this->pagination, 'ajax', false);
+            $options['update_url'] = Utils::array_get($this->pagination, 'updateURL', true);
+            $options['scroll_to_top'] = Utils::array_get($this->pagination, 'scrollToTop', false);
+            $options['show_loading_state'] = Utils::array_get($this->pagination, 'showLoadingState', true);
+
+            // Accessibility options
+            if (isset($this->pagination['keyboardNav'])) {
+                $options['keyboard_nav'] = $this->pagination['keyboardNav'];
+            }
+            if (isset($this->pagination['touchSupport'])) {
+                $options['touch_support'] = $this->pagination['touchSupport'];
+            }
+        } else {
+            $options['show_paginate'] = false;
+        }
+
+        return $options;
     }
 
     public function createQueryDataTypeArgs(&$args)
@@ -379,10 +558,9 @@ class PostsFetcher
             $loopItemLayout
         );
 
-        $postLayout->setOptions([
-            'thumbnail_position' => $this->thumb_pos ? $this->thumb_pos : 'top',
-            'thumbnail_size' => $this->thumb_size ? $this->thumb_size : 'medium',
-        ]);
+        // Build complete options from all block attributes
+        $options = $this->buildPostLayoutOptions();
+        $postLayout->setOptions($options);
 
         // Only disable loop start/end if NOT a block preview request
         // Check both header and query parameter

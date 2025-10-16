@@ -72,14 +72,20 @@ class PostLayoutManager
             throw new \InvalidArgumentException('Template engine ID cannot be null');
         }
 
-        error_log("[PostLayoutManager Debug] Creating instance for engine ID: " . $id);
-        error_log("[PostLayoutManager Debug] Engine class: " . get_class($templateEngine));
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayoutManager Debug] Creating instance for engine ID: " . $id);
+            error_log("[PostLayoutManager Debug] Engine class: " . get_class($templateEngine));
+        }
 
         if (!isset(static::$instances[$id])) {
-            error_log("[PostLayoutManager Debug] Creating new PostLayoutManager instance");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Creating new PostLayoutManager instance");
+            }
             static::$instances[$id] = new static($templateEngine);
-            error_log("[PostLayoutManager Debug] PostLayoutManager instance created successfully");
-        } else {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] PostLayoutManager instance created successfully");
+            }
+        } elseif (defined('WP_DEBUG') && WP_DEBUG) {
             error_log("[PostLayoutManager Debug] Using existing PostLayoutManager instance");
         }
 
@@ -92,64 +98,91 @@ class PostLayoutManager
             throw new \InvalidArgumentException('Template engine cannot be null in constructor');
         }
 
-        error_log("[PostLayoutManager Debug] Constructor called");
-        error_log("[PostLayoutManager Debug] Template engine class: " . get_class($templateEngine));
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayoutManager Debug] Constructor called");
+            error_log("[PostLayoutManager Debug] Template engine class: " . get_class($templateEngine));
+        }
 
         $engineId = $templateEngine->getId();
         if (is_null($engineId)) {
             throw new \InvalidArgumentException('Template engine ID cannot be null in constructor');
         }
-        error_log("[PostLayoutManager Debug] Template engine ID: " . $engineId);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayoutManager Debug] Template engine ID: " . $engineId);
+        }
 
         if (empty(static::$instances)) {
-            error_log("[PostLayoutManager Debug] First instance - initializing hooks");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] First instance - initializing hooks");
+            }
             $this->initHooks();
 
             $fetcher = new PostsFetcher();
             did_action('init')
                 ? $fetcher->init()
                 : add_action('init', array($fetcher, 'init'));
-            error_log("[PostLayoutManager Debug] PostsFetcher initialized");
+
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] PostsFetcher initialized");
+            }
         }
 
         $this->templateEngine = &$templateEngine;
-        error_log("[PostLayoutManager Debug] Template engine assigned to instance");
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayoutManager Debug] Template engine assigned to instance");
+        }
 
         if ($this->templateEngine && !$this->registeredFunctions) {
-            error_log("[PostLayoutManager Debug] Registering template functions");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Registering template functions");
+            }
             $this->templateEngine->registerFunction(
                 'get_meta_value',
                 array(Utils::class, 'get_meta_value')
             );
             $this->registeredFunctions = true;
-            error_log("[PostLayoutManager Debug] Template functions registered");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Template functions registered");
+            }
         }
 
         // Register template directories
         if ($this->templateEngine) {
-            error_log("[PostLayoutManager Debug] Registering template directories");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Registering template directories");
+            }
 
             // Get theme directory
             $themeDir = get_template_directory();
             $viewsDir = $themeDir . '/views/post-layouts';
 
-            error_log("[PostLayoutManager Debug] Theme directory: " . $themeDir);
-            error_log("[PostLayoutManager Debug] Views directory: " . $viewsDir);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Theme directory: " . $themeDir);
+                error_log("[PostLayoutManager Debug] Views directory: " . $viewsDir);
+            }
 
             if (is_dir($viewsDir)) {
                 $this->templateEngine->addTemplateDirectory($viewsDir, 'post-layouts');
-                error_log("[PostLayoutManager Debug] Template directory registered: " . $viewsDir);
-            } else {
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log("[PostLayoutManager Debug] Template directory registered: " . $viewsDir);
+                }
+            } elseif (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log("[PostLayoutManager Debug] Template directory not found: " . $viewsDir);
             }
         }
 
         if (!self::$isBootstrap) {
             self::$isBootstrap = true;
-            error_log("[PostLayoutManager Debug] Bootstrap flag set");
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log("[PostLayoutManager Debug] Bootstrap flag set");
+            }
         }
 
-        error_log("[PostLayoutManager Debug] Constructor completed successfully");
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("[PostLayoutManager Debug] Constructor completed successfully");
+        }
     }
 
 
@@ -246,8 +279,7 @@ class PostLayoutManager
         if (is_null(static::$supportedLoopItemLayouts) || $refresh) {
             static::$supportedLoopItemLayouts = apply_filters(
                 'jankx/posts/loop/layouts',
-                [
-                ]
+                []
             );
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log("[PostLayoutManager Debug] Supported loop item layouts: " . print_r(static::$supportedLoopItemLayouts, true));
